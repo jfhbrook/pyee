@@ -14,14 +14,18 @@ def test_emit():
 
     #Used in a decorator style.
     @ee.on('event')
-    def event_handler(data):
+    def event_handler(data, error=None):
         nt.assert_equals(data, 'emitter is emitted!')
         # Raise exception to prove it fired.
-        raise ItWorkedException
+        if (error):
+            raise ItWorkedException
 
-    # Some nose bullshit to check for the firings
+    #Making sure data is passed propers.
+    ee.emit('event', 'emitter is emitted!')
+
+    # Some nose bullshit to check for the firings. "Hides" other exceptions.
     with nt.assert_raises(ItWorkedException) as it_worked:
-        ee.emit('event', 'emitter is emitted!')
+        ee.emit('event', 'emitter is emitted!', True)
 
 
 def test_new_listener_event():
@@ -85,14 +89,20 @@ def test_once():
 
     ee = Event_emitter()
 
-    @ee.once('event')
-    def event_handler(data):
+    def once_handler(data, error=None):
         nt.assert_equals(data, 'emitter is emitted!')
-        raise ItWorkedException
+        if (error):
+            raise ItWorkedException
 
+    #Tests to make sure that after event is emitted that it's gone.
+    ee.once('event', once_handler)
+    ee.emit('event', 'emitter is emitted!')
+    nt.assert_equal(ee._events['event'], [])
+
+    #Tests to make sure callback fires. "Hides" other exceptions.
     with nt.assert_raises(ItWorkedException) as it_worked:
-        ee.emit('event', 'emitter is emitted!')
-        nt.assert_equal(ee._events['event'], [])
+        ee.once('event', once_handler)
+        ee.emit('event', 'emitter is emitted!', True)
 
 def test_listeners():
     """
