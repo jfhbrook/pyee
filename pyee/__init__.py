@@ -40,7 +40,7 @@ class Event_emitter(object):
         def _once(f):
             def g(*args, **kwargs):
                 f(*args, **kwargs)
-                self.remove(self,event)
+                self.remove_listener(self,event)
             return g
 
         if (f==None):
