@@ -36,7 +36,7 @@ Installation:
 Methods:
 --------
 
-**``ee.on(event, f=None)``**: Registers the function ``f`` to the event name 
+**ee.on(event, f=None)**: Registers the function ``f`` to the event name 
 ``event``. Example::
 
     ee.on('data', some_fxn)
@@ -48,24 +48,24 @@ callback, which allows for decorator styles::
     def data_handler(data):
         print data
 
-**``ee.emit(event, *args)``**: Emits the event, calling the attached functions
+**ee.emit(event, *args)**: Emits the event, calling the attached functions
 with *args. For example::
 
     ee.emit('data', '00101001')
 
 which will call ``data('00101001')'``
 
-**``ee.once(event, f=None)``**: The same as ``ee.on`` except that the listener
+**ee.once(event, f=None)**: The same as ``ee.on`` except that the listener
 is automatically removed after it's called.
 
-**``ee.remove_listener(event, fxn)``**: Removes the function `fxn` from `event`.
+**ee.remove_listener(event, fxn)**: Removes the function ``fxn`` from ``event``.
 Requires that the function is not closed over by ee.on---that is, being able to
 use this with the decorator style is unfortunately not possible.
 
-**``ee.remove_all_listeners(event)``**: Removes all listeners from `event`.
+**ee.remove_all_listeners(event)**: Removes all listeners from ``event``.
 
-**``ee.listeners(event)``**: Returns the array of all listeners registered to
-the given `event`.
+**ee.listeners(event)**: Returns the array of all listeners registered to
+the given ``event``.
 
 
 (Special) Events:
