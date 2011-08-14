@@ -48,7 +48,7 @@ callback, which allows for decorator styles::
     def data_handler(data):
         print data
 
-**ee.emit(event, *args)**: Emits the event, calling the attached functions
+**ee.emit(event, *args, **kwargs)**: Emits the event, calling the attached functions
 with *args. For example::
 
     ee.emit('data', '00101001')
