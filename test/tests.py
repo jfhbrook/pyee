@@ -14,19 +14,18 @@ def test_emit():
 
     #Used in a decorator style.
     @ee.on('event')
-    def event_handler(data, error=None):
+    def event_handler(data, **kwargs):
         nt.assert_equals(data, 'emitter is emitted!')
         # Raise exception to prove it fired.
-        if (error):
+        if (kwargs['error']):
             raise ItWorkedException
 
     #Making sure data is passed propers.
-    ee.emit('event', 'emitter is emitted!')
+    ee.emit('event', 'emitter is emitted!', error=False)
 
     # Some nose bullshit to check for the firings. "Hides" other exceptions.
     with nt.assert_raises(ItWorkedException) as it_worked:
-        ee.emit('event', 'emitter is emitted!', True)
-
+        ee.emit('event', 'emitter is emitted!', error=True)
 
 def test_new_listener_event():
     """

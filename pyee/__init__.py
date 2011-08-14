@@ -27,14 +27,14 @@ class Event_emitter(object):
         else:
             return _on(f)
 
-    def emit(self, event, *args):
+    def emit(self, event, *args, **kwargs):
         """
         Emit `event`, passing *args to each attached function.
         """
 
         # Pass the args to each function in the events dict
         for fxn in self._events[event]:
-            fxn(*args)
+            fxn(*args, **kwargs)
 
     def once(self, event, f=None):
         def _once(f):
