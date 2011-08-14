@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name = "pyee",
-    version = "0.0.4",
+    version = "0.0.5",
     packages = ["pyee"],
     description = "A port of node.js's EventEmitter to python.",
     author = "Joshua Holbrook",
