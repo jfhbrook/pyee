@@ -1,21 +1,20 @@
-class Event_emitter(object):
+from collections import defaultdict
+
+class EventEmitter(object):
     def __init__(self):
         """
         Initializes the EE.
         """
-        self._events = { 'new_listener': [] }
+        self._events = defaultdict(lambda: [])
+
+    def on_event(self, event, f):
+        self._events[event].append(f)
 
     def on(self, event, f=None):
         """
         Returns a function that takes an event listener callback
         """
         def _on(f):
-            # Creating a new event array if necessary
-            try:
-                self._events[event]
-            except KeyError:
-                self._events[event] = []
-
             #fire 'new_listener' *before* adding the new listener!
             self.emit('new_listener')
 
