@@ -1,5 +1,5 @@
 import nose.tools as nt
-from pyee import Event_emitter
+from pyee import EventEmitter
 
 # An exception, used to prove that an event handler fired.
 # Kinda hack-y, I know.
@@ -10,7 +10,7 @@ def test_emit():
     """
     Test to show that event_emitters fire properly.
     """
-    ee = Event_emitter()
+    ee = EventEmitter()
 
     #Used in a decorator style.
     @ee.on('event')
@@ -32,7 +32,7 @@ def test_new_listener_event():
     test for the 'new_listener' event
     """
 
-    ee = Event_emitter()
+    ee = EventEmitter()
 
     @ee.on('new_listener')
     def new_listener_handler():
@@ -49,7 +49,7 @@ def test_listener_removal():
     tests to make sure we can remove listeners as appropriate.
     """
 
-    ee = Event_emitter()
+    ee = EventEmitter()
 
 
     #Some functions to pass to the EE
@@ -86,7 +86,7 @@ def test_once():
     # very similar to "test_emit" but also makes sure that the event
     # gets removed afterwards
 
-    ee = Event_emitter()
+    ee = EventEmitter()
 
     def once_handler(data, error=None):
         nt.assert_equals(data, 'emitter is emitted!')
@@ -107,7 +107,7 @@ def test_listeners():
     """
     Test to make sure that the listeners method gives you access to the listeners array.
     """
-    ee = Event_emitter()
+    ee = EventEmitter()
     @ee.on('event')
     def event_handler():
         pass
