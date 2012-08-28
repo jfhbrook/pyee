@@ -1,5 +1,5 @@
 import nose.tools as nt
-from pyee import Event_emitter
+from pyee import Event_emitter, EventEmitter
 
 # An exception, used to prove that an event handler fired.
 # Kinda hack-y, I know.
@@ -26,6 +26,31 @@ def test_emit():
     # Some nose bullshit to check for the firings. "Hides" other exceptions.
     with nt.assert_raises(ItWorkedException) as it_worked:
         ee.emit('event', 'emitter is emitted!', error=True)
+
+def test_emit_error():
+    ee = EventEmitter()
+    
+    with nt.assert_raises(Exception):
+        ee.emit('error')
+
+    @ee.on('error')
+    def onError():
+        pass
+        
+    # No longer raises and error instead return True indicating handled
+    nt.assert_true(ee.emit('error'))
+
+def test_emit_return():
+    ee = EventEmitter()
+    
+    # make sure emission without callback retruns False
+    nt.assert_false(ee.emit('data'))
+
+    # add a callback
+    ee.on('data')(lambda: None)
+
+    # should return true now
+    nt.assert_true(ee.emit('data'))
 
 def test_new_listener_event():
     """
