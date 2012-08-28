@@ -35,7 +35,7 @@ def test_new_listener_event():
     ee = Event_emitter()
 
     @ee.on('new_listener')
-    def new_listener_handler():
+    def new_listener_handler(event, fxn):
         raise ItWorkedException
 
     with nt.assert_raises(ItWorkedException) as it_worked:
@@ -56,23 +56,30 @@ def test_listener_removal():
     def first():
         return 1
 
+    ee.on('event', first)
+
+    @ee.on('event')
     def second():
         return 2
 
+    @ee.on('event')
     def third():
         return 3
 
-    #If you want un-closed functions, you unfortunately have to
-    #call ee without using decorator styles.
-    ee.on('event', first)
-    ee.on('event', second)
-    ee.on('event', third)
+    def fourth():
+        return 4
 
-    nt.assert_equal(ee._events['event'], [first, second, third])
+    ee.on('event', fourth)
+
+    nt.assert_equal(ee._events['event'], [first, second, third, fourth])
 
     #uses the function itself to find/remove listener
     ee.remove_listener('event', second)
-    nt.assert_equal(ee._events['event'], [first, third])
+    nt.assert_equal(ee._events['event'], [first, third, fourth])
+
+    #uses the function itself to find/remove listener
+    ee.remove_listener('event', first)
+    nt.assert_equal(ee._events['event'], [third, fourth])
 
     #remove ALL the listeners!
     ee.remove_all_listeners('event')
