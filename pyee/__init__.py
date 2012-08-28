@@ -1,21 +1,17 @@
-class Event_emitter(object):
+from collections import defaultdict
+
+class EventEmitter(object):
     def __init__(self):
         """
         Initializes the EE.
         """
-        self._events = { 'new_listener': [] }
+        self._events = defaultdict(list)
 
     def on(self, event, f=None):
         """
         Returns a function that takes an event listener callback
         """
         def _on(f):
-            # Creating a new event array if necessary
-            try:
-                self._events[event]
-            except KeyError:
-                self._events[event] = []
-
             #fire 'new_listener' *before* adding the new listener!
             self.emit('new_listener', event, f)
 
@@ -34,10 +30,15 @@ class Event_emitter(object):
         """
         Emit `event`, passing *args to each attached function.
         """
-
+        handled = False
         # Pass the args to each function in the events dict
         for fxn in self._events[event]:
             fxn(*args, **kwargs)
+            handled = True
+
+        if not handled and event == 'error':
+            raise Exception("Uncaught, 'error' event.")
+        return handled
 
     def once(self, event, f=None):
         def _once(f):
@@ -66,3 +67,7 @@ class Event_emitter(object):
 
     def listeners(self, event):
         return self._events[event]
+
+# Backwards capatiablity
+Event_emitter = EventEmitter
+__all__ = [Event_emitter, EventEmitter]
