@@ -30,12 +30,15 @@ class EventEmitter(object):
         """
         Emit `event`, passing *args to each attached function.
         """
-
+        handled = False
         # Pass the args to each function in the events dict
         for fxn in self._events[event]:
             fxn(*args, **kwargs)
-        
-        return self._events[event] != []
+            handled = True
+
+        if not handled and event == 'error':
+            raise Exception("Uncaught, 'error' event.")
+        return handled
 
     def once(self, event, f=None):
         def _once(f):

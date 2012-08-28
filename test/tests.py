@@ -27,6 +27,19 @@ def test_emit():
     with nt.assert_raises(ItWorkedException) as it_worked:
         ee.emit('event', 'emitter is emitted!', error=True)
 
+def test_emit_error():
+    ee = EventEmitter()
+    
+    with nt.assert_raises(Exception):
+        ee.emit('error')
+
+    @ee.on('error')
+    def onError():
+        pass
+        
+    # No longer raises and error instead return True indicating handled
+    nt.assert_true(ee.emit('error'))
+
 def test_emit_return():
     ee = EventEmitter()
     
