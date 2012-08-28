@@ -17,10 +17,13 @@ class Event_emitter(object):
                 self._events[event] = []
 
             #fire 'new_listener' *before* adding the new listener!
-            self.emit('new_listener')
+            self.emit('new_listener', event, f)
 
             # Add the necessary function
             self._events[event].append(f)
+
+            # Return original function so removal works
+            return f
 
         if (f==None):
             return _on
