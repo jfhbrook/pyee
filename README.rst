@@ -9,9 +9,9 @@ Example:
 
 ::
 
-    In [1]: from pyee import Event_emitter
+    In [1]: from pyee import EventEmitter
 
-    In [2]: ee = Event_emitter()
+    In [2]: ee = EventEmitter()
 
     In [3]: @ee.on('event')
        ...: def event_handler():
@@ -53,7 +53,8 @@ with *args. For example::
 
     ee.emit('data', '00101001')
 
-which will call ``data('00101001')'``
+which will call ``data('00101001')'`` presuming that data was an attached function.
+Returns ``False`` if no functions were attached to handle the emission otherwise ``True``.
 
 **ee.once(event, f=None)**: The same as ``ee.on`` except that the listener
 is automatically removed after it's called.
@@ -73,6 +74,15 @@ the given ``event``.
 
 **"new_listener"**: Fires whenever a new listener is created. Listeners for this
 event do not fire upon their own creation.
+
+**"error"**: When emitted raises an Exception by default, behavior can be overriden by
+attaching callback to the event. For example::
+
+    @ee.on('error')
+    def onError(message):
+        logging.err(message)
+    
+    ee.emit('error', 'something blew up')
 
 Tests:
 ------
