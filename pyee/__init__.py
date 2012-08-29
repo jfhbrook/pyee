@@ -70,4 +70,4 @@ class EventEmitter(object):
 
 # Backwards capatiablity
 Event_emitter = EventEmitter
-__all__ = [Event_emitter, EventEmitter]
+__all__ = ['Event_emitter', 'EventEmitter']
