@@ -1,5 +1,8 @@
 from collections import defaultdict
 
+__all__ = ['EventEmitter', 'Event_emitter']
+
+
 class EventEmitter(object):
     def __init__(self):
         """
@@ -21,7 +24,7 @@ class EventEmitter(object):
             # Return original function so removal works
             return f
 
-        if (f==None):
+        if f is None:
             return _on
         else:
             return _on(f)
@@ -47,7 +50,7 @@ class EventEmitter(object):
                 self.remove_listener(event, g)
             return g
 
-        if (f==None):
+        if f is None:
             return lambda f: self.on(event, _once(f))
         else:
             self.on(event, _once(f))
@@ -68,6 +71,6 @@ class EventEmitter(object):
     def listeners(self, event):
         return self._events[event]
 
+
 # Backwards capatiablity
 Event_emitter = EventEmitter
-__all__ = ['Event_emitter', 'EventEmitter']
