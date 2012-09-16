@@ -1,8 +1,8 @@
 pyee
 ======
 
-pyee supplies an event_emitter object that acts similar to the `EventEmitter`
-that comes with node.js.
+pyee supplies an ``EventEmitter`` object similar to the ``EventEmitter``
+from Node.js.
 
 Example:
 --------
@@ -16,12 +16,12 @@ Example:
     In [3]: @ee.on('event')
        ...: def event_handler():
        ...:     print 'BANG BANG'
-       ...:     
+       ...:
 
     In [4]: ee.emit('event')
     BANG BANG
 
-    In [5]: 
+    In [5]:
 
 Easy-peasy.
 
@@ -36,12 +36,12 @@ Installation:
 Methods:
 --------
 
-**ee.on(event, f=None)**: Registers the function ``f`` to the event name 
+**ee.on(event, f=None)**: Registers the function ``f`` to the event name
 ``event``. Example::
 
     ee.on('data', some_fxn)
 
-If ``f`` is not specified, ee.on returns a function that takes ``f`` as a
+If ``f`` is not specified, ``ee.on`` returns a function that takes ``f`` as a
 callback, which allows for decorator styles::
 
     @ee.on('data')
@@ -49,19 +49,19 @@ callback, which allows for decorator styles::
         print data
 
 **ee.emit(event, *args, **kwargs)**: Emits the event, calling the attached functions
-with *args. For example::
+with ``*args``. For example::
 
     ee.emit('data', '00101001')
 
-which will call ``data('00101001')'`` presuming that data was an attached function.
-Returns ``False`` if no functions were attached to handle the emission otherwise ``True``.
+This will call ``data('00101001')'`` (assuming ``data`` is an attached function).
+Returns ``False`` if no functions are attached to handle the emission (otherwise ``True``).
 
-**ee.once(event, f=None)**: The same as ``ee.on`` except that the listener
+**ee.once(event, f=None)**: The same as ``ee.on``, except that the listener
 is automatically removed after it's called.
 
 **ee.remove_listener(event, fxn)**: Removes the function ``fxn`` from ``event``.
-Requires that the function is not closed over by ee.on---that is, being able to
-use this with the decorator style is unfortunately not possible.
+Requires that the function is not closed over by ``ee.on`` (using this with the
+decorator style is unfortunately not possible).
 
 **ee.remove_all_listeners(event)**: Removes all listeners from ``event``.
 
@@ -81,7 +81,7 @@ attaching callback to the event. For example::
     @ee.on('error')
     def onError(message):
         logging.err(message)
-    
+
     ee.emit('error', 'something blew up')
 
 Tests:
@@ -94,8 +94,8 @@ Tests:
 Developers! Developers! Developers!
 -----------------------------------
 
-If you're a python and/or node.js fan and like what you see (or don't quite like
-what you see), I heartily invite you to dig in, fork it up and `git push it
+If you're a Python and/or Node.js fan, and you like what you see (or don't quite like
+what you see): I heartily invite you to dig in, fork it up and `git push it
 good <https://twitter.com/#!/maraksquires/status/71911996051824640>`_.
 
 License:
