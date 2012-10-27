@@ -10,7 +10,7 @@ setup(
     author = "Joshua Holbrook",
     author_email = "josh.holbrook@gmail.com",
     url = "https://github.com/jesusabdullah/pyee",
-    keywords = ["events", "emitter", "node.js"],
+    keywords = ['events', 'emitter', 'node.js', 'node', 'eventemitter', 'event_emitter'],
     classifiers = [
         "Programming Language :: Python",
         "Development Status :: 2 - Pre-Alpha",
