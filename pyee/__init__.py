@@ -8,15 +8,15 @@ __all__ = ['EventEmitter', 'Event_emitter']
 
 class EventEmitter(object):
     def __init__(self):
-        """
+        '''
         Initializes the EE.
-        """
+        '''
         self._events = defaultdict(list)
 
     def on(self, event, f=None):
-        """
+        '''
         Returns a function that takes an event listener callback
-        """
+        '''
         def _on(f):
             #fire 'new_listener' *before* adding the new listener!
             self.emit('new_listener', event, f)
@@ -33,9 +33,9 @@ class EventEmitter(object):
             return _on(f)
 
     def emit(self, event, *args, **kwargs):
-        """
+        '''
         Emit `event`, passing *args to each attached function.
-        """
+        '''
         handled = False
         # Pass the args to each function in the events dict
         for fxn in self._events[event]:
@@ -60,15 +60,15 @@ class EventEmitter(object):
 
 
     def remove_listener(self, event, function):
-        """
+        '''
         Remove the function attached to `event`.
-        """
+        '''
         self._events[event].remove(function)
 
     def remove_all_listeners(self, event):
-        """
+        '''
         Remove all listeners attached to `event`.
-        """
+        '''
         self._events[event] = []
 
     def listeners(self, event):

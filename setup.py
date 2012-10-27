@@ -3,24 +3,24 @@
 from distutils.core import setup
 
 setup(
-    name = "pyee",
-    version = "0.0.6",
-    packages = ["pyee"],
-    description = "A port of node.js's EventEmitter to python.",
-    author = "Joshua Holbrook",
-    author_email = "josh.holbrook@gmail.com",
-    url = "https://github.com/jesusabdullah/pyee",
+    name = 'pyee',
+    version = '0.0.6',
+    packages = ['pyee'],
+    description = 'A port of node.js\'s EventEmitter to Python.',
+    author = 'Joshua Holbrook',
+    author_email = 'josh.holbrook@gmail.com',
+    url = 'https://github.com/jesusabdullah/pyee',
     keywords = ['events', 'emitter', 'node.js', 'node', 'eventemitter', 'event_emitter'],
     classifiers = [
-        "Programming Language :: Python",
-        "Development Status :: 2 - Pre-Alpha",
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python :: 2.7", #only one tested
-        "Topic :: Other/Nonlisted Topic"
+        'Programming Language :: Python',
+        'Development Status :: 2 - Pre-Alpha',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2.7', #only one tested
+        'Topic :: Other/Nonlisted Topic'
     ],
-    long_description = """\
+    long_description = '''\
 pyee
 ======
 
@@ -49,5 +49,5 @@ Example:
 Easy-peasy.
 
 For more, visit <https://github.com/jesusabdullah/pyee> .
-    """
+    '''
 )
