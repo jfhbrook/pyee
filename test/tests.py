@@ -3,15 +3,17 @@
 import nose.tools as nt
 from pyee import Event_emitter, EventEmitter
 
-# An exception, used to prove that an event handler fired.
+
 # Kinda hack-y, I know.
 class ItWorkedException(Exception):
+    '''An exception, used to prove that an event handler fired.
+    '''
     pass
 
 def test_emit():
-    """
-    Test to show that event_emitters fire properly.
-    """
+    '''
+    Test that EventEmitters fire properly.
+    '''
     ee = Event_emitter()
 
     #Used in a decorator style.
@@ -30,6 +32,9 @@ def test_emit():
         ee.emit('event', 'emitter is emitted!', error=True)
 
 def test_emit_error():
+    '''
+    Test emitting an 'error' event.
+    '''
     ee = EventEmitter()
     
     with nt.assert_raises(Exception):
@@ -43,6 +48,7 @@ def test_emit_error():
     nt.assert_true(ee.emit('error'))
 
 def test_emit_return():
+    # FIXME: Add docstring
     ee = EventEmitter()
     
     # make sure emission without callback retruns False
@@ -55,9 +61,9 @@ def test_emit_return():
     nt.assert_true(ee.emit('data'))
 
 def test_new_listener_event():
-    """
-    test for the 'new_listener' event
-    """
+    '''
+    Test the 'new_listener' event.
+    '''
 
     ee = Event_emitter()
 
@@ -72,9 +78,9 @@ def test_new_listener_event():
 
     
 def test_listener_removal():
-    """
+    '''
     tests to make sure we can remove listeners as appropriate.
-    """
+    '''
 
     ee = Event_emitter()
 
@@ -113,9 +119,9 @@ def test_listener_removal():
     nt.assert_equal(ee._events['event'], [])
 
 def test_once():
-    """
+    '''
     Test to show that the "once" method works propers.
-    """
+    '''
 
     # very similar to "test_emit" but also makes sure that the event
     # gets removed afterwards
@@ -138,9 +144,9 @@ def test_once():
         ee.emit('event', 'emitter is emitted!', True)
 
 def test_listeners():
-    """
+    '''
     Test to make sure that the listeners method gives you access to the listeners array.
-    """
+    '''
     ee = Event_emitter()
     @ee.on('event')
     def event_handler():
