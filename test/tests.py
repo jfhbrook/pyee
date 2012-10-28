@@ -1,3 +1,4 @@
+#!/usr/bin/env nosetests
 # -*- coding: utf-8 -*-
 
 import nose.tools as nt
