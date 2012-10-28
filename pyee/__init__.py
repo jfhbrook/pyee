@@ -1,41 +1,39 @@
 # -*- coding: utf-8 -*-
+# FIXME: Add module docstring
+
+__all__ = ['EventEmitter', 'Event_emitter']
 
 from collections import defaultdict
 
 
-__all__ = ['EventEmitter', 'Event_emitter']
-
-
 class EventEmitter(object):
+    # FIXME: Add docstring
+    
     def __init__(self):
-        '''
-        Initializes the EE.
-        '''
+        '''Initializes the EE.'''
         self._events = defaultdict(list)
 
-    def on(self, event, f=None):
+    def on(self, event, fn=None):
+        '''Function decorator.  Decorate a function with this to have it fire
+        whenever `event` is emitted.
         '''
-        Returns a function that takes an event listener callback
-        '''
-        def _on(f):
-            #fire 'new_listener' *before* adding the new listener!
-            self.emit('new_listener', event, f)
+        def _on(fn):
+            # Fire `new_listener` *before* adding the new listener!
+            self.emit('new_listener', event, fn)
 
             # Add the necessary function
-            self._events[event].append(f)
+            self._events[event].append(fn)
 
             # Return original function so removal works
-            return f
+            return fn
 
-        if f is None:
+        if fn is None:
             return _on
         else:
-            return _on(f)
+            return _on(fn)
 
     def emit(self, event, *args, **kwargs):
-        '''
-        Emit `event`, passing *args to each attached function.
-        '''
+        '''Emit `event`, passing `*args` to each attached function.'''
         handled = False
         # Pass the args to each function in the events dict
         for fxn in self._events[event]:
@@ -43,10 +41,12 @@ class EventEmitter(object):
             handled = True
 
         if not handled and event == 'error':
-            raise Exception("Uncaught, 'error' event.")
+            raise Exception("Uncaught 'error' event.")
+
         return handled
 
     def once(self, event, f=None):
+        # FIXME: add docstring
         def _once(f):
             def g(*args, **kwargs):
                 f(*args, **kwargs)
@@ -58,20 +58,17 @@ class EventEmitter(object):
         else:
             self.on(event, _once(f))
 
-
     def remove_listener(self, event, function):
-        '''
-        Remove the function attached to `event`.
-        '''
+        '''Remove listener `function` from `event`.'''
         self._events[event].remove(function)
 
     def remove_all_listeners(self, event):
-        '''
-        Remove all listeners attached to `event`.
-        '''
+        '''Remove all listeners attached to `event`.'''
         self._events[event] = []
 
     def listeners(self, event):
+        '''Return all listeners for `event`.'''
+        # FIXME: specify the kind of object that is returned
         return self._events[event]
 
 
