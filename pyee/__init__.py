@@ -62,9 +62,13 @@ class EventEmitter(object):
         '''Remove listener `function` from `event`.'''
         self._events[event].remove(function)
 
-    def remove_all_listeners(self, event):
+    def remove_all_listeners(self, event=None):
         '''Remove all listeners attached to `event`.'''
-        self._events[event] = []
+        if event is not None:
+            self._events[event] = []
+        else:
+            self._events = None
+            self._events = defaultdict(list)
 
     def listeners(self, event):
         '''Return all listeners for `event`.'''
