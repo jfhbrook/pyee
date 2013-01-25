@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # I will always have to look these up, so why not just do it here?
 # Ref: http://diveintopython3.org/packaging.html
