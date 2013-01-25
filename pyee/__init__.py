@@ -35,8 +35,8 @@ class EventEmitter(object):
         """
         handled = False
         # Pass the args to each function in the events dict
-        for fxn in self._events[event]:
-            fxn(*args, **kwargs)
+        for f in self._events[event]:
+            f(*args, **kwargs)
             handled = True
 
         if not handled and event == 'error':
@@ -56,11 +56,11 @@ class EventEmitter(object):
             self.on(event, _once(f))
 
 
-    def remove_listener(self, event, function):
+    def remove_listener(self, event, f):
         """
         Remove the function attached to `event`.
         """
-        self._events[event].remove(function)
+        self._events[event].remove(f)
 
     def remove_all_listeners(self, event):
         """
