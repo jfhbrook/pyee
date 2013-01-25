@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# -*- coding: utf-8 -*-
 
 # I will always have to look these up, so why not just do it here?
 # Ref: http://diveintopython3.org/packaging.html
