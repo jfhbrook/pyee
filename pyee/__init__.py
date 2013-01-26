@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from collections import defaultdict
 
 __all__ = ['EventEmitter', 'Event_emitter']

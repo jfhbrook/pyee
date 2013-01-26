@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import nose.tools as nt
 from pyee import Event_emitter, EventEmitter
 
