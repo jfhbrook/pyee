@@ -1,6 +1,9 @@
 pyee
 ======
 
+.. image:: https://travis-ci.org/jesusabdullah/pyee.png
+`(link) <https://travis-ci.org/jesusabdullah/pyee>`_
+
 pyee supplies an ``EventEmitter`` object similar to the ``EventEmitter``
 from Node.js.
 
