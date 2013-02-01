@@ -27,27 +27,28 @@ pyee
 pyee supplies an event_emitter object that acts similar to the `EventEmitter`
 that comes with node.js.
 
-Example:
---------
+Example
+-------
 
 ::
 
-    In [1]: from pyee import Event_emitter
+    In [1]: from pyee import EventEmitter
 
-    In [2]: ee = Event_emitter()
+    In [2]: ee = EventEmitter()
 
     In [3]: @ee.on('event')
        ...: def event_handler():
        ...:     print 'BANG BANG'
-       ...:     
+       ...:
 
     In [4]: ee.emit('event')
     BANG BANG
 
-    In [5]: 
+    In [5]:
 
 Easy-peasy.
 
 For more, visit <https://github.com/jesusabdullah/pyee> .
-    """
+
+"""
 )
