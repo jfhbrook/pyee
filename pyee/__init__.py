@@ -56,7 +56,7 @@ class EventEmitter(object):
         def onError(message):
             logging.err(message)
 
-        ee.emit('error', 'something blew up')
+        ee.emit('error', Exception('something blew up'))
 
     """
     def __init__(self):

@@ -85,7 +85,7 @@ attaching callback to the event. For example::
     def onError(message):
         logging.err(message)
 
-    ee.emit('error', 'something blew up')
+    ee.emit('error', Exception('something blew up'))
 
 Tests:
 ------
