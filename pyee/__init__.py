@@ -79,7 +79,7 @@ class EventEmitter(object):
         """
 
         def _on(f):
-            #fire 'new_listener' *before* adding the new listener!
+            # Fire 'new_listener' *before* adding the new listener!
             self.emit('new_listener', event, f)
 
             # Add the necessary function
@@ -158,5 +158,5 @@ class EventEmitter(object):
         return self._events[event]
 
 
-# Backwards capatability
+# Backwards compatiblity
 Event_emitter = EventEmitter
