@@ -124,8 +124,10 @@ class EventEmitter(object):
         """
         def _once(f):
             def g(*args, **kwargs):
-                f(*args, **kwargs)
-                self.remove_listener(event, g)
+                try:
+                    f(*args, **kwargs)
+                finally:
+                    self.remove_listener(event, g)
             return g
 
         if f is None:
