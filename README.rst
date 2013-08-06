@@ -2,7 +2,7 @@ pyee
 ======
 
 .. image:: https://travis-ci.org/jesusabdullah/pyee.png
-`(link) <https://travis-ci.org/jesusabdullah/pyee>`_
+   :target: https://travis-ci.org/jesusabdullah/pyee
 
 pyee supplies an ``EventEmitter`` object similar to the ``EventEmitter``
 from Node.js.
@@ -93,13 +93,6 @@ Tests:
 ::
 
     nosetests
-
-Developers! Developers! Developers!
------------------------------------
-
-If you're a Python and/or Node.js fan, and you like what you see (or don't quite like
-what you see): I heartily invite you to dig in, fork it up and `git push it
-good <https://twitter.com/#!/maraksquires/status/71911996051824640>`_.
 
 License:
 --------
