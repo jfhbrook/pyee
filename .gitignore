@@ -3,3 +3,5 @@ dist/*
 build/*
 MANIFEST
 README
+
+*.patch
