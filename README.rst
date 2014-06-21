@@ -7,6 +7,8 @@ pyee
 pyee supplies an ``EventEmitter`` object similar to the ``EventEmitter``
 from Node.js.
 
+There is also the possibility to use mqtt topic patterns to match events
+
 Example:
 --------
 
@@ -25,6 +27,8 @@ Example:
     BANG BANG
 
     In [5]:
+
+    In [6]: ee.on('a/#/c', lambda ...)
 
 Easy-peasy.
 

@@ -6,6 +6,7 @@ pyee
 pyee supplies an ``EventEmitter`` object similar to the ``EventEmitter``
 from Node.js.
 
+There is also the possibility to use mqtt topic patterns to match events
 
 Example
 -------
@@ -26,6 +27,7 @@ Example
 
     In [5]:
 
+    In [6]: ee.on('a/#/c', lambda ...)
 
 Easy-peasy.
 
@@ -39,6 +41,7 @@ __all__ = ['EventEmitter', 'Event_emitter']
 
 
 class EventEmitter(object):
+
     """The EventEmitter class.
 
     (Special) Events
@@ -59,11 +62,16 @@ class EventEmitter(object):
         ee.emit('error', Exception('something blew up'))
 
     """
+
     def __init__(self):
         """
         Initializes the EE.
         """
         self._events = defaultdict(list)
+
+        # Specialised dict for pattern matching topics
+        # This way it will not impact standard behaviour
+        self._patterns = defaultdict(list)
 
     def on(self, event, f=None):
         """Registers the function ``f`` to the event name ``event``.
@@ -83,7 +91,10 @@ class EventEmitter(object):
             self.emit('new_listener', event, f)
 
             # Add the necessary function
-            self._events[event].append(f)
+            if '#' in event:
+                self._patterns[event].append(f)
+            else:
+                self._events[event].append(f)
 
             # Return original function so removal works
             return f
@@ -108,6 +119,12 @@ class EventEmitter(object):
         """
         handled = False
 
+        for p in self._patterns:
+            if self._matches(p, event):
+                for f in self._patterns[p]:
+                    f(*args, **kwargs)
+                    handled = True
+
         # Pass the args to each function in the events dict
         for f in self._events[event]:
             f(*args, **kwargs)
@@ -117,6 +134,14 @@ class EventEmitter(object):
             raise Exception("Uncaught 'error' event.")
 
         return handled
+
+    def _matches(self, pattern, event):
+        """
+        Check that 'a/#/b/#/c' pattern matches '/a/x/b/x/c'
+        """
+
+        ps, es = pattern.split('/'), event.split('/')
+        return all([x == y or x == '#' for x, y in zip(ps, es)]) and len(ps) <= len(es)
 
     def once(self, event, f=None):
         """The same as ``ee.on``, except that the listener is automatically
@@ -141,22 +166,29 @@ class EventEmitter(object):
         style is.)
 
         """
-        self._events[event].remove(f)
+        if '#' in event:
+            self._patterns[event].remove(f)
+        else:
+            self._events[event].remove(f)
 
     def remove_all_listeners(self, event=None):
         """Remove all listeners attached to ``event``.
         """
         if event is not None:
-            self._events[event] = []
+            if '#' in event:
+                self._patterns[event] = []
+            else:
+                self._events[event] = []
         else:
             self._events = None
+            self._patterns = None
             self._events = defaultdict(list)
+            self._patterns = defaultdict(list)
 
     def listeners(self, event):
         """Returns the list of all listeners registered to the ``event``.
         """
-        return self._events[event]
-
+        return self._events[event] if not '#' in event else self._patterns[event]
 
 # Backwards compatiblity
 Event_emitter = EventEmitter
