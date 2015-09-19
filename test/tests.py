@@ -153,3 +153,34 @@ def test_listeners():
 
     with nt.assert_raises(ItWorkedException) as it_worked:
         ee.emit('event')
+
+def test_properties_preserved():
+    """Test that the properties of decorated functions are preserved.
+    """
+    ee = EventEmitter()
+
+    @ee.on('always')
+    def always_event_handler():
+        """An event handler."""
+        raise ItWorkedException
+
+    @ee.once('once')
+    def once_event_handler():
+        """Another event handler."""
+        raise ItWorkedException
+
+    nt.assert_equal(always_event_handler.__doc__, 'An event handler.')
+    nt.assert_equal(once_event_handler.__doc__, 'Another event handler.')
+
+    with nt.assert_raises(ItWorkedException) as it_worked:
+        # Call the event handler directly.
+        always_event_handler()
+
+    with nt.assert_raises(ItWorkedException):
+        # Call the event handler directly.
+        once_event_handler()
+
+    with nt.assert_raises(ItWorkedException):
+        # Assert that it does not matter, that the handler has already been
+        # called directly.
+        ee.emit('once')

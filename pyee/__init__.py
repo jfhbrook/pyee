@@ -128,10 +128,14 @@ class EventEmitter(object):
                 self.remove_listener(event, g)
             return g
 
-        if f is None:
-            return lambda f: self.on(event, _once(f))
-        else:
+        def _wrapper(f):
             self.on(event, _once(f))
+            return f
+
+        if f is None:
+            return _wrapper
+        else:
+            _wrapper(f)
 
     def remove_listener(self, event, f):
         """Removes the function ``f`` from ``event``.
