@@ -9,7 +9,7 @@ setup(
     description = "A port of node.js's EventEmitter to python.",
     author = "Joshua Holbrook",
     author_email = "josh.holbrook@gmail.com",
-    url = "https://github.com/jesusabdullah/pyee",
+    url = "https://github.com/jfhbrook/pyee",
     keywords = ["events", "emitter", "node.js", "node", "eventemitter", "event_emitter"],
     classifiers = [
         "Programming Language :: Python",
@@ -55,7 +55,7 @@ Example
 
 Easy-peasy.
 
-For more, visit <https://github.com/jesusabdullah/pyee> .
+For more, visit <https://github.com/jfhbrook/pyee> .
 
 """
 )
