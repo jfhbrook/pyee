@@ -51,20 +51,22 @@ callback, which allows for decorator styles::
     def data_handler(data):
         print data
 
-**ee.emit(event, *args, **kwargs)**: Emits the event, calling the attached functions
-with ``*args``. For example::
+**ee.emit(event, *args, **kwargs)**: Emits the event, calling the attached
+functions with ``*args``. For example::
 
     ee.emit('data', '00101001')
 
-This will call ``data('00101001')'`` (assuming ``data`` is an attached function).
-Returns ``False`` if no functions are attached to handle the emission (otherwise ``True``).
+This will call ``data('00101001')'`` (assuming ``data`` is an attached
+function). Returns ``False`` if no functions are attached to handle the emission
+(otherwise ``True``).
 
 **ee.once(event, f=None)**: The same as ``ee.on``, except that the listener
 is automatically removed after it's called.
 
-**ee.remove_listener(event, fxn)**: Removes the function ``fxn`` from ``event``.
-Requires that the function is not closed over by ``ee.on`` (using this with the
-decorator style is unfortunately not possible).
+**ee.remove_listener(event, fxn)**: Removes the function ``fxn`` from
+``event``. Note that because ``@ee.once`` returns the original function and not
+the wrapped function that automatically removes the listener, you can't remove
+once listeners set up with the decorator.
 
 **ee.remove_all_listeners(event)**: Removes all listeners from ``event``.
 
@@ -78,8 +80,8 @@ the given ``event``.
 **"new_listener"**: Fires whenever a new listener is created. Listeners for this
 event do not fire upon their own creation.
 
-**"error"**: When emitted raises an Exception by default, behavior can be overriden by
-attaching callback to the event. For example::
+**"error"**: When emitted raises an Exception by default, behavior can be
+overriden by attaching callback to the event. For example::
 
     @ee.on('error')
     def onError(message):
