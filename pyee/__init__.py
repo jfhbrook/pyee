@@ -108,8 +108,12 @@ class EventEmitter(object):
         """
         handled = False
 
+        # Copy the events dict first. Avoids a bug if the events dict gets
+        # changed in the middle of the following for loop.
+        events_copy = list(self._events[event])
+
         # Pass the args to each function in the events dict
-        for f in self._events[event]:
+        for f in events_copy:
             f(*args, **kwargs)
             handled = True
 
