@@ -112,6 +112,32 @@ def test_listener_removal():
     ee.remove_all_listeners('event')
     nt.assert_equal(ee._events['event'], [])
 
+def test_listener_removal_on_emit():
+    """Test that a listener removed during an emit is called inside the current
+    emit cycle.
+    """
+    ee = Event_emitter()
+
+    def should_still_work():
+        raise ItWorkedException
+
+    def should_remove():
+        ee.remove_listener('remove', should_still_work)
+
+    ee.on('remove', should_remove)
+    ee.on('remove', should_still_work)
+
+    with nt.assert_raises(ItWorkedException) as it_worked:
+        ee.emit('remove')
+
+    # Testing it the other way for sanity
+    ee = Event_emitter()
+    ee.on('remove', should_still_work)
+    ee.on('remove', should_remove)
+
+    with nt.assert_raises(ItWorkedException) as it_worked:
+        ee.emit('remove')
+
 def test_once():
     """Test that `once()` method works propers.
     """
