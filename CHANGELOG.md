@@ -1,3 +1,6 @@
+2016/02/15 Version 1.0.2
+  - Make copy of event handlers array before iterating on emit
+
 2015/09/21 Version 1.0.1
   - Change URLs to reference jfhbrook
 
