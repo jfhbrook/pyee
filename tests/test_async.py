@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from asyncio import Future, gather, new_event_loop, sleep
-from twisted.internet import reactor
 from twisted.internet.defer import Deferred, ensureDeferred
 
 from pyee import EventEmitter
@@ -52,14 +51,10 @@ def test_twisted_emit():
     @should_call.addCallback
     def _done(result):
         assert result
-        reactor.stop()
 
     @should_call.addErrback
     def _err(exc):
-        reactor.stop()
-
-    reactor.callLater(0.2, should_call.cancel)
+        raise exc
 
     ee.emit('event')
 
-    reactor.run()
