@@ -26,7 +26,8 @@ API Docs:
 Some Links
 ==========
 
-* `Read About Me On GitHub! <https://github.com/jfhbrook/pyee>`_
+* `Fork Me On GitHub! <https://github.com/jfhbrook/pyee>`_
+* `These Very Docs on readthedocs.io <https://pyee.rtfd.io>`_
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`

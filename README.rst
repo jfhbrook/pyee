@@ -9,18 +9,11 @@ pyee
 pyee supplies an ``EventEmitter`` object similar to the ``EventEmitter``
 from Node.js.
 
-Installation:
--------------
-
-::
-
-    pip install pyee
-
-API Docs:
+Docs:
 --------
 
-Authgenerated API docs, including examples, can be found at
-https://pyee.readthedocs.io .
+Authgenerated API docs, including basic installation directions and examples,
+can be found at https://pyee.readthedocs.io .
 
 Development:
 ------
