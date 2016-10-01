@@ -6,7 +6,7 @@ pyee is a rough port of
 It's missing a number of methods, but implements the basics.
 
 Install:
--------
+--------
 
 You can install this project off pypi using ``pip``::
 

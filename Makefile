@@ -7,7 +7,7 @@ publish:
 	python setup.py register sdist upload
 
 test:
-	pytest -v
+	python setup.py test
 
 lint:
-	pyflakes ./pyee ./tests setup.py
+	python setup.py flake8
