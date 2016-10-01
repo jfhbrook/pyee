@@ -6,4 +6,4 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
-script: nosetests -v --where=test
+script: python setup.py develop && nosetests -v --where=test
