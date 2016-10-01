@@ -124,7 +124,6 @@ class EventEmitter():
         for f in events_copy:
             result = f(*args, **kwargs)
             if iscoroutine and iscoroutine(result):
-                print('this is a coroutine, scheduling')
                 self._schedule(result)
             handled = True
 
