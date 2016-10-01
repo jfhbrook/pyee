@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from asyncio import Future, gather, new_event_loop, sleep
-from twisted.internet.defer import Deferred, ensureDeferred
+from mock import Mock
+from twisted.internet.defer import ensureDeferred
 
 from pyee import EventEmitter
 
@@ -42,19 +43,13 @@ def test_twisted_emit():
     """
     ee = EventEmitter(scheduler=ensureDeferred)
 
-    should_call = Deferred()
+    should_call = Mock()
 
     @ee.on('event')
     async def event_handler():
-        should_call.callback(True)
-
-    @should_call.addCallback
-    def _done(result):
-        assert result
-
-    @should_call.addErrback
-    def _err(exc):
-        raise exc
+        should_call(True)
 
     ee.emit('event')
+
+    should_call.assert_called_once()
 
