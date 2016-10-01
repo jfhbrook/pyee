@@ -16,7 +16,7 @@ Example
 
     In [3]: @ee.on('event')
        ...: def event_handler():
-       ...:     print 'BANG BANG'
+       ...:     print('BANG BANG')
        ...:
 
     In [4]: ee.emit('event')
