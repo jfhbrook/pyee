@@ -65,12 +65,12 @@ class EventEmitter():
         ee.emit('error', Exception('something blew up'))
 
     """
-    def __init__(self, ensure_future=ensure_future):
+    def __init__(self, scheduler=ensure_future):
         """
         Initializes the EE.
         """
         self._events = defaultdict(list)
-        self._ensure_future - ensure_future
+        self._schedule = scheduler
 
     def on(self, event, f=None):
         """Registers the function ``f`` to the event name ``event``.
@@ -123,7 +123,7 @@ class EventEmitter():
         for f in events_copy:
             result = f(*args, **kwargs)
             if iscoroutine and iscoroutine(result):
-                self._ensure_future(result)
+                self._schedule(result)
             handled = True
 
         if not handled and event == 'error':
