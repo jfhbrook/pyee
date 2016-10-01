@@ -47,8 +47,11 @@ class EventEmitter():
 
     For interoperation with asyncio, one can specify the scheduler and
     the event loop. The scheduler defaults to ``asyncio.ensure_future``,
-    and the loop defaults to ``None``---in other words, the default
-    asyncio event loop.
+    and the loop defaults to ``None``. When used with the default scheduler,
+    this will schedule the coroutine onto asyncio's default loop.
+
+    This should also be compatible with recent versions of twisted by
+    setting `scheduler=twisted.internet.defer.ensureDeferred.
 
     Most events are registered with EventEmitter via the ``on`` and ``once``
     methods. However, pyee EventEmitters have two *special* events:
