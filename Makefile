@@ -1,16 +1,24 @@
-publish:
-	# I will always have to look these up, so why not just do it here?
-	# Ref: http://diveintopython3.org/packaging.html
-	cp README.rst README
+package:
 	python setup.py check
 	python setup.py sdist
-	python setup.py register sdist upload
+
+upload:
+	twine upload dist/*
 
 test:
-	tox
+	make lint && tox
 
 lint:
 	python setup.py flake8
 
 the_docs:
 	python setup.py build_sphinx
+
+clean:
+	rm -rf .tox
+	rm -rf dist
+	rm -rf pyee.egg-info
+	rm -rf pyee/*.pyc
+	rm -rf pyee/__pycache__
+	rm -rf pytest_runner-*.egg
+	rm -rf tests/__pycache__
