@@ -1,10 +1,19 @@
-.. pyee documentation master file, created by
-   sphinx-quickstart on Sat Oct  1 15:15:23 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 pyee
 ====
+
+pyee is a rough port of
+`node.js's EventEmitter <https://nodejs.org/api/events.html>`_.
+It's missing a number of methods, but implements the basics.
+
+Install:
+-------
+
+You can install this project off pypi using ``pip``::
+
+    pip install pyee
+
+API Docs:
+---------
 
 .. toctree::
    :maxdepth: 2
@@ -15,8 +24,9 @@ pyee
     :members:
 
 Some Links
-==================
+==========
 
+* `Read About Me On GitHub! <https://github.com/jfhbrook/pyee>`_
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
