@@ -8,7 +8,7 @@ setup(
 
     packages=find_packages(),
     setup_requires=['pytest-runner'],
-    tests_require=['pytest'],
+    tests_require=['twisted'],
     include_package_data=True,
 
     description="A port of node.js's EventEmitter to python.",

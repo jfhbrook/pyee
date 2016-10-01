@@ -137,7 +137,10 @@ class EventEmitter():
         for f in events_copy:
             result = f(*args, **kwargs)
             if iscoroutine and iscoroutine(result):
-                self._schedule(result, loop=self._loop)
+                if self._loop:
+                    self._schedule(result, loop=self._loop)
+                else:
+                    self._schedule(result)
             handled = True
 
         if not handled and event == 'error':
