@@ -84,10 +84,9 @@ def test_listener_removal():
     ee = EventEmitter()
 
     # Some functions to pass to the EE
+    @ee.on('event')
     def first():
         return 1
-
-    ee.on('event', first)
 
     @ee.on('event')
     def second():
