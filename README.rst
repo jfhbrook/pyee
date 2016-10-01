@@ -3,6 +3,8 @@ pyee
 
 .. image:: https://travis-ci.org/jfhbrook/pyee.png
    :target: https://travis-ci.org/jfhbrook/pyee
+.. image:: https://readthedocs.org/projects/pyee/badge/?version=latest
+   :target: https://pyee.readthedocs.io
 
 pyee supplies an ``EventEmitter`` object similar to the ``EventEmitter``
 from Node.js.
@@ -13,6 +15,12 @@ Installation:
 ::
 
     pip install pyee
+
+API Docs:
+--------
+
+Authgenerated API docs, including examples, can be found at
+https://pyee.readthedocs.io .
 
 Development:
 ------
