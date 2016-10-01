@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """
-pyee
-====
-
 pyee supplies an ``EventEmitter`` object similar to the ``EventEmitter``
 from Node.js.
 
@@ -26,10 +23,6 @@ Example
     BANG BANG
 
     In [5]:
-
-
-Easy-peasy.
-
 
 """
 
@@ -73,22 +66,41 @@ class EventEmitter():
     def __init__(self, scheduler=ensure_future, loop=None):
         """
         Initializes the EE.
+
+        For interoperation with asyncio, one can specify either:
+
+        1. ``scheduler=ensure_future`` - The function used by pyee to schedule
+        asyncio coroutines. Defaults to ``asyncio.ensure_future``.
+        2. ``loop=None`` - The event loop used by pyee when scheduling asyncio
+        coroutines. Defaults to the default event loop as accessed by
+        ``asyncio.get_event_loop()``.
         """
         self._events = defaultdict(list)
         self._schedule = scheduler
         self._loop = loop
 
     def on(self, event, f=None):
-        """Registers the function ``f`` to the event name ``event``.
+        """Registers the function (or optionally an asyncio coroutine function)
+        ``f`` to the event name ``event``.
 
         If ``f`` isn't provided, this method returns a function that
         takes ``f`` as a callback; in other words, you can use this method
-        as a decorator, like so:
+        as a decorator, like so::
 
             @ee.on('data')
             def data_handler(data):
-                print data
+                print(data)
 
+        As mentioned, this method can also take an asyncio coroutine function::
+
+           @ee.on('data')
+           async def data_handler(data)
+               await do_async_thing(data)
+
+
+        This will automatically schedule the coroutine using the configured
+        scheduling function (defaults to ``asyncio.ensure_future``) and the
+        configured event loop (defaults to ``asyncio.get_event_loop()``).
         """
 
         def _on(f):
@@ -118,6 +130,9 @@ class EventEmitter():
         Assuming ``data`` is an attached function, this will call
         ``data('00101001')'``.
 
+        For coroutine event handlers, calling emit is non-blocking. In other
+        words, you do not have to await any results from emit, and the
+        coroutine is scheduled in a fire-and-forget fashion.
         """
         handled = False
 
