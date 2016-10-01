@@ -128,7 +128,7 @@ class EventEmitter():
             handled = True
 
         if not handled and event == 'error':
-            raise Exception("Uncaught 'error' event.")
+            raise args[0] if args[0] else Exception("Uncaught 'error' event.")
 
         return handled
 
