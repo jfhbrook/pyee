@@ -10,4 +10,4 @@ test:
 	pytest -v
 
 lint:
-	pyflakes ./pyee ./test ./py3-test setup.py
+	pyflakes ./pyee ./tests setup.py
