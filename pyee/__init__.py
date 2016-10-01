@@ -33,12 +33,17 @@ Easy-peasy.
 """
 
 
+try:
+    from asyncio import iscoroutine, ensure_future
+except ImportError:
+    pass
+
 from collections import defaultdict
 
 __all__ = ['EventEmitter', 'Event_emitter']
 
 
-class EventEmitter(object):
+class EventEmitter():
     """The EventEmitter class.
 
     (Special) Events
@@ -59,11 +64,12 @@ class EventEmitter(object):
         ee.emit('error', Exception('something blew up'))
 
     """
-    def __init__(self):
+    def __init__(self, scheduler=ensure_future):
         """
         Initializes the EE.
         """
         self._events = defaultdict(list)
+        self._schedule = scheduler
 
     def on(self, event, f=None):
         """Registers the function ``f`` to the event name ``event``.
@@ -114,7 +120,10 @@ class EventEmitter(object):
 
         # Pass the args to each function in the events dict
         for f in events_copy:
-            f(*args, **kwargs)
+            result = f(*args, **kwargs)
+            if iscoroutine and iscoroutine(result):
+                print('this is a coroutine, scheduling')
+                self._schedule(result)
             handled = True
 
         if not handled and event == 'error':

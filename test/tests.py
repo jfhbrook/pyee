@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import nose.tools as nt
-from pyee import Event_emitter, EventEmitter
+try:
+    from asyncio import get_event_loop
+    from asyncio import sleep as async_sleep
+except ImportError:
+    pass
+
+from pyee import EventEmitter
 
 
 class ItWorkedException(Exception):
@@ -13,7 +19,7 @@ class ItWorkedException(Exception):
 def test_emit():
     """Test that event_emitters fire properly.
     """
-    ee = Event_emitter()
+    ee = EventEmitter()
 
     # Used in a decorator style
     @ee.on('event')
@@ -30,6 +36,39 @@ def test_emit():
     # "Hides" other exceptions.
     with nt.assert_raises(ItWorkedException) as it_worked:
         ee.emit('event', 'emitter is emitted!', error=True)
+
+def test_async_emit():
+    if not get_event_loop:
+        return
+
+    """Test that event_emitters can handle wrapping coroutines
+    """
+    ee = EventEmitter()
+    loop = get_event_loop()
+
+    class SenseWasCalled():
+        def __init__(self):
+            self.was_called = False
+
+        def am_calling(self):
+            self.was_called = True
+
+        def assert_was_called(self):
+            nt.assert_true(self.was_called)
+
+    sensor = SenseWasCalled()
+
+
+    @ee.on('event')
+    async def event_handler():
+        sensor.am_calling()
+
+
+    ee.emit('event')
+    loop.run_until_complete(async_sleep(1))
+
+    sensor.assert_was_called()
+    
 
 def test_emit_error():
     ee = EventEmitter()
@@ -60,7 +99,7 @@ def test_new_listener_event():
     """Test the 'new_listener' event.
     """
 
-    ee = Event_emitter()
+    ee = EventEmitter()
 
     @ee.on('new_listener')
     def new_listener_handler(event, fxn):
@@ -76,7 +115,7 @@ def test_listener_removal():
     """Tests that we can remove listeners (as appropriate).
     """
 
-    ee = Event_emitter()
+    ee = EventEmitter()
 
 
     #Some functions to pass to the EE
@@ -116,7 +155,7 @@ def test_listener_removal_on_emit():
     """Test that a listener removed during an emit is called inside the current
     emit cycle.
     """
-    ee = Event_emitter()
+    ee = EventEmitter()
 
     def should_still_work():
         raise ItWorkedException
@@ -131,7 +170,7 @@ def test_listener_removal_on_emit():
         ee.emit('remove')
 
     # Testing it the other way for sanity
-    ee = Event_emitter()
+    ee = EventEmitter()
     ee.on('remove', should_still_work)
     ee.on('remove', should_remove)
 
@@ -145,7 +184,7 @@ def test_once():
     # very similar to "test_emit" but also makes sure that the event
     # gets removed afterwards
 
-    ee = Event_emitter()
+    ee = EventEmitter()
 
     def once_handler(data, error=None):
         nt.assert_equals(data, 'emitter is emitted!')
@@ -166,7 +205,7 @@ def test_listeners():
     """Test that `listeners()` gives you access to the listeners array.
     """
     
-    ee = Event_emitter()
+    ee = EventEmitter()
     @ee.on('event')
     def event_handler():
         pass
