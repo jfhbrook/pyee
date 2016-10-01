@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import nose.tools as nt
-from pyee import Event_emitter, EventEmitter
+
+from pyee import EventEmitter
 
 
 class ItWorkedException(Exception):
@@ -10,10 +11,11 @@ class ItWorkedException(Exception):
     """
     pass
 
+
 def test_emit():
     """Test that event_emitters fire properly.
     """
-    ee = Event_emitter()
+    ee = EventEmitter()
 
     # Used in a decorator style
     @ee.on('event')
@@ -26,27 +28,29 @@ def test_emit():
     # Making sure data is passed propers
     ee.emit('event', 'emitter is emitted!', error=False)
 
-    # Some nose bullshit to check for the firings. 
+    # Some nose bullshit to check for the firings.
     # "Hides" other exceptions.
-    with nt.assert_raises(ItWorkedException) as it_worked:
+    with nt.assert_raises(ItWorkedException) as it_worked:  # noqa
         ee.emit('event', 'emitter is emitted!', error=True)
+
 
 def test_emit_error():
     ee = EventEmitter()
-    
+
     with nt.assert_raises(Exception):
         ee.emit('error')
 
     @ee.on('error')
     def onError():
         pass
-        
+
     # No longer raises and error instead return True indicating handled
     nt.assert_true(ee.emit('error'))
 
+
 def test_emit_return():
     ee = EventEmitter()
-    
+
     # make sure emitting without a callback returns False
     nt.assert_false(ee.emit('data'))
 
@@ -56,30 +60,30 @@ def test_emit_return():
     # should return True now
     nt.assert_true(ee.emit('data'))
 
+
 def test_new_listener_event():
     """Test the 'new_listener' event.
     """
 
-    ee = Event_emitter()
+    ee = EventEmitter()
 
     @ee.on('new_listener')
     def new_listener_handler(event, fxn):
         raise ItWorkedException
 
-    with nt.assert_raises(ItWorkedException) as it_worked:
+    with nt.assert_raises(ItWorkedException) as it_worked:  # noqa
         @ee.on('event')
         def event_handler(data):
             pass
 
-    
+
 def test_listener_removal():
     """Tests that we can remove listeners (as appropriate).
     """
 
-    ee = Event_emitter()
+    ee = EventEmitter()
 
-
-    #Some functions to pass to the EE
+    # Some functions to pass to the EE
     def first():
         return 1
 
@@ -112,11 +116,12 @@ def test_listener_removal():
     ee.remove_all_listeners('event')
     nt.assert_equal(ee._events['event'], [])
 
+
 def test_listener_removal_on_emit():
     """Test that a listener removed during an emit is called inside the current
     emit cycle.
     """
-    ee = Event_emitter()
+    ee = EventEmitter()
 
     def should_still_work():
         raise ItWorkedException
@@ -131,12 +136,13 @@ def test_listener_removal_on_emit():
         ee.emit('remove')
 
     # Testing it the other way for sanity
-    ee = Event_emitter()
+    ee = EventEmitter()
     ee.on('remove', should_still_work)
     ee.on('remove', should_remove)
 
-    with nt.assert_raises(ItWorkedException) as it_worked:
+    with nt.assert_raises(ItWorkedException) as it_worked:  # noqa
         ee.emit('remove')
+
 
 def test_once():
     """Test that `once()` method works propers.
@@ -145,28 +151,30 @@ def test_once():
     # very similar to "test_emit" but also makes sure that the event
     # gets removed afterwards
 
-    ee = Event_emitter()
+    ee = EventEmitter()
 
     def once_handler(data, error=None):
         nt.assert_equals(data, 'emitter is emitted!')
         if (error):
             raise ItWorkedException
 
-    #Tests to make sure that after event is emitted that it's gone.
+    # Tests to make sure that after event is emitted that it's gone.
     ee.once('event', once_handler)
     ee.emit('event', 'emitter is emitted!')
     nt.assert_equal(ee._events['event'], [])
 
-    #Tests to make sure callback fires. "Hides" other exceptions.
-    with nt.assert_raises(ItWorkedException) as it_worked:
+    # Tests to make sure callback fires. "Hides" other exceptions.
+    with nt.assert_raises(ItWorkedException) as it_worked:  # noqa
         ee.once('event', once_handler)
         ee.emit('event', 'emitter is emitted!', True)
+
 
 def test_listeners():
     """Test that `listeners()` gives you access to the listeners array.
     """
-    
-    ee = Event_emitter()
+
+    ee = EventEmitter()
+
     @ee.on('event')
     def event_handler():
         pass
@@ -177,8 +185,9 @@ def test_listeners():
     l = ee.listeners('event')
     l[0] = raiser
 
-    with nt.assert_raises(ItWorkedException) as it_worked:
+    with nt.assert_raises(ItWorkedException) as it_worked:  # noqa
         ee.emit('event')
+
 
 def test_properties_preserved():
     """Test that the properties of decorated functions are preserved.
@@ -198,7 +207,7 @@ def test_properties_preserved():
     nt.assert_equal(always_event_handler.__doc__, 'An event handler.')
     nt.assert_equal(once_event_handler.__doc__, 'Another event handler.')
 
-    with nt.assert_raises(ItWorkedException) as it_worked:
+    with nt.assert_raises(ItWorkedException) as it_worked:  # noqa
         # Call the event handler directly.
         always_event_handler()
 

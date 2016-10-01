@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
 pyee
 ====
@@ -33,22 +34,28 @@ Easy-peasy.
 """
 
 
+try:
+    from asyncio import iscoroutine, ensure_future
+except ImportError:
+    iscoroutine = None
+    ensure_future = None
+
 from collections import defaultdict
 
-__all__ = ['EventEmitter', 'Event_emitter']
+__all__ = ['EventEmitter']
 
 
-class EventEmitter(object):
+class EventEmitter():
     """The EventEmitter class.
 
     (Special) Events
     ----------------
 
-    -   'new_listener': Fires whenever a new listener is created. Listeners for this
-    event do not fire upon their own creation.
+    -   'new_listener': Fires whenever a new listener is created. Listeners for
+    this event do not fire upon their own creation.
 
-    -   'error': When emitted raises an Exception by default, behavior can be overriden by
-    attaching callback to the event.
+    -   'error': When emitted raises an Exception by default, behavior can be
+    overriden by attaching callback to the event.
 
     For example::
 
@@ -59,11 +66,12 @@ class EventEmitter(object):
         ee.emit('error', Exception('something blew up'))
 
     """
-    def __init__(self):
+    def __init__(self, scheduler=ensure_future):
         """
         Initializes the EE.
         """
         self._events = defaultdict(list)
+        self._schedule = scheduler
 
     def on(self, event, f=None):
         """Registers the function ``f`` to the event name ``event``.
@@ -114,7 +122,9 @@ class EventEmitter(object):
 
         # Pass the args to each function in the events dict
         for f in events_copy:
-            f(*args, **kwargs)
+            result = f(*args, **kwargs)
+            if iscoroutine and iscoroutine(result):
+                self._schedule(result)
             handled = True
 
         if not handled and event == 'error':
@@ -164,7 +174,3 @@ class EventEmitter(object):
         """Returns the list of all listeners registered to the ``event``.
         """
         return self._events[event]
-
-
-# Backwards compatiblity
-Event_emitter = EventEmitter

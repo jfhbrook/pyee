@@ -1,5 +1,3 @@
-all: tests
-
 publish:
 	# I will always have to look these up, so why not just do it here?
 	# Ref: http://diveintopython3.org/packaging.html
@@ -8,5 +6,9 @@ publish:
 	python setup.py sdist
 	python setup.py register sdist upload
 
-tests:
-	nosetests -v
+test:
+	nosetests -v --where=test
+	nosetests -v where=test --py3where=py3-test
+
+lint:
+	pyflakes ./pyee ./test ./py3-test setup.py
