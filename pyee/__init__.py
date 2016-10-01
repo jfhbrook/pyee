@@ -41,7 +41,12 @@ except ImportError:
 
 from collections import defaultdict
 
-__all__ = ['EventEmitter']
+__all__ = ['EventEmitter', 'PyeeException']
+
+
+class PyeeException(Exception):
+    """An exception internal to pyee."""
+    pass
 
 
 class EventEmitter():
@@ -128,7 +133,10 @@ class EventEmitter():
             handled = True
 
         if not handled and event == 'error':
-            raise args[0] if args[0] else Exception("Uncaught 'error' event.")
+            if len(args):
+                raise args[0]
+            else:
+                raise PyeeException("Uncaught, unspecified 'error' event.")
 
         return handled
 
