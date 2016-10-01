@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-import nose.tools as nt
 from asyncio import Future, gather, new_event_loop, sleep
 
 from pyee import EventEmitter
-
 
 def test_async_emit():
     """Test that event_emitters can handle wrapping coroutines
@@ -27,7 +25,7 @@ def test_async_emit():
 
     @should_call.add_done_callback
     def _done(result):
-        nt.assert_true(result)
+        assert result
 
     ee.emit('event')
 
