@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
 pyee
 ====
@@ -36,11 +37,12 @@ Easy-peasy.
 try:
     from asyncio import iscoroutine, ensure_future
 except ImportError:
-    pass
+    iscoroutine = None
+    ensure_future = None
 
 from collections import defaultdict
 
-__all__ = ['EventEmitter', 'Event_emitter']
+__all__ = ['EventEmitter']
 
 
 class EventEmitter():
@@ -174,6 +176,3 @@ class EventEmitter():
         """
         return self._events[event]
 
-
-# Backwards compatiblity
-Event_emitter = EventEmitter
