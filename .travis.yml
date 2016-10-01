@@ -6,4 +6,5 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
+install: pip install --user -r requirements_dev.txt
 script: python setup.py develop && pytest -v
