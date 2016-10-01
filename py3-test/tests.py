@@ -11,22 +11,24 @@ def test_async_emit():
     loop = get_event_loop()
     ee = EventEmitter(loop=loop)
 
-    future = Future()
+    should_call = Future(loop=loop)
 
     @ee.on('event')
     async def event_handler():
-        future.set_result(True)
+        should_call.set_result(True)
 
     async def create_timeout(loop=loop):
         await sleep(1, loop=loop)
-        future.cancel()
+        if not should_call.done():
+            raise Exception('should_call timed out!')
+            return should_call.cancel()
 
     timeout = create_timeout(loop=loop)
 
-    @future.add_done_callback
+    @should_call.add_done_callback
     def _done(result):
         nt.assert_true(result)
 
     ee.emit('event')
 
-    loop.run_until_complete(gather(future, timeout))
+    loop.run_until_complete(gather(should_call, timeout))
