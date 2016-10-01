@@ -32,3 +32,5 @@ def test_async_emit():
     ee.emit('event')
 
     loop.run_until_complete(gather(should_call, timeout, loop=loop))
+
+    loop.close()
