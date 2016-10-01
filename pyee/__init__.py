@@ -33,7 +33,6 @@ Easy-peasy.
 
 """
 
-
 try:
     from asyncio import iscoroutine, ensure_future
 except ImportError:
@@ -152,17 +151,12 @@ class EventEmitter():
             _wrapper(f)
 
     def remove_listener(self, event, f):
-        """Removes the function ``f`` from ``event``.
-
-        Requires that ``f`` is not closed over by ``ee.on``. (In other words,
-        it is, unfortunately, not possible to use this with the decorator
-        style is.)
-
-        """
+        """Removes the function ``f`` from ``event``."""
         self._events[event].remove(f)
 
     def remove_all_listeners(self, event=None):
         """Remove all listeners attached to ``event``.
+        If ``event`` is ``None``, remove all listeners on all events.
         """
         if event is not None:
             self._events[event] = []
