@@ -1,3 +1,12 @@
+2016/10/01 Version 2.0.0
+  - Drop support for pythons 3.2, 3.3 and 3.4 (support 2.7 and 3.5)
+  - Use pytest instead of nose
+  - Removed Event\_emitter alias
+  - Code passes flake8
+  - Use setuptools (no support for users without setuptools)
+  - Reogranized docs, hosted on readthedocs.org
+  - Support for scheduling coroutine functions passed to `@ee.on`
+
 2016/02/15 Version 1.0.2
   - Make copy of event handlers array before iterating on emit
 

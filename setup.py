@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="pyee",
-    version="1.0.2",
+    version="2.0.0",
 
     packages=find_packages(),
     setup_requires=['pytest-runner'],
@@ -21,7 +21,7 @@ setup(
     ],
     classifiers=[
         "Programming Language :: Python",
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
