@@ -2,7 +2,7 @@
 
 """
 pyee supplies an ``EventEmitter`` object similar to the ``EventEmitter``
-from Node.js.
+from Node.js. It supports both synchronous callbacks and asyncio coroutines.
 
 
 Example
@@ -45,8 +45,13 @@ class PyeeException(Exception):
 class EventEmitter():
     """The EventEmitter class.
 
-    (Special) Events
-    ----------------
+    For interoperation with asyncio, one can specify the scheduler and
+    the event loop. The scheduler defaults to ``asyncio.ensure_future``,
+    and the loop defaults to ``None``---in other words, the default
+    asyncio event loop.
+
+    Most events are registered with EventEmitter via the ``on`` and ``once``
+    methods. However, pyee EventEmitters have two *special* events:
 
     -   'new_listener': Fires whenever a new listener is created. Listeners for
     this event do not fire upon their own creation.
@@ -61,20 +66,8 @@ class EventEmitter():
             logging.err(message)
 
         ee.emit('error', Exception('something blew up'))
-
     """
     def __init__(self, scheduler=ensure_future, loop=None):
-        """
-        Initializes the EE.
-
-        For interoperation with asyncio, one can specify either:
-
-        1. ``scheduler=ensure_future`` - The function used by pyee to schedule
-        asyncio coroutines. Defaults to ``asyncio.ensure_future``.
-        2. ``loop=None`` - The event loop used by pyee when scheduling asyncio
-        coroutines. Defaults to the default event loop as accessed by
-        ``asyncio.get_event_loop()``.
-        """
         self._events = defaultdict(list)
         self._schedule = scheduler
         self._loop = loop
@@ -119,11 +112,11 @@ class EventEmitter():
             return _on(f)
 
     def emit(self, event, *args, **kwargs):
-        """Emit ``event``, passing ``*args`` to each attached function. Returns
-        ``True`` if any functions are attached to ``event``; otherwise returns
-        ``False``.
+        """Emit ``event``, passing ``*args`` and ``**kwargs`` to each attached
+        function. Returns ``True`` if any functions are attached to ``event``;
+        otherwise returns ``False``.
 
-        Example:
+        Example::
 
             ee.emit('data', '00101001')
 
