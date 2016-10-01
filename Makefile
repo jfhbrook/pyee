@@ -8,3 +8,6 @@ publish:
 
 test:
 	nosetests -v --where=test --py3where=py3-test
+
+lint:
+	pyflakes ./pyee ./test ./py3-test setup.py

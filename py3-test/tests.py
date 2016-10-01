@@ -25,15 +25,11 @@ def test_async_emit():
 
     sensor = SenseWasCalled()
 
-
     @ee.on('event')
     async def event_handler():
         sensor.am_calling()
-
 
     ee.emit('event')
     loop.run_until_complete(async_sleep(1))
 
     sensor.assert_was_called()
-    
-

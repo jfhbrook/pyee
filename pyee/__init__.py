@@ -51,11 +51,11 @@ class EventEmitter():
     (Special) Events
     ----------------
 
-    -   'new_listener': Fires whenever a new listener is created. Listeners for this
-    event do not fire upon their own creation.
+    -   'new_listener': Fires whenever a new listener is created. Listeners for
+    this event do not fire upon their own creation.
 
-    -   'error': When emitted raises an Exception by default, behavior can be overriden by
-    attaching callback to the event.
+    -   'error': When emitted raises an Exception by default, behavior can be
+    overriden by attaching callback to the event.
 
     For example::
 
@@ -175,4 +175,3 @@ class EventEmitter():
         """Returns the list of all listeners registered to the ``event``.
         """
         return self._events[event]
-
