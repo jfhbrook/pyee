@@ -7,7 +7,7 @@ setup(
     version = "1.0.2",
 
     packages = find_packages(),
-    test_require = [ 'pytest' ],
+    tests_require = [ 'pytest' ],
     include_package_data = True,
 
     description = "A port of node.js's EventEmitter to python.",
