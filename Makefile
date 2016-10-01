@@ -11,3 +11,6 @@ test:
 
 lint:
 	python setup.py flake8
+
+the_docs:
+	python setup.py build_sphinx
