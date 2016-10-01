@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from setuptools import setup
+from setuptools import find_packages, setup
 
 setup(
     name = "pyee",
     version = "1.0.2",
-    packages = ["pyee"],
+
+    packages = find_packages(),
+    test_require = [ 'pytest' ],
+    include_package_data = True,
+
     description = "A port of node.js's EventEmitter to python.",
     author = "Joshua Holbrook",
     author_email = "josh.holbrook@gmail.com",
@@ -23,36 +27,5 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Topic :: Other/Nonlisted Topic"
-    ],
-    long_description = """\
-pyee
-======
-
-pyee supplies an event_emitter object that acts similar to the `EventEmitter`
-that comes with node.js.
-
-Example
--------
-
-::
-
-    In [1]: from pyee import EventEmitter
-
-    In [2]: ee = EventEmitter()
-
-    In [3]: @ee.on('event')
-       ...: def event_handler():
-       ...:     print 'BANG BANG'
-       ...:
-
-    In [4]: ee.emit('event')
-    BANG BANG
-
-    In [5]:
-
-Easy-peasy.
-
-For more, visit <https://github.com/jfhbrook/pyee> .
-
-"""
+    ]
 )
