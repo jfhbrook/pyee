@@ -7,7 +7,7 @@ publish:
 	python setup.py register sdist upload
 
 test:
-	python setup.py test
+	tox
 
 lint:
 	python setup.py flake8
