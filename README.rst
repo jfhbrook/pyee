@@ -20,7 +20,7 @@ Development:
 
 - For development purposes, you can link this project to your global space with
   ``python setup.py develop``.
-- Tests can be ran with ``pytest -v``.
+- Tests can be ran with ``python setup.py test``.
 - Documentation can be generated with ``cd ./docs && make html``.
 
 
