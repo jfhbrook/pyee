@@ -56,26 +56,26 @@ class EventEmitter():
     Most events are registered with EventEmitter via the ``on`` and ``once``
     methods. However, pyee EventEmitters have two *special* events:
 
-    -   'new_listener': Fires whenever a new listener is created. Listeners for
-    this event do not fire upon their own creation.
+    - ``new_listener``: Fires whenever a new listener is created. Listeners for
+      this event do not fire upon their own creation.
 
-    -   'error': When emitted raises an Exception by default, behavior can be
-    overriden by attaching callback to the event.
+    - ``error``: When emitted raises an Exception by default, behavior can be
+      overriden by attaching callback to the event.
 
-    For example::
+      For example::
 
-        @ee.on('error')
-        def onError(message):
-            logging.err(message)
+          @ee.on('error')
+          def onError(message):
+              logging.err(message)
 
-        ee.emit('error', Exception('something blew up'))
+          ee.emit('error', Exception('something blew up'))
 
-    For synchronous callbacks, exceptions are **not** handled for you---
-    you must catch your own exceptions inside synchronous ``on`` handlers.
-    However, when wrapping **async** functions, errors will be intercepted
-    and emitted under the ``error`` event. **This behavior for async functions
-    is inconsistent with node.js**, which unlike this package has no facilities
-    for handling returned Promises from handlers.
+      For synchronous callbacks, exceptions are **not** handled for you---
+      you must catch your own exceptions inside synchronous ``on`` handlers.
+      However, when wrapping **async** functions, errors will be intercepted
+      and emitted under the ``error`` event. **This behavior for async
+      functions is inconsistent with node.js**, which unlike this package has
+      no facilities for handling returned Promises from handlers.
     """
     def __init__(self, scheduler=ensure_future, loop=None):
         self._events = defaultdict(list)

@@ -66,7 +66,10 @@ author = 'Joshua Holbrook'
 # built documents.
 #
 # The short X.Y version.
-version = vcversioner.find_version(root=path.dirname(path.dirname(path.abspath(__file)))).version
+version = vcversioner.find_version(
+    root=path.dirname(path.dirname(path.abspath(__file__)))
+).version
+
 # The full version, including alpha/beta/rc tags.
 release = version
 
