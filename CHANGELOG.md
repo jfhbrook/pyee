@@ -1,3 +1,7 @@
+2016/10/02 Version 3.0.1
+  - Fixes/Updates to pyee docs
+  - Uses vcversioner for managing version information
+
 2016/10/02 Version 3.0.0
   - Errors resulting from async functions are now proxied to the "error"
     event, rather than being lost into the aether.
