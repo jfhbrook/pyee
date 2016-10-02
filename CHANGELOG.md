@@ -1,3 +1,6 @@
+2016/10/01 Version 2.0.1
+  - Add README contents as long\_description inside setup.py
+
 2016/10/01 Version 2.0.0
   - Drop support for pythons 3.2, 3.3 and 3.4 (support 2.7 and 3.5)
   - Use pytest instead of nose
