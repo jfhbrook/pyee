@@ -1,3 +1,7 @@
+2016/10/01 Version 2.0.3
+  - Fix setup.py broken in python 2.7
+  - Add link to CHANGELOG in README
+
 2016/10/01 Version 2.0.2
   - Fix RST render warnings in README
 
