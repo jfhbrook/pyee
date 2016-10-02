@@ -1,3 +1,7 @@
+2016/10/02 Version 3.0.0
+  - Errors resulting from async functions are now proxied to the "error"
+    event, rather than being lost into the aether.
+
 2016/10/01 Version 2.0.3
   - Fix setup.py broken in python 2.7
   - Add link to CHANGELOG in README
