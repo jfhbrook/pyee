@@ -2,16 +2,11 @@
 
 from os import path
 from setuptools import find_packages, setup
-from sys import version_info
 
 README_rst = path.join(path.abspath(path.dirname(__file__)), 'README.rst')
 
-if version_info[0] >= 3:
-    with open(README_rst, encoding='utf-8') as f:
-        long_description = f.read()
-else:
-    with open(README_rst) as f:
-        long_description = f.read()
+with open(README_rst, 'r') as f:
+    long_description = f.read()
 
 setup(
     name="pyee",
