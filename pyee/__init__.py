@@ -51,7 +51,7 @@ class EventEmitter():
     this will schedule the coroutine onto asyncio's default loop.
 
     This should also be compatible with recent versions of twisted by
-    setting `scheduler=twisted.internet.defer.ensureDeferred.
+    setting ``scheduler=twisted.internet.defer.ensureDeferred``.
 
     Most events are registered with EventEmitter via the ``on`` and ``once``
     methods. However, pyee EventEmitters have two *special* events:
