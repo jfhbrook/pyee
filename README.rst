@@ -23,6 +23,10 @@ Development:
 - Tests can be ran with ``python setup.py test``.
 - Documentation can be generated with ``cd ./docs && make html``.
 
+Changelog:
+----------
+
+https://github.com/jfhbrook/pyee/blob/master/CHANGELOG.md
 
 License:
 --------
