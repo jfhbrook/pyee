@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import find_packages, setup
+from os import path
+
+README_rst = path.join(path.abspath(path.dirname(__file__)), 'README.rst')
+
+with open(README_rst, encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name="pyee",
@@ -12,6 +18,7 @@ setup(
     include_package_data=True,
 
     description="A port of node.js's EventEmitter to python.",
+    long_description=long_description,
     author="Joshua Holbrook",
     author_email="josh.holbrook@gmail.com",
     url="https://github.com/jfhbrook/pyee",
