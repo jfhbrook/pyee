@@ -10,7 +10,7 @@ with open(README_rst, encoding='utf-8') as f:
 
 setup(
     name="pyee",
-    version="2.0.1",
+    version="2.0.2",
 
     packages=find_packages(),
     setup_requires=['pytest-runner'],

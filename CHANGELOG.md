@@ -1,3 +1,6 @@
+2016/10/01 Version 2.0.2
+  - Fix RST render warnings in README
+
 2016/10/01 Version 2.0.1
   - Add README contents as long\_description inside setup.py
 
