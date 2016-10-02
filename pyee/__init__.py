@@ -69,6 +69,13 @@ class EventEmitter():
             logging.err(message)
 
         ee.emit('error', Exception('something blew up'))
+
+    For synchronous callbacks, exceptions are **not** handled for you---
+    you must catch your own exceptions inside synchronous ``on`` handlers.
+    However, when wrapping **async** functions, errors will be intercepted
+    and emitted under the ``error`` event. **This behavior for async functions
+    is inconsistent with node.js**, which unlike this package has no facilities
+    for handling returned Promises from handlers.
     """
     def __init__(self, scheduler=ensure_future, loop=None):
         self._events = defaultdict(list)
@@ -141,9 +148,19 @@ class EventEmitter():
             result = f(*args, **kwargs)
             if iscoroutine and iscoroutine(result):
                 if self._loop:
-                    self._schedule(result, loop=self._loop)
+                    d = self._schedule(result, loop=self._loop)
                 else:
-                    self._schedule(result)
+                    d = self._schedule(result)
+                if hasattr(d, 'add_done_callback'):
+                    @d.add_done_callback
+                    def _callback(f):
+                        exc = f.exception()
+                        if exc:
+                            self.emit('error', exc)
+                elif hasattr(d, 'addErrback'):
+                    @d.addErrback
+                    def _callback(exc):
+                        self.emit('error', exc)
             handled = True
 
         if not handled and event == 'error':
