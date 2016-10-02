@@ -1,3 +1,7 @@
+setup:
+	pip install -r requirements_dev.txt
+	python setup.py develop
+
 package:
 	python setup.py check
 	python setup.py sdist
