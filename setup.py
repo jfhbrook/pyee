@@ -10,10 +10,10 @@ with open(README_rst, 'r') as f:
 
 setup(
     name="pyee",
-    version="3.0.0",
+    vcversioner={},
 
     packages=find_packages(),
-    setup_requires=['pytest-runner'],
+    setup_requires=['pytest-runner', 'vcversioner'],
     tests_require=['twisted'],
     include_package_data=True,
 
