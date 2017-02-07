@@ -42,7 +42,7 @@ class PyeeException(Exception):
     pass
 
 
-class EventEmitter():
+class EventEmitter(object):
     """The EventEmitter class.
 
     For interoperation with asyncio, one can specify the scheduler and
