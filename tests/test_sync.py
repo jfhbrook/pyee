@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from inpsect import getmro
+
 from mock import Mock
 from pytest import raises
 
@@ -225,3 +227,27 @@ def test_properties_preserved():
     # Calling the event handler directly doesn't clear the handler
     ee.emit('once')
     call_me_also.assert_called_once()
+
+
+def test_inheritance():
+    """Test that inheritance is preserved from object"""
+    assert object in getmro(EventEmitter)
+
+    class example(EventEmitter):
+        def __init__(self):
+            super(example, self).__init__()
+
+    assert EventEmitter in getmro(example)
+    assert object in getmro(example)
+
+
+def test_multiple_inheritance():
+    """Test that inheritance is preserved along a lengthy MRO"""
+    example = EventEmitter
+
+    for _ in range(10):
+        class example(example):
+            def __init__(self):
+                super(example, self).__init__()
+
+    a = example()
