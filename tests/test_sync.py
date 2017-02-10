@@ -240,14 +240,22 @@ def test_inheritance():
     assert EventEmitter in getmro(example)
     assert object in getmro(example)
 
-
 def test_multiple_inheritance():
     """Test that inheritance is preserved along a lengthy MRO"""
-    example = EventEmitter
+    class example(EventEmitter):
+        def __init__(self):
+            super(example, self).__init__()
 
-    for _ in range(10):
-        class example(example):
-            def __init__(self):
-                super(example, self).__init__()
+    class _example(example):
+        def __init__(self):
+            super(_example, self).__init__()
 
-    a = example()
+    class example2(_example):
+        def __init__(self):
+            super(example2, self).__init__()
+
+    class _example2(_example):
+        def __init__(self):
+            super(_example2, self).__init__()
+
+    a = _example2()
