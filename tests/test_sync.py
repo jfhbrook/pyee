@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from inpsect import getmro
+from inspect import getmro
 
 from mock import Mock
 from pytest import raises
