@@ -6,7 +6,7 @@ from twisted.internet.defer import ensureDeferred
 
 from pyee import EventEmitter
 
-class PyeeTestException(Exception):
+class PyeeTestError(Exception):
     pass
 
 def test_asyncio_emit():
@@ -52,7 +52,7 @@ def test_asyncio_error():
 
     @ee.on('event')
     async def event_handler():
-        raise PyeeTestException()
+        raise PyeeTestError()
 
     @ee.on('error')
     def handle_error(exc):
@@ -104,7 +104,7 @@ def test_twisted_error():
 
     @ee.on('event')
     async def event_handler():
-        raise PyeeTestException()
+        raise PyeeTestError()
 
     @ee.on('error')
     def handle_error(e):
