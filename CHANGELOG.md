@@ -1,3 +1,6 @@
+2017/02/10 Version 3.0.2
+  - EventEmitter now inherits from object
+
 2016/10/02 Version 3.0.1
   - Fixes/Updates to pyee docs
   - Uses vcversioner for managing version information
