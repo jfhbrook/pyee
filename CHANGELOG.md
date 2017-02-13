@@ -1,3 +1,6 @@
+2017/02/12 Version 3.0.3
+  - Add universal wheel
+
 2017/02/10 Version 3.0.2
   - EventEmitter now inherits from object
 
