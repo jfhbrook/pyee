@@ -2,7 +2,7 @@
 
 from asyncio import Future, gather, new_event_loop, sleep
 from mock import Mock
-from twisted.internet.defer import ensureDeferred
+from twisted.internet.defer import ensureDeferred, succeed
 
 from pyee import EventEmitter
 
@@ -56,6 +56,7 @@ def test_asyncio_error():
 
     @ee.on('error')
     def handle_error(exc):
+        assert isinstance(exc, PyeeTestError)
         should_call.set_result(exc)
 
     async def create_timeout(loop=loop):
@@ -67,8 +68,8 @@ def test_asyncio_error():
     timeout = create_timeout(loop=loop)
 
     @should_call.add_done_callback
-    def _done(result):
-        assert isinstance(result, PyeeTestError)
+    def _done(f):
+        assert isinstance(f.result(), PyeeTestError)
 
     ee.emit('event')
 
@@ -87,6 +88,7 @@ def test_twisted_emit():
 
     @ee.on('event')
     async def event_handler():
+        _ = await succeed('yes!')
         should_call(True)
 
     ee.emit('event')
