@@ -13,7 +13,7 @@ setup(
     vcversioner={},
 
     packages=find_packages(),
-    setup_requires=['pytest-runner', 'vcversioner'],
+    setup_requires=['pytest-runner', 'pytest-asyncio', 'vcversioner'],
     tests_require=['twisted'],
     include_package_data=True,
 

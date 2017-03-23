@@ -1,54 +1,56 @@
 # -*- coding: utf-8 -*-
 
+import pytest
+import pytest_asyncio.plugin
+
 from asyncio import Future, gather, new_event_loop, sleep
 from mock import Mock
 from twisted.internet.defer import ensureDeferred, succeed
 
 from pyee import EventEmitter
 
+
 class PyeeTestError(Exception):
     pass
 
-def test_asyncio_emit():
+
+@pytest.mark.asyncio
+async def test_asyncio_emit(event_loop):
     """Test that event_emitters can handle wrapping coroutines as used with
     asyncio.
     """
-    loop = new_event_loop()
-    ee = EventEmitter(loop=loop)
 
-    should_call = Future(loop=loop)
+    ee = EventEmitter(loop=event_loop)
+
+    should_call = Future(loop=event_loop)
 
     @ee.on('event')
     async def event_handler():
         should_call.set_result(True)
 
-    async def create_timeout(loop=loop):
-        await sleep(0.1, loop=loop)
+    async def create_timeout(loop=event_loop):
+        await sleep(0.1, loop=event_loop)
         if not should_call.done():
             raise Exception('should_call timed out!')
             return should_call.cancel()
 
-    timeout = create_timeout(loop=loop)
-
-    @should_call.add_done_callback
-    def _done(result):
-        assert result
+    timeout = create_timeout(loop=event_loop)
 
     ee.emit('event')
 
-    loop.run_until_complete(gather(should_call, timeout, loop=loop))
+    result = await should_call
 
-    loop.close()
+    assert result == True
 
 
-def test_asyncio_error():
+@pytest.mark.asyncio
+async def test_asyncio_error(event_loop):
     """Test that event_emitters can handle errors when wrapping coroutines as
     used with asyncio.
     """
-    loop = new_event_loop()
-    ee = EventEmitter(loop=loop)
+    ee = EventEmitter(loop=event_loop)
 
-    should_call = Future(loop=loop)
+    should_call = Future(loop=event_loop)
 
     @ee.on('event')
     async def event_handler():
@@ -59,23 +61,19 @@ def test_asyncio_error():
         assert isinstance(exc, PyeeTestError)
         should_call.set_result(exc)
 
-    async def create_timeout(loop=loop):
-        await sleep(0.1, loop=loop)
+    async def create_timeout(loop=event_loop):
+        await sleep(0.1, loop=event_loop)
         if not should_call.done():
             raise Exception('should_call timed out!')
             return should_call.cancel()
 
-    timeout = create_timeout(loop=loop)
-
-    @should_call.add_done_callback
-    def _done(f):
-        assert isinstance(f.result(), PyeeTestError)
+    timeout = create_timeout(loop=event_loop)
 
     ee.emit('event')
 
-    loop.run_until_complete(gather(should_call, timeout, loop=loop))
+    result = await should_call
 
-    loop.close()
+    assert isinstance(result, PyeeTestError)
 
 
 def test_twisted_emit():
