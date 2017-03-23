@@ -15,7 +15,7 @@ setup(
     packages=find_packages(),
     setup_requires=[
         'pytest-runner',
-        'pytest-asyncio',
+        'pytest-asyncio; python_version > "3.4"',
         'vcversioner'
     ],
     tests_require=['twisted'],
