@@ -6,6 +6,5 @@ python:
 install:
   - pip install pip --upgrade
   - pip install setuptools --upgrade
-  - pip install -r requirements_dev.txt
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install -r requirements_dev_py2.txt else pip install -r requirements_dev.txt; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install -r requirements_dev_py2.txt; else pip install -r requirements_dev.txt; fi
 script: python setup.py develop && python setup.py test
