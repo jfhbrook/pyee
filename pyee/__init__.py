@@ -39,7 +39,7 @@ __all__ = ['EventEmitter', 'PyeeException']
 
 class PyeeException(Exception):
     """An exception internal to pyee."""
-    pass
+    __slots__ = ()
 
 
 class EventEmitter(object):
@@ -77,6 +77,8 @@ class EventEmitter(object):
       functions is inconsistent with node.js**, which unlike this package has
       no facilities for handling returned Promises from handlers.
     """
+    __slots__ = ('_events', '_schedule', '_loop')
+    
     def __init__(self, scheduler=ensure_future, loop=None):
         self._events = defaultdict(list)
         self._schedule = scheduler
