@@ -3,7 +3,7 @@
 import pytest
 import pytest_asyncio.plugin
 
-from asyncio import Future, gather, new_event_loop, sleep
+from asyncio import Future, gather, new_event_loop, wait_for
 from mock import Mock
 from twisted.internet.defer import ensureDeferred, succeed
 
@@ -28,17 +28,9 @@ async def test_asyncio_emit(event_loop):
     async def event_handler():
         should_call.set_result(True)
 
-    async def create_timeout(loop=event_loop):
-        await sleep(0.1, loop=event_loop)
-        if not should_call.done():
-            should_call.cancel()
-            raise Exception('should_call timed out!')
-
-    timeout = create_timeout(loop=event_loop)
-
     ee.emit('event')
 
-    result = await should_call
+    result = await wait_for(should_call, 0.1)
 
     assert result == True
 
@@ -56,17 +48,9 @@ async def test_asyncio_once_emit(event_loop):
     async def event_handler():
         should_call.set_result(True)
 
-    async def create_timeout(loop=event_loop):
-        await sleep(0.1, loop=event_loop)
-        if not should_call.done():
-            should_call.cancel()
-            raise Exception('should_call timed out!')
-
-    timeout = create_timeout(loop=event_loop)
-
     ee.emit('event')
 
-    result = await should_call
+    result = await wait_for(should_call, 0.1)
 
     assert result == True
 
@@ -89,17 +73,9 @@ async def test_asyncio_error(event_loop):
         assert isinstance(exc, PyeeTestError)
         should_call.set_result(exc)
 
-    async def create_timeout(loop=event_loop):
-        await sleep(0.1, loop=event_loop)
-        if not should_call.done():
-            raise Exception('should_call timed out!')
-            return should_call.cancel()
-
-    timeout = create_timeout(loop=event_loop)
-
     ee.emit('event')
 
-    result = await should_call
+    result = await wait_for(should_call, 0.1)
 
     assert isinstance(result, PyeeTestError)
 
