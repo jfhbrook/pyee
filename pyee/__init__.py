@@ -177,8 +177,8 @@ class EventEmitter(object):
         """
         def _once(f):
             def g(*args, **kwargs):
-                f(*args, **kwargs)
                 self.remove_listener(event, g)
+                return f(*args, **kwargs)
             return g
 
         def _wrapper(f):

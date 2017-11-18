@@ -3,7 +3,7 @@
 import pytest
 import pytest_asyncio.plugin
 
-from asyncio import Future, gather, new_event_loop, sleep
+from asyncio import Future, gather, new_event_loop, wait_for
 from mock import Mock
 from twisted.internet.defer import ensureDeferred, succeed
 
@@ -28,17 +28,29 @@ async def test_asyncio_emit(event_loop):
     async def event_handler():
         should_call.set_result(True)
 
-    async def create_timeout(loop=event_loop):
-        await sleep(0.1, loop=event_loop)
-        if not should_call.done():
-            raise Exception('should_call timed out!')
-            return should_call.cancel()
+    ee.emit('event')
 
-    timeout = create_timeout(loop=event_loop)
+    result = await wait_for(should_call, 0.1)
+
+    assert result == True
+
+
+@pytest.mark.asyncio
+async def test_asyncio_once_emit(event_loop):
+    """Test that event_emitters also wrap coroutines when using once
+    """
+
+    ee = EventEmitter(loop=event_loop)
+
+    should_call = Future(loop=event_loop)
+
+    @ee.once('event')
+    async def event_handler():
+        should_call.set_result(True)
 
     ee.emit('event')
 
-    result = await should_call
+    result = await wait_for(should_call, 0.1)
 
     assert result == True
 
@@ -61,17 +73,9 @@ async def test_asyncio_error(event_loop):
         assert isinstance(exc, PyeeTestError)
         should_call.set_result(exc)
 
-    async def create_timeout(loop=event_loop):
-        await sleep(0.1, loop=event_loop)
-        if not should_call.done():
-            raise Exception('should_call timed out!')
-            return should_call.cancel()
-
-    timeout = create_timeout(loop=event_loop)
-
     ee.emit('event')
 
-    result = await should_call
+    result = await wait_for(should_call, 0.1)
 
     assert isinstance(result, PyeeTestError)
 
@@ -85,6 +89,24 @@ def test_twisted_emit():
     should_call = Mock()
 
     @ee.on('event')
+    async def event_handler():
+        _ = await succeed('yes!')
+        should_call(True)
+
+    ee.emit('event')
+
+    should_call.assert_called_once()
+
+
+def test_twisted_once():
+    """Test that event_emitters also wrap coroutines for once when using
+    twisted and ensureDeferred.
+    """
+    ee = EventEmitter(scheduler=ensureDeferred)
+
+    should_call = Mock()
+
+    @ee.once('event')
     async def event_handler():
         _ = await succeed('yes!')
         should_call(True)

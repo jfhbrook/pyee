@@ -10,8 +10,11 @@ package:
 upload:
 	twine upload dist/*
 
-test:
-	make lint && tox
+test: lint
+	python setup.py test
+
+tox:
+	tox
 
 lint:
 	python setup.py flake8
