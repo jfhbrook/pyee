@@ -23,7 +23,7 @@ See ``DEVELOPMENT.rst``.
 Changelog:
 ----------
 
-https://github.com/jfhbrook/pyee/blob/master/CHANGELOG.md
+See ``CHANGELOG.rst``.
 
 Contributors:
 -------------
