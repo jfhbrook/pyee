@@ -181,32 +181,6 @@ class EventEmitter(object):
     def once(self, event, f=None):
         """The same as ``ee.on``, except that the listener is automatically
         removed after being called.
-
-        A subtle difference in behavior between the decorated and
-        undecorated versions of this function: As an implementation detail,
-        the event handler is wrapped in a function which removes itself from
-        listeners right before the wrapped listener is called. The decorator
-        version returns the underlying function, while the non-decorating call
-        returns the wrapped handler. This means that this will work::
-
-            h = ee.once('event', once_handler)
-
-            ee.remove_listener('event', h)
-
-        However::
-
-            @ee.once('event')
-            def once_handler():
-                print('hello')
-
-            # This won't remove anything, since once_handler isn't the
-            # wrapped listener
-            ee.remove_listener('event', once_handler)
-
-            # But, I can call it without removing the event
-            once_handler()  # Prints "hello", event still attached
-            ee.emit('event')  # Still prints "hello"
-            ee.emit('event')  # Does nothing, event self-removed
         """
         def _wrapper(f):
             def g(*args, **kwargs):
