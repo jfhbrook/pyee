@@ -1,4 +1,6 @@
 include README.rst
-include CHANGELOG
+include CHANGELOG.rst
+include CONTRIBUTORS.rst
+include DEVELOPMENT.rst
 include version.txt
 recursive-include tests *.py
