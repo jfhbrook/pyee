@@ -1,4 +1,5 @@
-- Added contributors
+- CHANGELOG.md reformatted to CHANGELOG.rst
+- Added CONTRIBUTORS.rst
 - The `listeners` method no longer returns the raw list of listeners, and
   instead returns a list of unwrapped listeners; This means that mutating
   listeners on the EventEmitter by mutating the list returned by
