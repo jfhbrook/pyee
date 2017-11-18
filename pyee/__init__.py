@@ -216,4 +216,4 @@ class EventEmitter(object):
     def listeners(self, event):
         """Returns a list of all listeners registered to the ``event``.
         """
-        return list(self._events[event].values())
+        return list(self._events[event].keys())

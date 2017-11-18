@@ -1,6 +1,8 @@
-  - The `listeners` method no longer returns the raw list of listeners;
-    mutating listeners on the EventEmitter by mutating the list returned by
-    this method isn't possible anymore
+  - The `listeners` method no longer returns the raw list of listeners, and
+    instead returns a list of unwrapped listeners; This means that mutating
+    listeners on the EventEmitter by mutating the list returned by
+    this method isn't possible anymore, and that for once handlers this method
+    returns the unwrapped handler rather than the wrapped handler
   - `once` API now returns the unwrapped handler in both decorator and
     non-decorator cases
   - Possible to remove once handlers with unwrapped handlers

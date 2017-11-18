@@ -210,9 +210,14 @@ def test_listeners():
     def event_handler():
         pass
 
+    @ee.once('event')
+    def once_handler():
+        pass
+
     listeners = ee.listeners('event')
 
     assert listeners[0] == event_handler
+    assert listeners[1] == once_handler
 
     # listeners is a copy, you can't mutate the innards this way
     listeners[0] = call_me
