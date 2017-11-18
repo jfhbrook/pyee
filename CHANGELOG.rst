@@ -1,3 +1,6 @@
+2017/11/18 Version 5.0.0
+------------------------
+
 - CHANGELOG.md reformatted to CHANGELOG.rst
 - Added CONTRIBUTORS.rst
 - The `listeners` method no longer returns the raw list of listeners, and
