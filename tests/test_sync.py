@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from inspect import getmro
+from collections import OrderedDict
 
 from mock import Mock
 from pytest import raises
@@ -105,17 +106,26 @@ def test_listener_removal():
 
     ee.on('event', fourth)
 
-    assert ee._events['event'] == [first, second, third, fourth]
+    assert ee._events['event'] == OrderedDict([
+        (first, first),
+        (second, second),
+        (third, third),
+        (fourth, fourth)
+    ])
 
     ee.remove_listener('event', second)
 
-    assert ee._events['event'] == [first, third, fourth]
+    assert ee._events['event'] == OrderedDict([
+        (first, first),
+        (third, third),
+        (fourth, fourth)
+    ])
 
     ee.remove_listener('event', first)
-    assert ee._events['event'] == [third, fourth]
+    assert ee._events['event'] == OrderedDict([(third, third), (fourth, fourth)])
 
     ee.remove_all_listeners('event')
-    assert ee._events['event'] == []
+    assert ee._events['event'] == OrderedDict()
 
 
 def test_listener_removal_on_emit():
@@ -165,17 +175,33 @@ def test_once():
     # Tests to make sure that after event is emitted that it's gone.
     callback_fn = ee.once('event', once_handler)
 
-    # assert ee._events['event'] == [callback_fn]
-
     ee.emit('event', 'emitter is emitted!')
 
     call_me.assert_called_once()
 
-    assert ee._events['event'] == []
+    assert ee._events['event'] == OrderedDict()
+
+
+def test_once_removal():
+    """Removal of once functions works
+    """
+
+    ee = EventEmitter()
+
+    def once_handler(data):
+        pass
+
+    handle = ee.once('event', once_handler)
+
+    assert handle == once_handler
+
+    ee.remove_listener('event', handle)
+
+    assert ee._events['event'] == OrderedDict()
 
 
 def test_listeners():
-    """`listeners()` gives you access to the listeners array."""
+    """`listeners()` returns a copied list of listeners."""
 
     call_me = Mock()
     ee = EventEmitter()
@@ -184,16 +210,21 @@ def test_listeners():
     def event_handler():
         pass
 
+    @ee.once('event')
+    def once_handler():
+        pass
+
     listeners = ee.listeners('event')
 
     assert listeners[0] == event_handler
+    assert listeners[1] == once_handler
 
-    # Overwrite listener
+    # listeners is a copy, you can't mutate the innards this way
     listeners[0] = call_me
 
     ee.emit('event')
 
-    call_me.assert_called_once()
+    call_me.assert_not_called()
 
 
 def test_properties_preserved():

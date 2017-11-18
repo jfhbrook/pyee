@@ -32,7 +32,7 @@ except ImportError:
     iscoroutine = None
     ensure_future = None
 
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 __all__ = ['EventEmitter', 'PyeeException']
 
@@ -78,7 +78,7 @@ class EventEmitter(object):
       no facilities for handling returned Promises from handlers.
     """
     def __init__(self, scheduler=ensure_future, loop=None):
-        self._events = defaultdict(list)
+        self._events = defaultdict(OrderedDict)
         self._schedule = scheduler
         self._loop = loop
 
@@ -104,22 +104,30 @@ class EventEmitter(object):
         This will automatically schedule the coroutine using the configured
         scheduling function (defaults to ``asyncio.ensure_future``) and the
         configured event loop (defaults to ``asyncio.get_event_loop()``).
+
+        In both the decorated and undecorated forms, the event handler is
+        returned. The upshot of this is that you can call decorated handlers
+        directly, as well as use them in remove_listener calls.
         """
 
         def _on(f):
-            # Fire 'new_listener' *before* adding the new listener!
-            self.emit('new_listener', event, f)
-
-            # Add the necessary function
-            self._events[event].append(f)
-
-            # Return original function so removal works
+            self._add_event_handler(event, f, f)
             return f
 
         if f is None:
             return _on
         else:
             return _on(f)
+
+    def _add_event_handler(self, event, k, v):
+        # Fire 'new_listener' *before* adding the new listener!
+        self.emit('new_listener', event, k)
+
+        # Add the necessary function
+        # Note that k and v are the same for `on` handlers, but
+        # different for `once` handlers, where v is a wrapped version
+        # of k which removes itself before calling k
+        self._events[event][k] = v
 
     def emit(self, event, *args, **kwargs):
         """Emit ``event``, passing ``*args`` and ``**kwargs`` to each attached
@@ -139,7 +147,7 @@ class EventEmitter(object):
         """
         handled = False
 
-        for f in self._events[event][:]:
+        for f in list(self._events[event].values()):
             result = f(*args, **kwargs)
 
             # If f was a coroutine function, we need to schedule it and
@@ -177,37 +185,35 @@ class EventEmitter(object):
         """The same as ``ee.on``, except that the listener is automatically
         removed after being called.
         """
-        def _once(f):
+        def _wrapper(f):
             def g(*args, **kwargs):
-                self.remove_listener(event, g)
+                self.remove_listener(event, f)
                 # f may return a coroutine, so we need to return that
                 # result here so that emit can schedule it
                 return f(*args, **kwargs)
-            return g
 
-        def _wrapper(f):
-            self.on(event, _once(f))
+            self._add_event_handler(event, f, g)
             return f
 
         if f is None:
             return _wrapper
         else:
-            _wrapper(f)
+            return _wrapper(f)
 
     def remove_listener(self, event, f):
         """Removes the function ``f`` from ``event``."""
-        self._events[event].remove(f)
+        self._events[event].pop(f)
 
     def remove_all_listeners(self, event=None):
         """Remove all listeners attached to ``event``.
         If ``event`` is ``None``, remove all listeners on all events.
         """
         if event is not None:
-            self._events[event] = []
+            self._events[event] = OrderedDict()
         else:
-            self._events = defaultdict(list)
+            self._events = defaultdict(OrderedDict)
 
     def listeners(self, event):
-        """Returns the list of all listeners registered to the ``event``.
+        """Returns a list of all listeners registered to the ``event``.
         """
-        return self._events[event]
+        return list(self._events[event].keys())

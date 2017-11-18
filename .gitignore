@@ -4,3 +4,8 @@ dist/*
 build/*
 MANIFEST
 README
+.cache
+.eggs
+.python-version
+pyee.egg-info/
+version.txt
