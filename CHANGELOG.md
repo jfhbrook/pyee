@@ -1,4 +1,7 @@
-  - once now returns the wrapped function when called in non-decorating form
+  - The `listeners` method no longer returns the raw list of listeners;
+    mutating listeners on the EE with this method no longer works.
+  - Possible to remove once handlers, as internally listeners are now keyed
+    by the unwrapped handler
   - Minor stylistic tweaks to make code more pythonic
 
 2017/11/17 Version 4.0.1
