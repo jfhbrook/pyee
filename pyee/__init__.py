@@ -105,8 +105,8 @@ class EventEmitter(object):
         scheduling function (defaults to ``asyncio.ensure_future``) and the
         configured event loop (defaults to ``asyncio.get_event_loop()``).
 
-        In both the decorated and undecorated forms, the function handler
-        is returned. The upshot of this is that you can call decorated handlers
+        In both the decorated and undecorated forms, the event handler is
+        returned. The upshot of this is that you can call decorated handlers
         directly, as well as use them in remove_listener calls.
         """
 
