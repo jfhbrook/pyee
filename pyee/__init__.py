@@ -209,7 +209,7 @@ class EventEmitter(object):
         If ``event`` is ``None``, remove all listeners on all events.
         """
         if event is not None:
-            self._events[event] = {}
+            self._events[event] = OrderedDict()
         else:
             self._events = defaultdict(OrderedDict)
 
