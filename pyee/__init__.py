@@ -124,6 +124,9 @@ class EventEmitter(object):
         self.emit('new_listener', event, k)
 
         # Add the necessary function
+        # Note that k and v are the same for `on` handlers, but
+        # different for `once` handlers, where v is a wrapped version
+        # of k which removes itself before calling k
         self._events[event][k] = v
 
     def emit(self, event, *args, **kwargs):
