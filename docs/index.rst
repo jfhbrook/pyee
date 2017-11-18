@@ -5,12 +5,12 @@ pyee is a rough port of
 `node.js's EventEmitter <https://nodejs.org/api/events.html>`_.
 It's missing a number of methods, but implements the basics. Unlike its
 namesake, it supports wrapping async functions/coroutines as seen in python
-3.5.
+3.5+.
 
 Install:
 --------
 
-You can install this project off pypi using ``pip``::
+You can install this project into your environment of choice using ``pip``::
 
     pip install pyee
 
