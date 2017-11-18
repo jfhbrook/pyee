@@ -25,6 +25,11 @@ Changelog:
 
 https://github.com/jfhbrook/pyee/blob/master/CHANGELOG.md
 
+Contributors:
+-------------
+
+See ``CONTRIBUTORS.rst``.
+
 License:
 --------
 
