@@ -1,3 +1,8 @@
+2017/11/17 Version 4.0.0
+  - Coroutines now work with .once
+  - Wrapped listener is removed prior to hook execution rather than after for
+    synchronous .once handlers
+
 2017/02/12 Version 3.0.3
   - Add universal wheel
 
