@@ -32,7 +32,7 @@ except ImportError:
     iscoroutine = None
     ensure_future = None
 
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 __all__ = ['EventEmitter', 'PyeeException']
 
@@ -78,7 +78,7 @@ class EventEmitter(object):
       no facilities for handling returned Promises from handlers.
     """
     def __init__(self, scheduler=ensure_future, loop=None):
-        self._events = defaultdict(dict)
+        self._events = defaultdict(OrderedDict)
         self._schedule = scheduler
         self._loop = loop
 
@@ -234,7 +234,7 @@ class EventEmitter(object):
         if event is not None:
             self._events[event] = {}
         else:
-            self._events = defaultdict(dict)
+            self._events = defaultdict(OrderedDict)
 
     def listeners(self, event):
         """Returns a list of all listeners registered to the ``event``.

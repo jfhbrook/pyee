@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from inspect import getmro
+from collections import OrderedDict
 
 from mock import Mock
 from pytest import raises
@@ -105,26 +106,26 @@ def test_listener_removal():
 
     ee.on('event', fourth)
 
-    assert ee._events['event'] == {
-        first: first,
-        second: second,
-        third: third,
-        fourth: fourth
-    }
+    assert ee._events['event'] == OrderedDict([
+        (first, first),
+        (second, second),
+        (third, third),
+        (fourth, fourth)
+    ])
 
     ee.remove_listener('event', second)
 
-    assert ee._events['event'] == {
-        first: first,
-        third: third,
-        fourth: fourth
-    }
+    assert ee._events['event'] == OrderedDict([
+        (first, first),
+        (third, third),
+        (fourth, fourth)
+    ])
 
     ee.remove_listener('event', first)
-    assert ee._events['event'] == {third: third, fourth: fourth}
+    assert ee._events['event'] == OrderedDict([(third, third), (fourth, fourth)])
 
     ee.remove_all_listeners('event')
-    assert ee._events['event'] == {}
+    assert ee._events['event'] == OrderedDict()
 
 
 def test_listener_removal_on_emit():
@@ -178,7 +179,7 @@ def test_once():
 
     call_me.assert_called_once()
 
-    assert ee._events['event'] == {}
+    assert ee._events['event'] == OrderedDict()
 
 
 def test_once_removal():
@@ -196,7 +197,7 @@ def test_once_removal():
 
     ee.remove_listener('event', handle)
 
-    assert ee._events['event'] == {}
+    assert ee._events['event'] == OrderedDict()
 
 
 def test_listeners():
