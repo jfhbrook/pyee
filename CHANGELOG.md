@@ -1,3 +1,4 @@
+  - once now returns the wrapped function when called in non-decorating form
   - Minor stylistic tweaks to make code more pythonic
 
 2017/11/17 Version 4.0.1
