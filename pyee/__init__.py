@@ -139,12 +139,7 @@ class EventEmitter(object):
         """
         handled = False
 
-        # Copy the events dict first. Avoids a bug if the events dict gets
-        # changed in the middle of the following for loop.
-        events_copy = list(self._events[event])
-
-        # Pass the args to each function in the events dict
-        for f in events_copy:
+        for f in self._events[event][:]:
             result = f(*args, **kwargs)
             if iscoroutine and iscoroutine(result):
                 if self._loop:
@@ -164,7 +159,7 @@ class EventEmitter(object):
             handled = True
 
         if not handled and event == 'error':
-            if len(args):
+            if args:
                 raise args[0]
             else:
                 raise PyeeException("Uncaught, unspecified 'error' event.")
@@ -201,7 +196,6 @@ class EventEmitter(object):
         if event is not None:
             self._events[event] = []
         else:
-            self._events = None
             self._events = defaultdict(list)
 
     def listeners(self, event):

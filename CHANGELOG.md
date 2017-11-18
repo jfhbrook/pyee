@@ -1,3 +1,5 @@
+  - Minor stylistic tweaks to make code more pythonic
+
 2017/11/17 Version 4.0.1
   - Fix bug in setup.py; Now publishable
 
