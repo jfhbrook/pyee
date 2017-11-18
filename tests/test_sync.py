@@ -174,6 +174,26 @@ def test_once():
     assert ee._events['event'] == []
 
 
+def test_once_removal():
+    """Removal of once functions works
+    """
+
+    ee = EventEmitter()
+
+    def once_handler(data):
+        pass
+
+    handle = ee.once('event', once_handler)
+
+    assert handle != once_handler, (
+        'Handle returned by once call is the wrapped handler'
+    )
+
+    ee.remove_listener('event', handle)
+
+    assert ee._events['event'] == []
+
+
 def test_listeners():
     """`listeners()` gives you access to the listeners array."""
 
