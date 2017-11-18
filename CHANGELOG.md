@@ -1,3 +1,6 @@
+2017/11/17 Version 4.0.1
+  - Fix bug in setup.py; Now publishable
+
 2017/11/17 Version 4.0.0
   - Coroutines now work with .once
   - Wrapped listener is removed prior to hook execution rather than after for
