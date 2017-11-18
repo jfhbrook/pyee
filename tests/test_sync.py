@@ -105,17 +105,26 @@ def test_listener_removal():
 
     ee.on('event', fourth)
 
-    assert ee._events['event'] == [first, second, third, fourth]
+    assert ee._events['event'] == {
+        first: first,
+        second: second,
+        third: third,
+        fourth: fourth
+    }
 
     ee.remove_listener('event', second)
 
-    assert ee._events['event'] == [first, third, fourth]
+    assert ee._events['event'] == {
+        first: first,
+        third: third,
+        fourth: fourth
+    }
 
     ee.remove_listener('event', first)
-    assert ee._events['event'] == [third, fourth]
+    assert ee._events['event'] == {third: third, fourth: fourth}
 
     ee.remove_all_listeners('event')
-    assert ee._events['event'] == []
+    assert ee._events['event'] == {}
 
 
 def test_listener_removal_on_emit():
@@ -165,13 +174,11 @@ def test_once():
     # Tests to make sure that after event is emitted that it's gone.
     callback_fn = ee.once('event', once_handler)
 
-    # assert ee._events['event'] == [callback_fn]
-
     ee.emit('event', 'emitter is emitted!')
 
     call_me.assert_called_once()
 
-    assert ee._events['event'] == []
+    assert ee._events['event'] == {}
 
 
 def test_once_removal():
@@ -185,17 +192,15 @@ def test_once_removal():
 
     handle = ee.once('event', once_handler)
 
-    assert handle != once_handler, (
-        'Handle returned by once call is the wrapped handler'
-    )
+    assert handle == once_handler
 
     ee.remove_listener('event', handle)
 
-    assert ee._events['event'] == []
+    assert ee._events['event'] == {}
 
 
 def test_listeners():
-    """`listeners()` gives you access to the listeners array."""
+    """`listeners()` returns a copied list of listeners."""
 
     call_me = Mock()
     ee = EventEmitter()
@@ -208,12 +213,12 @@ def test_listeners():
 
     assert listeners[0] == event_handler
 
-    # Overwrite listener
+    # listeners is a copy, you can't mutate the innards this way
     listeners[0] = call_me
 
     ee.emit('event')
 
-    call_me.assert_called_once()
+    call_me.assert_not_called()
 
 
 def test_properties_preserved():
