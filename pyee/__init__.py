@@ -141,17 +141,24 @@ class EventEmitter(object):
 
         for f in self._events[event][:]:
             result = f(*args, **kwargs)
+
+            # If f was a coroutine function, we need to schedule it and
+            # handle potential errors
             if iscoroutine and iscoroutine(result):
                 if self._loop:
                     d = self._schedule(result, loop=self._loop)
                 else:
                     d = self._schedule(result)
+
+                # scheduler gave us an asyncio Future
                 if hasattr(d, 'add_done_callback'):
                     @d.add_done_callback
                     def _callback(f):
                         exc = f.exception()
                         if exc:
                             self.emit('error', exc)
+
+                # scheduler gave us a twisted Deferred
                 elif hasattr(d, 'addErrback'):
                     @d.addErrback
                     def _callback(exc):
@@ -173,6 +180,8 @@ class EventEmitter(object):
         def _once(f):
             def g(*args, **kwargs):
                 self.remove_listener(event, g)
+                # f may return a coroutine, so we need to return that
+                # result here so that emit can schedule it
                 return f(*args, **kwargs)
             return g
 
