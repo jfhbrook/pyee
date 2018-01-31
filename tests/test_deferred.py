@@ -7,6 +7,11 @@ from twisted.internet.defer import inlineCallbacks, succeed
 
 from pyee import EventEmitter
 
+
+class PyeeTestError(Exception):
+    pass
+
+
 def test_propagates_error():
     """Test that event_emitters can propagate errors
     from twisted Deferreds
