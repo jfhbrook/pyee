@@ -3,7 +3,7 @@
 import pytest
 
 from mock import Mock
-from twisted.internet.defer import inlineCallbacks, succeed
+from twisted.internet.defer import fail, inlineCallbacks, succeed
 
 from pyee import EventEmitter
 
@@ -23,7 +23,7 @@ def test_propagates_error():
     @ee.on('event')
     @inlineCallbacks
     def event_handler():
-        raise PyeeTestError()
+        yield failure(PyeeTestError())
 
     @ee.on('error')
     def handle_error(e):
