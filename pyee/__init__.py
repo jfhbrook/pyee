@@ -171,6 +171,10 @@ class EventEmitter(object):
                     @d.addErrback
                     def _callback(exc):
                         self.emit('error', exc)
+            elif hasattr(result, 'addErrback'):
+                @result.addErrback
+                def _callback(exc):
+                    self.emit('error', exc)
             handled = True
 
         if not handled and event == 'error':
