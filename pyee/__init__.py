@@ -51,7 +51,9 @@ class EventEmitter(object):
     this will schedule the coroutine onto asyncio's default loop.
 
     This should also be compatible with recent versions of twisted by
-    setting ``scheduler=twisted.internet.defer.ensureDeferred``.
+    setting ``scheduler=twisted.internet.defer.ensureDeferred``. Similar
+    behavior can also be obtained using @inlineCallbacks.
+ 
 
     Most events are registered with EventEmitter via the ``on`` and ``once``
     methods. However, pyee EventEmitters have two *special* events:
@@ -70,10 +72,12 @@ class EventEmitter(object):
 
           ee.emit('error', Exception('something blew up'))
 
-      For synchronous callbacks, exceptions are **not** handled for you---
-      you must catch your own exceptions inside synchronous ``on`` handlers.
-      However, when wrapping **async** functions, errors will be intercepted
-      and emitted under the ``error`` event. **This behavior for async
+      For synchronous callbacks, raised exceptions are **not** handled for
+      you---you must catch your own exceptions inside synchronous ``on``
+      handlers. However, when wrapping **async** functions, errors will be
+      intercepted and emitted under the ``error`` event. In addition, if the
+      sync handler returns a Deferred, errors captured by the Deferred will
+      also be emitted under the ``error`` event. This behavior for async
       functions is inconsistent with node.js**, which unlike this package has
       no facilities for handling returned Promises from handlers.
     """
@@ -98,12 +102,19 @@ class EventEmitter(object):
 
            @ee.on('data')
            async def data_handler(data)
-               await do_async_thing(data)
-
+               await do_async_thing(data
 
         This will automatically schedule the coroutine using the configured
         scheduling function (defaults to ``asyncio.ensure_future``) and the
         configured event loop (defaults to ``asyncio.get_event_loop()``).
+ 
+        It will also behave in a similar fashion when wrapping functions which
+        return Deferreds::
+        
+            @ee.on('data')
+            @inlineCallbacks
+            def data_handler(data)
+                yield do_async_thing(data)
 
         In both the decorated and undecorated forms, the event handler is
         returned. The upshot of this is that you can call decorated handlers
