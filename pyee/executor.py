@@ -40,4 +40,4 @@ class ExecutorEventEmitter(EventEmitter):
         the ``error`` event.
         """
 
-        super(self).emit(event, *args, **kwargs)
+        super().emit(event, *args, **kwargs)
