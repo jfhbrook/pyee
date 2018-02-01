@@ -16,7 +16,7 @@ class PyeeTestError(Exception):
 
 @pytest.mark.asyncio
 async def test_asyncio_emit(event_loop):
-    """Test that event_emitters can handle wrapping coroutines as used with
+    """Test that EventEmitters can handle wrapping coroutines as used with
     asyncio.
     """
 
@@ -37,7 +37,7 @@ async def test_asyncio_emit(event_loop):
 
 @pytest.mark.asyncio
 async def test_asyncio_once_emit(event_loop):
-    """Test that event_emitters also wrap coroutines when using once
+    """Test that EventEmitters also wrap coroutines when using once
     """
 
     ee = AsyncIOEventEmitter(loop=event_loop)
@@ -57,7 +57,7 @@ async def test_asyncio_once_emit(event_loop):
 
 @pytest.mark.asyncio
 async def test_asyncio_error(event_loop):
-    """Test that event_emitters can handle errors when wrapping coroutines as
+    """Test that EventEmitters can handle errors when wrapping coroutines as
     used with asyncio.
     """
     ee = AsyncIOEventEmitter(loop=event_loop)
