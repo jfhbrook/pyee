@@ -49,17 +49,6 @@ class EventEmitter(object):
             def data_handler(data):
                 print(data)
 
-        As mentioned, this method can also take an asyncio coroutine function::
-
-           @ee.on('data')
-           async def data_handler(data)
-               await do_async_thing(data)
-
-
-        This will automatically schedule the coroutine using the configured
-        scheduling function (defaults to ``asyncio.ensure_future``) and the
-        configured event loop (defaults to ``asyncio.get_event_loop()``).
-
         In both the decorated and undecorated forms, the event handler is
         returned. The upshot of this is that you can call decorated handlers
         directly, as well as use them in remove_listener calls.
