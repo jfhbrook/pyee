@@ -20,8 +20,7 @@ def test_executor_emit():
     should_call = Mock()
 
     @ee.on('event')
-    async def event_handler():
-        _ = await succeed('yes!')
+    def event_handler():
         should_call(True)
 
     ee.emit('event')
@@ -55,7 +54,7 @@ def test_executor_error():
     should_call = Mock()
 
     @ee.on('event')
-    async def event_handler():
+    def event_handler():
         raise PyeeTestError()
 
     @ee.on('error')
