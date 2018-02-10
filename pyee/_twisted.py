@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from pyee._base import EventEmitter
+
 from twisted.internet.defer import Deferred, ensureDeferred
 
 try:
@@ -7,7 +9,6 @@ try:
 except ImportError:
     iscoroutine = None
 
-from pyee.base import EventEmitter
 
 __all__ = ['TwistedEventEmitter']
 

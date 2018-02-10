@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyee.base import EventEmitter
+from pyee._base import EventEmitter
 
 try:
     from concurrent.futures import ThreadPoolExecutor

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from asyncio import ensure_future, Future, iscoroutine
-from pyee.base import EventEmitter
+from pyee._base import EventEmitter
 
 __all__ = ['AsyncIOEventEmitter']
 
