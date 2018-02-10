@@ -30,9 +30,8 @@ Example
 """
 
 from pyee.base import EventEmitter, PyeeException
-from pyee.executor import ExecutorEventEmitter
 
-__all__ = ['EventEmitter', 'ExecutorEventEmitter', 'PyeeException']
+__all__ = ['EventEmitter', 'PyeeException']
 
 try:
     from pyee.asyncio import AsyncIOEventEmitter  # noqa
@@ -43,5 +42,11 @@ except ImportError:
 try:
     from pyee.twisted import TwistedEventEmitter  # noqa
     __all__.append('TwistedEventEmitter')
+except ImportError:
+    pass
+
+try:
+    from pyee.executor import ExecutorEventEmitter
+    __all__.append('ExecutorEventEmitter')
 except ImportError:
     pass
