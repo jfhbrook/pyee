@@ -29,21 +29,21 @@ Example
 
 """
 
-from pyee.base import EventEmitter, PyeeException
+from pyee._base import EventEmitter, PyeeException
 
 __all__ = ['EventEmitter', 'PyeeException']
 
 try:
-    from pyee.asyncio import AsyncIOEventEmitter  # noqa
+    from pyee._asyncio import AsyncIOEventEmitter  # noqa
     __all__.append('AsyncIOEventEmitter')
 except ImportError:
     pass
 
-from pyee.twisted import TwistedEventEmitter  # noqa
+from pyee._twisted import TwistedEventEmitter  # noqa
 __all__.append('TwistedEventEmitter')
 
 try:
-    from pyee.executor import ExecutorEventEmitter  # noqa
+    from pyee._executor import ExecutorEventEmitter  # noqa
     __all__.append('ExecutorEventEmitter')
 except ImportError:
     pass
