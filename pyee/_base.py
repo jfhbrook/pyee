@@ -39,8 +39,7 @@ class EventEmitter(object):
         self._events = defaultdict(OrderedDict)
 
     def on(self, event, f=None):
-        """Registers the function (or optionally an asyncio coroutine function)
-        ``f`` to the event name ``event``.
+        """Registers the function ``f`` to the event name ``event``.
 
         If ``f`` isn't provided, this method returns a function that
         takes ``f`` as a callback; in other words, you can use this method
