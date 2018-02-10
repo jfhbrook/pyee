@@ -18,7 +18,7 @@ class AsyncIOEventEmitter(EventEmitter):
     event loop is used.
     """
     def __init__(self, loop=None):
-        super().__init__()
+        super(AsyncIOEventEmitter, self).__init__()
         self._loop = loop
 
     def on(self, event, f=None):
@@ -48,7 +48,7 @@ class AsyncIOEventEmitter(EventEmitter):
         returned. The upshot of this is that you can call decorated handlers
         directly, as well as use them in remove_listener calls.
         """
-        return super().on(event, f)
+        return super(AsyncIOEventEmitter, self).on(event, f)
 
     def _emit_run(self, f, args, kwargs):
         coro = f(*args, **kwargs)
@@ -81,4 +81,4 @@ class AsyncIOEventEmitter(EventEmitter):
         errors are automatically emitted on the ``error`` event.
         """
 
-        super().emit(event, *args, **kwargs)
+        super(AsyncIOEventEmitter, self).emit(event, *args, **kwargs)

@@ -36,7 +36,7 @@ class TwistedEventEmitter(EventEmitter):
     handlers, the exception is raised.
     """
     def __init__(self):
-        super().__init__()
+        super(TwistedEventEmitter, self).__init__()
 
     def _emit_run(self, f, args, kwargs):
         result = f(*args, **kwargs)
@@ -57,7 +57,9 @@ class TwistedEventEmitter(EventEmitter):
         if event == 'failure':
             self.emit('error', error.value)
         else:
-            super()._emit_handle_potential_error(event, error)
+            (
+                super(TwistedEventEmitter, self)
+            )._emit_handle_potential_error(event, error)
 
     def emit(self, event, *args, **kwargs):
         """Emit ``event``, passing ``*args`` and ``**kwargs`` to each attached
@@ -72,4 +74,4 @@ class TwistedEventEmitter(EventEmitter):
         Similar behavior occurs for "sync" functions which return Deferreds.
         """
 
-        return super().emit(event, *args, **kwargs)
+        return super(TwistedEventEmitter, self).emit(event, *args, **kwargs)
