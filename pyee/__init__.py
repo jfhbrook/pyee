@@ -5,7 +5,7 @@ pyee supplies an ``EventEmitter`` class similar to the ``EventEmitter``
 from Node.js. In addition, it supplies the subclasses ``AsyncIOEventEmitter``,
 ``TwistedEventEmitter`` and ``ExecutorEventEmitter`` for supporting async and
 threaded execution with asyncio, twisted, and concurrent.futures Executors
-respectively.
+respectively, as supported by the environment.
 
 
 Example
@@ -46,7 +46,7 @@ except ImportError:
     pass
 
 try:
-    from pyee.executor import ExecutorEventEmitter
+    from pyee.executor import ExecutorEventEmitter  # noqa
     __all__.append('ExecutorEventEmitter')
 except ImportError:
     pass

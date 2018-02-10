@@ -2,14 +2,18 @@
 
 from pyee.base import EventEmitter
 
-from concurrent.futures import ThreadPoolExecutor
+try:
+    from concurrent.futures import ThreadPoolExecutor
+except ImportError:
+    from futures import ThreadPoolExecutor
 
 __all__ = ['ExecutorEventEmitter']
 
 
 class ExecutorEventEmitter(EventEmitter):
     """An event emitter class which runs handlers in a ``concurrent.futures``
-    executor.
+    executor. If using python 2, this will fall back to trying to use the
+    ``futures`` backported library (caveats there apply).
 
     By default, this class creates a default ``ThreadPoolExecutor``, but
     a custom executor may also be passed in explicitly to, for instance,
