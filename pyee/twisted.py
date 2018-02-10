@@ -17,16 +17,17 @@ class TwistedEventEmitter(EventEmitter):
     returned Deferreds, in addition to synchronous blocking functions. For
     example::
 
-    @ee.on('event')
-    @inlineCallbacks
-    def async_handler(*args, **kwargs):
-        yield returns_a_deferred()
+        @ee.on('event')
+        @inlineCallbacks
+        def async_handler(*args, **kwargs):
+            yield returns_a_deferred()
 
     or::
 
-    @ee.on('event')
-    async def async_handler(*args, **kwargs):
-        await returns_a_deferred()
+        @ee.on('event')
+        async def async_handler(*args, **kwargs):
+            await returns_a_deferred()
+
 
     When async handlers fail, Failures are first emitted on the ``failure``
     event. If there are no ``failure`` handlers, the Failure's associated

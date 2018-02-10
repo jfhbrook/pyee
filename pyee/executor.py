@@ -8,11 +8,14 @@ __all__ = ['ExecutorEventEmitter']
 
 
 class ExecutorEventEmitter(EventEmitter):
-    """An event emitter class which runs handlers in a concurrent.futures
+    """An event emitter class which runs handlers in a ``concurrent.futures``
     executor.
 
-    By default, this class creates a default ThreadPoolExecutor, but
-    a custom executor may also be passed in explicitly.
+    By default, this class creates a default ``ThreadPoolExecutor``, but
+    a custom executor may also be passed in explicitly to, for instance,
+    use a ``ProcessPoolExecutor`` instead.
+
+    No effort is made to ensure thread safety, beyond using an ``Executor``.
     """
     def __init__(self, executor=None):
         super().__init__()
@@ -35,9 +38,9 @@ class ExecutorEventEmitter(EventEmitter):
         function. Returns ``True`` if any functions are attached to ``event``;
         otherwise returns ``False``.
 
-        This class runs all emitted events in a concurrent.futures executor.
-        errors captured by the resulting Future are automatically emitted on
-        the ``error`` event.
+        This class runs all emitted events in a ``concurrent.futures``
+        executor. errors captured by the resulting Future are automatically
+        emitted on the ``error`` event.
         """
 
         super().emit(event, *args, **kwargs)

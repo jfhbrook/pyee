@@ -7,7 +7,9 @@ pyee
    :target: https://pyee.readthedocs.io
 
 pyee supplies an ``EventEmitter`` object similar to the ``EventEmitter``
-from Node.js.
+from Node.js. It also supplies a number of subclasses with added support for
+async and threaded programming in python, such as async/await as seen in
+python 3.5+.
 
 Docs:
 -----

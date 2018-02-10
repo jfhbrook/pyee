@@ -14,7 +14,8 @@ class EventEmitter(object):
     """The Base EventEmitter class.
 
     Most events are registered with EventEmitter via the ``on`` and ``once``
-    methods. However, pyee EventEmitters have two *special* events:
+    methods, and fired with the ``emit`` method. However, pyee EventEmitters
+    have two *special* events:
 
     - ``new_listener``: Fires whenever a new listener is created. Listeners for
       this event do not fire upon their own creation.

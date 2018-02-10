@@ -12,6 +12,10 @@ class AsyncIOEventEmitter(EventEmitter):
 
     Unlike the case with synchronous functions, exceptions raised by asyncio
     coroutines are automatically emitted on the ``error`` event.
+
+    When ``loop`` is specified, the supplied event loop will be used when
+    scheduling work with ``ensure_future``. Otherwise, the default asyncio
+    event loop is used.
     """
     def __init__(self, loop=None):
         super().__init__()
@@ -72,7 +76,7 @@ class AsyncIOEventEmitter(EventEmitter):
         otherwise returns ``False``.
 
         For asyncio coroutine event handlers, calling emit is non-blocking.
-        In other ords, you do not have to await any results from emit, and the
+        In other words, you do not have to await any results from emit, and the
         coroutine is scheduled in a fire-and-forget fashion. Asynchronous
         errors are automatically emitted on the ``error`` event.
         """
