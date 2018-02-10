@@ -39,11 +39,8 @@ try:
 except ImportError:
     pass
 
-try:
-    from pyee.twisted import TwistedEventEmitter  # noqa
-    __all__.append('TwistedEventEmitter')
-except ImportError:
-    pass
+from pyee.twisted import TwistedEventEmitter  # noqa
+__all__.append('TwistedEventEmitter')
 
 try:
     from pyee.executor import ExecutorEventEmitter  # noqa
