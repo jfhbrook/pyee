@@ -24,9 +24,6 @@ API Docs:
 .. autoclass:: BaseEventEmitter
     :members:
 
-.. autoclass:: EventEmitter
-    :members:
-
 .. autoclass:: AsyncIOEventEmitter
     :members:
 
@@ -34,6 +31,9 @@ API Docs:
     :members:
 
 .. autoclass:: ExecutorEventEmitter
+    :members:
+
+.. autoclass:: EventEmitter
     :members:
 
 .. autoclass:: pyee._compat.CompatEventEmitter
