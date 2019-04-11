@@ -13,9 +13,9 @@ Example
 
 ::
 
-    In [1]: from pyee import EventEmitter
+    In [1]: from pyee import BaseEventEmitter
 
-    In [2]: ee = EventEmitter()
+    In [2]: ee = BaseEventEmitter()
 
     In [3]: @ee.on('event')
        ...: def event_handler():
@@ -29,9 +29,14 @@ Example
 
 """
 
-from pyee._base import EventEmitter, PyeeException
+from pyee._base import (
+    BaseEventEmitter,
+    PyeeException
+)
 
-__all__ = ['EventEmitter', 'PyeeException']
+from pyee._compat import CompatEventEmitter as EventEmitter
+
+__all__ = ['BaseEventEmitter', 'EventEmitter', 'PyeeException']
 
 try:
     from pyee._asyncio import AsyncIOEventEmitter  # noqa

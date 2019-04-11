@@ -2,7 +2,7 @@
 
 from collections import defaultdict, OrderedDict
 
-__all__ = ['EventEmitter', 'PyeeException']
+__all__ = ['BaseEventEmitter', 'PyeeException']
 
 
 class PyeeException(Exception):
@@ -10,11 +10,11 @@ class PyeeException(Exception):
     pass
 
 
-class EventEmitter(object):
-    """The Base EventEmitter class.
+class BaseEventEmitter(object):
+    """The base event emitter class.
 
-    Most events are registered with EventEmitter via the ``on`` and ``once``
-    methods, and fired with the ``emit`` method. However, pyee EventEmitters
+    Most events are registered with an emitter via the ``on`` and ``once``
+    methods, and fired with the ``emit`` method. However, pyee event emitters
     have two *special* events:
 
     - ``new_listener``: Fires whenever a new listener is created. Listeners for

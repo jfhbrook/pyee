@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from asyncio import ensure_future, Future, iscoroutine
-from pyee._base import EventEmitter
+from pyee._base import BaseEventEmitter
 
 __all__ = ['AsyncIOEventEmitter']
 
 
-class AsyncIOEventEmitter(EventEmitter):
+class AsyncIOEventEmitter(BaseEventEmitter):
     """An event emitter class which can run asyncio coroutines in addition to
     synchronous blocking functions.
 

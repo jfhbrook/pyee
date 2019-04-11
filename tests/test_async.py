@@ -7,7 +7,7 @@ from asyncio import Future, gather, new_event_loop, wait_for
 from mock import Mock
 from twisted.internet.defer import ensureDeferred, succeed
 
-from pyee import AsyncIOEventEmitter, TwistedEventEmitter
+from pyee import EventEmitter, AsyncIOEventEmitter, TwistedEventEmitter
 
 
 class PyeeTestError(Exception):
