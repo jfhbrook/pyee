@@ -14,10 +14,10 @@ class CompatEventEmitter(BaseEventEmitter):
     ``AsyncIOEventEmitter``, ``TwistedEventEmitter``, ``ExecutorEventEmitter``,
     or ``BaseEventEmitter``.
 
-    This class is similar to the AsyncIOEventEmitter class, but also allows
+    This class is similar to the ``AsyncIOEventEmitter`` class, but also allows
     for overriding the scheduler function (``ensure_future`` by default as in
-    ASyncIOEventEmitter) and does duck typing checks to handle Deferreds. In
-    other words, by setting ``scheduler`` to
+    ``ASyncIOEventEmitter``) and does duck typing checks to handle Deferreds.
+    In other words, by setting ``scheduler`` to
     ``twisted.internet.defer.ensureDeferred`` this will support twisted use
     cases for coroutines.
 
