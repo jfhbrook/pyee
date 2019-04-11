@@ -15,54 +15,51 @@ class PyeeTestError(Exception):
 def test_executor_emit():
     """Test that ExecutorEventEmitters can emit events.
     """
-    ee = ExecutorEventEmitter()
+    with ExecutorEventEmitter() as ee:
+        should_call = Mock()
 
-    should_call = Mock()
+        @ee.on('event')
+        def event_handler():
+            should_call(True)
 
-    @ee.on('event')
-    def event_handler():
-        should_call(True)
+        ee.emit('event')
+        sleep(1)
 
-    ee.emit('event')
-    sleep(1)
-
-    should_call.assert_called_once()
+        should_call.assert_called_once()
 
 
 def test_executor_once():
     """Test that ExecutorEventEmitters also emit events for once.
     """
-    ee = ExecutorEventEmitter()
+    with ExecutorEventEmitter() as ee:
+        should_call = Mock()
 
-    should_call = Mock()
+        @ee.once('event')
+        def event_handler():
+            should_call(True)
 
-    @ee.once('event')
-    def event_handler():
-        should_call(True)
+        ee.emit('event')
+        sleep(1)
 
-    ee.emit('event')
-    sleep(1)
-
-    should_call.assert_called_once()
+        should_call.assert_called_once()
 
 
 def test_executor_error():
     """Test that ExecutorEventEmitters handle errors.
     """
-    ee = ExecutorEventEmitter()
+    with ExecutorEventEmitter() as ee:
+        should_call = Mock()
 
-    should_call = Mock()
+        @ee.on('event')
+        def event_handler():
+            raise PyeeTestError()
 
-    @ee.on('event')
-    def event_handler():
-        raise PyeeTestError()
+        @ee.on('error')
+        def handle_error(e):
+            should_call(e)
 
-    @ee.on('error')
-    def handle_error(e):
-        should_call(e)
+        ee.emit('event')
 
-    ee.emit('event')
+        sleep(1)
 
-    sleep(1)
-
-    should_call.assert_called_once()
+        should_call.assert_called_once()

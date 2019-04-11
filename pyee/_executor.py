@@ -19,7 +19,10 @@ class ExecutorEventEmitter(BaseEventEmitter):
     a custom executor may also be passed in explicitly to, for instance,
     use a ``ProcessPoolExecutor`` instead.
 
-    No effort is made to ensure thread safety, beyond using an ``Executor``.
+    This class is a context manager, and can be used in ``with`` statements.
+    The behavior on exit is to shut down the underlying executor.
+
+    No effort is made to ensure thread safety, beyond using an executor.
     """
     def __init__(self, executor=None):
         super(ExecutorEventEmitter, self).__init__()
@@ -48,3 +51,14 @@ class ExecutorEventEmitter(BaseEventEmitter):
         """
 
         super(ExecutorEventEmitter, self).emit(event, *args, **kwargs)
+
+    def shutdown(self, wait=True):
+        """Call ``shutdown`` on the internal executor."""
+
+        self._executor.shutdown(wait=wait)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.shutdown()
