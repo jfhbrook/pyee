@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-pyee supplies an ``EventEmitter`` class similar to the ``EventEmitter``
+pyee supplies a ``BaseEventEmitter`` class similar to the ``EventEmitter``
 from Node.js. In addition, it supplies the subclasses ``AsyncIOEventEmitter``,
 ``TwistedEventEmitter`` and ``ExecutorEventEmitter`` for supporting async and
 threaded execution with asyncio, twisted, and concurrent.futures Executors
