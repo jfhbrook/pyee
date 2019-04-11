@@ -14,13 +14,17 @@ class PyeeTestError(Exception):
     pass
 
 
+@pytest.mark.parametrize('cls', [
+    AsyncIOEventEmitter,
+    EventEmitter
+])
 @pytest.mark.asyncio
-async def test_asyncio_emit(event_loop):
-    """Test that EventEmitters can handle wrapping coroutines as used with
-    asyncio.
+async def test_asyncio_emit(cls, event_loop):
+    """Test that asyncio-supporting event emitters can handle wrapping
+    coroutines
     """
 
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = cls(loop=event_loop)
 
     should_call = Future(loop=event_loop)
 
@@ -34,13 +38,17 @@ async def test_asyncio_emit(event_loop):
 
     assert result == True
 
-
+@pytest.mark.parametrize('cls', [
+    AsyncIOEventEmitter,
+    EventEmitter
+])
 @pytest.mark.asyncio
-async def test_asyncio_once_emit(event_loop):
-    """Test that EventEmitters also wrap coroutines when using once
+async def test_asyncio_once_emit(cls, event_loop):
+    """Test that asyncio-supporting event emitters also wrap coroutines when
+    using once
     """
 
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = cls(loop=event_loop)
 
     should_call = Future(loop=event_loop)
 
@@ -55,12 +63,16 @@ async def test_asyncio_once_emit(event_loop):
     assert result == True
 
 
+@pytest.mark.parametrize('cls', [
+    AsyncIOEventEmitter,
+    EventEmitter
+])
 @pytest.mark.asyncio
-async def test_asyncio_error(event_loop):
-    """Test that EventEmitters can handle errors when wrapping coroutines as
-    used with asyncio.
+async def test_asyncio_error(cls, event_loop):
+    """Test that asyncio-supporting event emitters can handle errors when
+    wrapping coroutines
     """
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = cls(loop=event_loop)
 
     should_call = Future(loop=event_loop)
 
@@ -80,10 +92,15 @@ async def test_asyncio_error(event_loop):
     assert isinstance(result, PyeeTestError)
 
 
-def test_twisted_emit():
-    """Test that TwistedEventEmitters can handle wrapping coroutines.
+@pytest.mark.parametrize('cls,kwargs', [
+    (TwistedEventEmitter, dict()),
+    (EventEmitter, dict(scheduler=ensureDeferred))
+])
+def test_twisted_emit(cls, kwargs):
+    """Test that twisted-supporting event emitters can handle wrapping
+    coroutines
     """
-    ee = TwistedEventEmitter()
+    ee = cls(**kwargs)
 
     should_call = Mock()
 
@@ -97,10 +114,15 @@ def test_twisted_emit():
     should_call.assert_called_once()
 
 
-def test_twisted_once():
-    """Test that TwistedEventEmitters also wrap coroutines for once.
+@pytest.mark.parametrize('cls,kwargs', [
+    (TwistedEventEmitter, dict()),
+    (EventEmitter, dict(scheduler=ensureDeferred))
+])
+def test_twisted_once(cls, kwargs):
+    """Test that twisted-supporting event emitters also wrap coroutines for
+    once
     """
-    ee = TwistedEventEmitter()
+    ee = cls(**kwargs)
 
     should_call = Mock()
 

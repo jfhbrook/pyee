@@ -35,7 +35,7 @@ class CompatEventEmitter(BaseEventEmitter):
 
         super(CompatEventEmitter, self).__init__()
 
-        self._scheduler = scheduler
+        self._schedule = scheduler
         self._loop = loop
 
     def on(self, event, f=None):
