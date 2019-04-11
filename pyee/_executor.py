@@ -19,8 +19,22 @@ class ExecutorEventEmitter(BaseEventEmitter):
     a custom executor may also be passed in explicitly to, for instance,
     use a ``ProcessPoolExecutor`` instead.
 
-    This class is a context manager, and can be used in ``with`` statements.
-    The behavior on exit is to shut down the underlying executor.
+    This class is a context manager, and can be used in ``with`` statements::
+
+        with ExecutorEventEmitter() as ee:
+            @ee.on('data')
+            def slow_data_handler(data):
+                sleep(0.5)
+                print(data)
+
+            ee.emit('event')
+
+            sleep(1)  # slow data handler will have printed
+
+    The behavior on exit is to shut down the underlying executor. Alternately,
+    create the event emitter as normal and manually call the ``shutdown``
+    method when done, or pass in an existing executor and manage the lifecycle
+    of that executor independently.
 
     No effort is made to ensure thread safety, beyond using an executor.
     """

@@ -21,6 +21,9 @@ API Docs:
 
 .. automodule:: pyee
 
+.. autoclass:: BaseEventEmitter
+    :members:
+
 .. autoclass:: EventEmitter
     :members:
 
@@ -32,6 +35,10 @@ API Docs:
 
 .. autoclass:: ExecutorEventEmitter
     :members:
+
+.. autoclass:: pyee._compat.CompatEventEmitter
+    :members:
+
 
 Some Links
 ==========
