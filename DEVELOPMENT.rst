@@ -1,8 +1,11 @@
 Development And Publishing:
 ------------
 
-- Given you're in a virtualenv or conda environment, you can install this
-  project's dependencies with ``make setup``.
+- Set up either a virtualenv or a conda env
+  - if using a virtualenv, `pip install -r requirements_dev.txt` will install
+    development dependencies
+  - if using conda, `conda env create` in this directory will create the
+    environment and `conda env update` will update.
 - You can link this project to your global space with
   ``python setup.py develop``.
 - Tests can be ran with ``make test``.
