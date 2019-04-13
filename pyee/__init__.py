@@ -29,29 +29,52 @@ Example
 
 """
 
+import importlib
 from pyee._base import (
     BaseEventEmitter,
     PyeeException
 )
+from pyee._compat import CompatEventEmitter
 
-from pyee._compat import CompatEventEmitter as EventEmitter
+LAZY_IMPORTS = {
+    'TwistedEventEmitter': dict(
+        path=('pyee._twisted', 'TwistedEventEmitter'),
+        message="in order to use 'TwistedEventEmitter', you need to have a "
+        'version of twisted installed that supports coroutines'
+    ),
+    'AsyncIOEventEmitter': dict(
+        path=('pyee._asyncio', 'AsyncIOEventEmitter'),
+        message="in order to use 'AsyncIOEventEmitter', you must be using at "
+        "least python 3.4 and have the 'asyncio' library available, and if "
+        "you want to use async/await you should be using at least python 3.5"
+    ),
+    'ExecutorEventEmitter': dict(
+        path=('pyee._executor', 'ExecutorEventEmitter'),
+        message="in order to use 'ExecutorEventEmitter', you must either be "
+        "using at least python 3.2 and have the 'concurrent.futures' library "
+        "available, or have the 'futures' polyfill installed"
+    )
+}
 
-__all__ = ['BaseEventEmitter', 'EventEmitter', 'PyeeException']
+BASE_IMPORTS = {
+    'BaseEventEmitter': BaseEventEmitter,
+    'EventEmitter': CompatEventEmitter,
+    'PyeeException': PyeeException
+}
 
-try:
-    from pyee._asyncio import AsyncIOEventEmitter  # noqa
-    __all__.append('AsyncIOEventEmitter')
-except ImportError:
-    pass
 
-try:
-    from pyee._twisted import TwistedEventEmitter  # noqa
-    __all__.append('TwistedEventEmitter')
-except ImportError:
-    pass
+__all__ = list(BASE_IMPORTS) + list(LAZY_IMPORTS.keys())
 
-try:
-    from pyee._executor import ExecutorEventEmitter  # noqa
-    __all__.append('ExecutorEventEmitter')
-except ImportError:
-    pass
+
+def __getattr__(name):
+    if name in BASE_IMPORTS:
+        return BASE_IMPORTS[name]
+    elif name in LAZY_IMPORTS:
+        try:
+            path = LAZY_IMPORTS[name]['path']
+            return getattr(importlib.import_module(path[0]), path[1])
+        except ImportError as err:
+            hint = LAZY_IMPORTS[name]['message']
+            raise ImportError(hint) from err
+    else:
+        raise ImportError(f"cannot import name '{name}' from 'pyee'")
