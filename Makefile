@@ -17,7 +17,7 @@ tox:
 	tox
 
 lint:
-	python setup.py flake8
+	flake8
 
 build_docs:
 	cd docs && make html
