@@ -32,9 +32,29 @@ Example
 import importlib
 from pyee._base import (
     BaseEventEmitter,
-    PyeeException
+    PyeeException,
+    UnspecifiedErrorException
 )
 from pyee._compat import CompatEventEmitter
+
+
+class LazyImportException(PyeeException):
+    '''
+    Subclasses of BaseEventEmitter that require other installed functionality
+    are loaded lazily so that meaningful errors can be raised when importing
+    them rather than having the imports be spookily missing from the
+    module.
+
+    This exception is raised when a lazy-loaded module can't be imported.
+    The reason an 'ImportError' or an 'AttributeError' isn't being raised
+    instead is that the former is normally raised when importing from while
+    the latter is raised when accessing properties on an imported module
+    object, but the lazy loading system can't tell which is which. Moreover,
+    the error message can not be customized when inheriting from either.
+    '''
+    def __init__(self, *args, **kwargs):
+        return PyeeException.__init__(self, *args, **kwargs)
+
 
 LAZY_IMPORTS = {
     'TwistedEventEmitter': dict(
@@ -59,7 +79,9 @@ LAZY_IMPORTS = {
 BASE_IMPORTS = {
     'BaseEventEmitter': BaseEventEmitter,
     'EventEmitter': CompatEventEmitter,
-    'PyeeException': PyeeException
+    'PyeeException': PyeeException,
+    'UnspecifiedErrorException': UnspecifiedErrorException,
+    'LazyImportException': LazyImportException
 }
 
 
@@ -73,8 +95,11 @@ def __getattr__(name):
         try:
             path = LAZY_IMPORTS[name]['path']
             return getattr(importlib.import_module(path[0]), path[1])
-        except ImportError as err:
+        except ImportError as exc:
             hint = LAZY_IMPORTS[name]['message']
-            raise ImportError(hint) from err
+            raise LazyImportException(hint) from exc
     else:
-        raise ImportError(f"cannot import name '{name}' from 'pyee'")
+        # This one is safe because python checks __all__ before calling
+        # __getattr__ when importing from package
+        nice_message = f"module 'pyee' has no attribute '{name}'"
+        raise AttributeError(nice_message)

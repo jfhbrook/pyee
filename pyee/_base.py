@@ -10,6 +10,13 @@ class PyeeException(Exception):
     pass
 
 
+class UnspecifiedErrorException(Exception):
+    """An exception raised when an ``error`` event occurs without an
+    Exception to raise.
+    """
+    pass
+
+
 class BaseEventEmitter(object):
     """The base event emitter class. All other event emitters inherit from
     this class.
@@ -82,7 +89,9 @@ class BaseEventEmitter(object):
             if error:
                 raise error
             else:
-                raise PyeeException("Uncaught, unspecified 'error' event.")
+                raise UnspecifiedErrorException(
+                    "Uncaught, unspecified 'error' event."
+                )
 
     def emit(self, event, *args, **kwargs):
         """Emit ``event``, passing ``*args`` and ``**kwargs`` to each attached

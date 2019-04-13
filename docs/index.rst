@@ -39,6 +39,12 @@ API Docs:
 .. autoclass:: pyee._compat.CompatEventEmitter
     :members:
 
+.. autoclass:: pyee.PyeeException
+
+.. autoclass:: pyee.UnspecifiedErrorException
+
+.. autoclass:: pyee.LazyImportException
+
 
 Some Links
 ==========
