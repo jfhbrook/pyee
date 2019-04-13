@@ -21,7 +21,7 @@ def test_executor_emit():
             should_call(True)
 
         ee.emit('event')
-        sleep(1)
+        sleep(0.1)
 
         should_call.assert_called_once()
 
@@ -37,7 +37,7 @@ def test_executor_once():
             should_call(True)
 
         ee.emit('event')
-        sleep(1)
+        sleep(0.1)
 
         should_call.assert_called_once()
 
@@ -58,6 +58,6 @@ def test_executor_error():
 
         ee.emit('event')
 
-        sleep(1)
+        sleep(0.1)
 
         should_call.assert_called_once()
