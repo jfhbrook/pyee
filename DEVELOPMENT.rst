@@ -11,7 +11,7 @@ Development And Publishing:
 - Tests can be ran with ``make test``.
 - Documentation can be generated locally with ``make build_docs`` and served
   with ``make serve_docs``.
-- Version off by ``git tag -a {version} -m 'Version {version}'``. No prefixed
+- Version off by ``git tag -a {version} -m 'Release {version}'``. No prefixed
   v. Make sure you do a commit with the updated CHANGELOG as well.
 - Publish with ``make package`` followed by ``make upload``.
 - RTD should build automatically but can be kicked off manually by logging in.
