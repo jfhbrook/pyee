@@ -19,8 +19,12 @@ class ExecutorEventEmitter(BaseEventEmitter):
     a custom executor may also be passed in explicitly to, for instance,
     use a ``ProcessPoolExecutor`` instead.
 
+    This class runs all emitted events the configured executor. Errors
+    captured by the resulting Future are automatically emitted on the
+    ``error`` event.
+
     The underlying executor may be shut down by calling the ``shutdown``
-    method. Alternately you can treat the event emitter as a context manager:
+    method. Alternately you can treat the event emitter as a context manager::
 
         with ExecutorEventEmitter() as ee:
             # Underlying executor open
@@ -32,6 +36,9 @@ class ExecutorEventEmitter(BaseEventEmitter):
             ee.emit('event')
 
         # Underlying executor closed
+
+    Since the function call is scheduled on an executor, emit is always
+    non-blocking.
 
     No effort is made to ensure thread safety, beyond using an executor.
     """
@@ -50,18 +57,6 @@ class ExecutorEventEmitter(BaseEventEmitter):
             exc = f.exception()
             if exc:
                 self.emit('error', exc)
-
-    def emit(self, event, *args, **kwargs):
-        """Emit ``event``, passing ``*args`` and ``**kwargs`` to each attached
-        function. Returns ``True`` if any functions are attached to ``event``;
-        otherwise returns ``False``.
-
-        This class runs all emitted events in a ``concurrent.futures``
-        executor. errors captured by the resulting Future are automatically
-        emitted on the ``error`` event.
-        """
-
-        return super(ExecutorEventEmitter, self).emit(event, *args, **kwargs)
 
     def shutdown(self, wait=True):
         """Call ``shutdown`` on the internal executor."""

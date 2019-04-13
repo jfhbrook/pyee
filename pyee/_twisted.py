@@ -37,6 +37,12 @@ class TwistedEventEmitter(BaseEventEmitter):
     handlers, the exception is raised. For consistency, when handlers raise
     errors synchronously, they're captured, wrapped in a Failure and treated
     as an async failure.
+
+    For twisted coroutine event handlers, calling emit is non-blocking.
+    In other words, you do not have to await any results from emit, and the
+    coroutine is scheduled in a fire-and-forget fashion.
+
+    Similar behavior occurs for "sync" functions which return Deferreds.
     """
     def __init__(self):
         super(TwistedEventEmitter, self).__init__()
@@ -66,18 +72,3 @@ class TwistedEventEmitter(BaseEventEmitter):
             (
                 super(TwistedEventEmitter, self)
             )._emit_handle_potential_error(event, error)
-
-    def emit(self, event, *args, **kwargs):
-        """Emit ``event``, passing ``*args`` and ``**kwargs`` to each attached
-        function. Returns ``True`` if any functions are attached to ``event``;
-        otherwise returns ``False``.
-
-        For twisted coroutine event handlers, calling emit is non-blocking.
-        In other words, you do not have to await any results from emit, and the
-        coroutine is scheduled in a fire-and-forget fashion. Asynchronous
-        errors are automatically emitted on the ``error`` event.
-
-        Similar behavior occurs for "sync" functions which return Deferreds.
-        """
-
-        return super(TwistedEventEmitter, self).emit(event, *args, **kwargs)
