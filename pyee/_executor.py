@@ -21,7 +21,8 @@ class ExecutorEventEmitter(BaseEventEmitter):
 
     This class runs all emitted events the configured executor. Errors
     captured by the resulting Future are automatically emitted on the
-    ``error`` event.
+    ``error`` event. This is unlike the BaseEventEmitter, which have no error
+    handling.
 
     The underlying executor may be shut down by calling the ``shutdown``
     method. Alternately you can treat the event emitter as a context manager::
