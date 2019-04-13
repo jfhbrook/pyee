@@ -11,7 +11,8 @@ class PyeeException(Exception):
 
 
 class BaseEventEmitter(object):
-    """The base event emitter class.
+    """The base event emitter class. All other event emitters inherit from
+    this class.
 
     Most events are registered with an emitter via the ``on`` and ``once``
     methods, and fired with the ``emit`` method. However, pyee event emitters
