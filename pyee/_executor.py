@@ -19,7 +19,7 @@ class ExecutorEventEmitter(BaseEventEmitter):
     a custom executor may also be passed in explicitly to, for instance,
     use a ``ProcessPoolExecutor`` instead.
 
-    This class runs all emitted events the configured executor. Errors
+    This class runs all emitted events on the configured executor. Errors
     captured by the resulting Future are automatically emitted on the
     ``error`` event. This is unlike the BaseEventEmitter, which have no error
     handling.
