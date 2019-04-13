@@ -1,3 +1,13 @@
+2019/04/11 Version 6.0.0
+-----------------------
+- Added a ``BaseEventEmitter`` class which is entirely synchronous and
+  intended for simple use and for subclassing
+- Added an ``AsyncIOEventEmitter`` class for intended use with asyncio
+- Added a ``TwistedEventEmitter`` class for intended use with twisted
+- Added an ``ExecutorEventEmitter`` class which runs events in an executor
+- Deprecated ``EventEmitter`` (use one of the new classes)
+
+
 2017/11/18 Version 5.0.0
 ------------------------
 

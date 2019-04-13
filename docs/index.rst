@@ -2,10 +2,9 @@ pyee
 ====
 
 pyee is a rough port of
-`node.js's EventEmitter <https://nodejs.org/api/events.html>`_.
-It's missing a number of methods, but implements the basics. Unlike its
-namesake, it supports wrapping async functions/coroutines as seen in python
-3.5+.
+`node.js's EventEmitter <https://nodejs.org/api/events.html>`_. Unlike its
+namesake, it includes a number of subclasses useful for implementing async
+and threaded programming in python, such as async/await as seen in python 3.5+.
 
 Install:
 --------
@@ -22,8 +21,24 @@ API Docs:
 
 .. automodule:: pyee
 
+.. autoclass:: BaseEventEmitter
+    :members:
+
+.. autoclass:: AsyncIOEventEmitter
+    :members:
+
+.. autoclass:: TwistedEventEmitter
+    :members:
+
+.. autoclass:: ExecutorEventEmitter
+    :members:
+
 .. autoclass:: EventEmitter
     :members:
+
+.. autoclass:: pyee._compat.CompatEventEmitter
+    :members:
+
 
 Some Links
 ==========

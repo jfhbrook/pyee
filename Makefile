@@ -1,7 +1,3 @@
-setup:
-	pip install -r requirements_dev.txt
-	python setup.py develop
-
 package:
 	python setup.py check
 	python setup.py sdist
@@ -17,10 +13,13 @@ tox:
 	tox
 
 lint:
-	python setup.py flake8
+	flake8
 
-the_docs:
-	python setup.py build_sphinx
+build_docs:
+	cd docs && make html
+
+serve_docs:
+	cd docs/_build/html && python -m http.server
 
 clean:
 	rm -rf .tox
