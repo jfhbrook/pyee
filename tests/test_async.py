@@ -38,6 +38,7 @@ async def test_asyncio_emit(cls, event_loop):
 
     assert result == True
 
+
 @pytest.mark.parametrize('cls', [
     AsyncIOEventEmitter,
     EventEmitter
@@ -82,7 +83,29 @@ async def test_asyncio_error(cls, event_loop):
 
     @ee.on('error')
     def handle_error(exc):
-        assert isinstance(exc, PyeeTestError)
+        should_call.set_result(exc)
+
+    ee.emit('event')
+
+    result = await wait_for(should_call, 0.1)
+
+    assert isinstance(result, PyeeTestError)
+
+
+@pytest.mark.asyncio
+async def test_sync_error(event_loop):
+    """Test that regular functions have the same error handling as coroutines
+    """
+    ee = AsyncIOEventEmitter(loop=event_loop)
+
+    should_call = Future(loop=event_loop)
+
+    @ee.on('event')
+    def sync_handler():
+        raise PyeeTestError()
+
+    @ee.on('error')
+    def handle_error(exc):
         should_call.set_result(exc)
 
     ee.emit('event')

@@ -61,7 +61,7 @@ class ExecutorEventEmitter(BaseEventEmitter):
         emitted on the ``error`` event.
         """
 
-        super(ExecutorEventEmitter, self).emit(event, *args, **kwargs)
+        return super(ExecutorEventEmitter, self).emit(event, *args, **kwargs)
 
     def shutdown(self, wait=True):
         """Call ``shutdown`` on the internal executor."""

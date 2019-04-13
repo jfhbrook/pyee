@@ -21,6 +21,12 @@ class CompatEventEmitter(BaseEventEmitter):
     ``twisted.internet.defer.ensureDeferred`` this will support twisted use
     cases for coroutines.
 
+    When calling synchronous handlers, raised exceptions are ignored - as with
+    the BaseEventEmitter, you must capture and handle your own exceptions.
+    However, for coroutine functions, exceptions are handled by emitting them
+    on the ``error`` event.  Note that when using with twisted, the ``error``
+    event will emit Failures, not Exceptions.
+
     This class will also successfully import in python 2, but without coroutine
     support.
     """
@@ -99,4 +105,4 @@ class CompatEventEmitter(BaseEventEmitter):
         coroutine is scheduled in a fire-and-forget fashion. Asynchronous
         errors are automatically emitted on the ``error`` event.
         """
-        super(CompatEventEmitter, self).emit(event, *args, **kwargs)
+        return super(CompatEventEmitter, self).emit(event, *args, **kwargs)

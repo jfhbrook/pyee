@@ -24,7 +24,29 @@ def test_propagates_failure():
     @ee.on('event')
     @inlineCallbacks
     def event_handler():
-        yield failure(PyeeTestError())
+        yield Failure(PyeeTestError())
+
+    @ee.on('failure')
+    def handle_failure(f):
+        assert isinstance(f, Failure)
+        should_call(f)
+
+    ee.emit('event')
+
+    should_call.assert_called_once()
+
+
+def test_propagates_sync_failure():
+    """Test that TwistedEventEmitters can propagate failures
+    from twisted Deferreds
+    """
+    ee = TwistedEventEmitter()
+
+    should_call = Mock()
+
+    @ee.on('event')
+    def event_handler():
+        raise PyeeTestError()
 
     @ee.on('failure')
     def handle_failure(f):
@@ -48,7 +70,7 @@ def test_propagates_exception():
     @ee.on('event')
     @inlineCallbacks
     def event_handler():
-        yield failure(PyeeTestError())
+        yield Failure(PyeeTestError())
 
     @ee.on('error')
     def handle_error(exc):

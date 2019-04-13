@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import pytest
 
 from inspect import getmro
 from collections import OrderedDict
@@ -6,16 +7,22 @@ from collections import OrderedDict
 from mock import Mock
 from pytest import raises
 
-from pyee import BaseEventEmitter
+from pyee import BaseEventEmitter, EventEmitter
+
 
 class PyeeTestException(Exception):
     pass
 
-def test_emit_sync():
+
+@pytest.mark.parametrize('cls', [
+    BaseEventEmitter,
+    EventEmitter
+])
+def test_emit_sync(cls):
     """Basic synchronous emission works"""
 
     call_me = Mock()
-    ee = BaseEventEmitter()
+    ee = cls()
 
     @ee.on('event')
     def event_handler(data, **kwargs):
@@ -28,11 +35,15 @@ def test_emit_sync():
     call_me.assert_called_once()
 
 
-def test_emit_error():
+@pytest.mark.parametrize('cls', [
+    BaseEventEmitter,
+    EventEmitter
+])
+def test_emit_error(cls):
     """Errors raise with no event handler, otherwise emit on handler"""
 
     call_me = Mock()
-    ee = BaseEventEmitter()
+    ee = cls()
 
     test_exception = PyeeTestException('lololol')
 
@@ -44,7 +55,7 @@ def test_emit_error():
         call_me()
 
     # No longer raises and error instead return True indicating handled
-    assert ee.emit('error', test_exception)
+    assert ee.emit('error', test_exception) == True
     call_me.assert_called_once()
 
 
