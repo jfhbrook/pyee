@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import pytest
-
 from mock import Mock
-from twisted.internet.defer import fail, inlineCallbacks, succeed
+from twisted.internet.defer import inlineCallbacks
 from twisted.python.failure import Failure
 
 from pyee import TwistedEventEmitter
@@ -80,5 +78,3 @@ def test_propagates_exception():
     ee.emit('event')
 
     should_call.assert_called_once()
-
-   

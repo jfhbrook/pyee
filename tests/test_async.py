@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-import pytest_asyncio.plugin
+import pytest_asyncio.plugin  # noqa
 
-from asyncio import Future, gather, new_event_loop, wait_for
+from asyncio import Future, wait_for
 from mock import Mock
 from twisted.internet.defer import ensureDeferred, succeed
 
@@ -36,7 +36,7 @@ async def test_asyncio_emit(cls, event_loop):
 
     result = await wait_for(should_call, 0.1)
 
-    assert result == True
+    assert result is True
 
 
 @pytest.mark.parametrize('cls', [
@@ -61,7 +61,7 @@ async def test_asyncio_once_emit(cls, event_loop):
 
     result = await wait_for(should_call, 0.1)
 
-    assert result == True
+    assert result is True
 
 
 @pytest.mark.parametrize('cls', [

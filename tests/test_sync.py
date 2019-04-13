@@ -47,7 +47,7 @@ def test_emit_error(cls):
 
     test_exception = PyeeTestException('lololol')
 
-    with raises(PyeeTestException) as exc_info:
+    with raises(PyeeTestException):
         ee.emit('error', test_exception)
 
     @ee.on('error')
@@ -55,7 +55,7 @@ def test_emit_error(cls):
         call_me()
 
     # No longer raises and error instead return True indicating handled
-    assert ee.emit('error', test_exception) == True
+    assert ee.emit('error', test_exception) is True
     call_me.assert_called_once()
 
 
@@ -133,7 +133,10 @@ def test_listener_removal():
     ])
 
     ee.remove_listener('event', first)
-    assert ee._events['event'] == OrderedDict([(third, third), (fourth, fourth)])
+    assert ee._events['event'] == OrderedDict([
+        (third, third),
+        (fourth, fourth)
+    ])
 
     ee.remove_all_listeners('event')
     assert ee._events['event'] == OrderedDict()
@@ -184,7 +187,7 @@ def test_once():
         call_me()
 
     # Tests to make sure that after event is emitted that it's gone.
-    callback_fn = ee.once('event', once_handler)
+    ee.once('event', once_handler)
 
     ee.emit('event', 'emitter is emitted!')
 
@@ -282,6 +285,7 @@ def test_inheritance():
     assert BaseEventEmitter in getmro(example)
     assert object in getmro(example)
 
+
 def test_multiple_inheritance():
     """Test that inheritance is preserved along a lengthy MRO"""
     class example(BaseEventEmitter):
@@ -300,4 +304,4 @@ def test_multiple_inheritance():
         def __init__(self):
             super(_example2, self).__init__()
 
-    a = _example2()
+    a = _example2()  # noqa
