@@ -66,15 +66,41 @@ def test_uplift():
     call_me.reset_mock()
 
     # Exception handling alwyas prefers uplifted
-    base_exc = Exception('error from base')
-    uplifted_exc = Exception('error from uplifted')
 
-    uplifted_ee.on('error', call_me)
+    base_error = Exception('base error')
+    uplifted_error = Exception('uplifted error')
 
-    uplifted_ee.emit('error', uplifted_exc)
-    base_ee.emit('error', base_exc)
+    # Hold my beer
+    error_handler = Mock()
+    original_error_handler = uplifted_ee._emit_handle_potential_error
+    uplifted_ee._emit_handle_potential_error = error_handler
+
+    base_ee.emit('error', base_error)
+    uplifted_ee.emit('error', uplifted_error)
+
+    error_handler.has_calls([
+        call('error', base_error),
+        call('error', uplifted_error)
+    ])
+
+    uplifted_ee._emit_handle_potential_error = original_error_handler
+
+    # Quick check for unwrap
+    uplifted_ee.unwrap()
+
+    assert not uplifted_ee.emit('base_event')
+    assert uplifted_ee.emit('shared_event')
+    assert uplifted_ee.emit('uplifted_event')
+
+    assert base_ee.emit('base_event')
+    assert base_ee.emit('shared_event')
+    assert not base_ee.emit('uplifted_event')
 
     call_me.assert_has_calls([
-        call(uplifted_exc),
-        call(base_exc)
+        # No listener for base event on uplifted
+        call('shared event on uplifted emitter'),
+        call('uplifted event on uplifted emitter'),
+        call('base event on base emitter'),
+        call('shared event on base emitter')
+        # No listener for uplifted event on uplifted
     ])
