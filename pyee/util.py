@@ -115,12 +115,11 @@ def uplift(
     ``_emit_handle_potential_error`` methods.
     """
 
-    new_proxy_new_listener = _PROXY_NEW_LISTENER_SETTINGS[
-        proxy_new_listener
-    ][0]
-    underlying_proxy_new_listener = _PROXY_NEW_LISTENER_SETTINGS[
-        proxy_new_listener
-    ][1]
+    new_proxy_new_listener, underlying_proxy_new_listener = (
+        _PROXY_NEW_LISTENER_SETTINGS[
+            proxy_new_listener
+         ]
+    )
 
     new = cls(*args, **kwargs)
 
@@ -130,8 +129,9 @@ def uplift(
         neither=(new, underlying)
     )
 
-    new_error_handler = uplift_error_handlers[error_handling][0]
-    underlying_error_handler = uplift_error_handlers[error_handling][1]
+    new_error_handler, underlying_error_handler = uplift_error_handlers[
+        error_handling
+    ]
 
     _wrap(
         new, underlying,
