@@ -29,6 +29,7 @@ Example
 
 """
 
+import sys
 import importlib
 from pyee._base import (
     BaseEventEmitter,
@@ -86,18 +87,28 @@ BASE_IMPORTS = {
 __all__ = list(BASE_IMPORTS) + list(LAZY_IMPORTS.keys())
 
 
-def __getattr__(name):
-    if name in BASE_IMPORTS:
-        return BASE_IMPORTS[name]
-    elif name in LAZY_IMPORTS:
-        try:
-            path = LAZY_IMPORTS[name]['path']
-            return getattr(importlib.import_module(path[0]), path[1])
-        except ImportError as exc:
-            hint = LAZY_IMPORTS[name]['message']
-            raise LazyImportException(hint) from exc
-    else:
-        # This one is safe because python checks __all__ before calling
-        # __getattr__ when importing from package
-        nice_message = f"module 'pyee' has no attribute '{name}'"
-        raise AttributeError(nice_message)
+# One pro trick is to override the module object...
+# ... but because it's not a package file we can't import
+# from any of the sub-modules.
+class LazyLoadingModule(object):
+
+    __all__ = __all__
+
+    def __getattr__(self, name):
+        if name in BASE_IMPORTS:
+            return BASE_IMPORTS[name]
+        elif name in LAZY_IMPORTS:
+            try:
+                path = LAZY_IMPORTS[name]['path']
+                return getattr(importlib.import_module(path[0]), path[1])
+            except ImportError as exc:
+                hint = LAZY_IMPORTS[name]['message']
+                raise LazyImportException(hint) from exc
+        else:
+            # This one is safe because python checks __all__ before calling
+            # __getattr__ when importing from package
+            nice_message = f"module 'pyee' has no attribute '{name}'"
+            raise AttributeError(nice_message)
+
+
+sys.modules[__name__] = LazyLoadingModule()
