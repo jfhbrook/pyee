@@ -14,9 +14,9 @@ def evolve(cls, underlying, *args, **kwargs):
 
     This is mostly helpful if you have a simple underlying event emitter
     with event handlers already attached to it, but you want to use that
-    event emitter in a new context - for example, using a ``BaseEventEmitter``
-    supplied by a third party library into an ``AsyncIOEventEmitter`` for
-    use in your ``asyncio`` app.
+    event emitter in a new context - for example, evolving a
+    ``BaseEventEmitter`` supplied by a third party library into an
+    ``AsyncIOEventEmitter`` for use in your ``asyncio`` app.
 
     Note that ``cls`` must be able to directly handle all of the same kinds
     of handlers as ``underlying``. For example, when evolving a
