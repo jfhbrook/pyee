@@ -40,11 +40,13 @@ def uplift(cls, underlying, *args, **kwargs):
     event behavior from an ``underlying`` event emitter instance.
 
     This is mostly helpful if you have a simple underlying event emitter
-    with event handlers already attached to it, but you want to use that
-    event emitter in a new context - for example, you may want to ``uplift``  a
+    that you don't have direct control over, but you want to use that
+    event emitter in a new context - for example, you may want to ``uplift`` a
     ``BaseEventEmitter`` supplied by a third party library into an
     ``AsyncIOEventEmitter`` so that you may register async event handlers
-    in your ``asyncio`` app. This trick will also often work for a deprecated
+    in your ``asyncio`` app but still be able to receive events from the
+    underlying event emitter and call the underlying event emitter's existing
+    handlers. This trick will also often work for a deprecated
     ``EventEmitter`` instance.
 
     When called, this instantiates a new instance of ``cls`` and overwrites
