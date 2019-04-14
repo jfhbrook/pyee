@@ -11,7 +11,7 @@ class UpliftedEventEmitter(BaseEventEmitter):
     pass
 
 
-def test_uplift():
+def test_uplift_emit():
     call_me = Mock()
 
     base_ee = BaseEventEmitter()
@@ -67,25 +67,6 @@ def test_uplift():
 
     call_me.reset_mock()
 
-    # Exception handling alwyas prefers uplifted
-    base_error = Exception('base error')
-    uplifted_error = Exception('uplifted error')
-
-    # Hold my beer
-    error_handler = Mock()
-    original_error_handler = uplifted_ee._emit_handle_potential_error
-    uplifted_ee._emit_handle_potential_error = error_handler
-
-    base_ee.emit('error', base_error)
-    uplifted_ee.emit('error', uplifted_error)
-
-    error_handler.has_calls([
-        call('error', base_error),
-        call('error', uplifted_error)
-    ])
-
-    uplifted_ee._emit_handle_potential_error = original_error_handler
-
     # Quick check for unwrap
     uplifted_ee.unwrap()
 
@@ -111,3 +92,109 @@ def test_uplift():
         call('shared event on base emitter')
         # No listener for uplifted event on uplifted
     ])
+
+
+@pytest.mark.parametrize('error_handling', [
+  'new', 'underlying', 'neither'
+])
+def test_exception_handling(error_handling):
+    base_ee = BaseEventEmitter()
+    uplifted_ee = uplift(
+        UpliftedEventEmitter, base_ee,
+        error_handling=error_handling
+    )
+
+    # Exception handling alwyas prefers uplifted
+    base_error = Exception('base error')
+    uplifted_error = Exception('uplifted error')
+
+    # Hold my beer
+    base_error_handler = Mock()
+    base_ee._emit_handle_potential_error = base_error_handler
+
+    # Hold my other beer
+    uplifted_error_handler = Mock()
+    uplifted_ee._emit_handle_potential_error = uplifted_error_handler
+
+    base_ee.emit('error', base_error)
+    uplifted_ee.emit('error', uplifted_error)
+
+    if error_handling == 'new':
+        base_error_handler.assert_not_called()
+        uplifted_error_handler.assert_has_calls([
+            call('error', base_error),
+            call('error', uplifted_error)
+        ])
+    elif error_handling == 'underlying':
+        base_error_handler.assert_has_calls([
+            call('error', base_error),
+            call('error', uplifted_error)
+        ])
+        uplifted_error_handler.assert_not_called()
+    elif error_handling == 'neither':
+        base_error_handler.assert_called_once_with('error', base_error)
+        uplifted_error_handler.assert_called_once_with('error', uplifted_error)
+    else:
+        raise Exception('unrecognized setting')
+
+
+@pytest.mark.parametrize('proxy_new_listener', [
+    'both',
+    'neither',
+    'forward',
+    'backward'
+])
+def test_proxy_new_listener(proxy_new_listener):
+    call_me = Mock()
+
+    base_ee = BaseEventEmitter()
+
+    uplifted_ee = uplift(
+        UpliftedEventEmitter,
+        base_ee,
+        proxy_new_listener=proxy_new_listener
+    )
+
+    @base_ee.on('new_listener')
+    def base_new_listener_handler(f):
+        call_me('base new listener handler', f)
+
+    @uplifted_ee.on('new_listener')
+    def uplifted_new_listener_handler(f):
+        call_me('uplifted new listener handler', f)
+
+    def fresh_base_handler():
+        pass
+
+    def fresh_uplifted_handler():
+        pass
+
+    base_ee.on('event', fresh_base_handler)
+    uplifted_ee.on('event', fresh_uplifted_handler)
+
+    if proxy_new_listener == 'both':
+        call_me.assert_has_calls([
+            call('base new listener handler', fresh_base_handler),
+            call('uplifted new listener handler', fresh_base_handler),
+            call('uplifted new listener handler', fresh_uplifted_handler),
+            call('base new listener handler', fresh_uplifted_handler)
+        ])
+    elif proxy_new_listener == 'neither':
+        call_me.assert_has_calls([
+            call('base new listener handler', fresh_base_handler),
+            call('uplifted new listener handler', fresh_uplifted_handler)
+        ])
+    elif proxy_new_listener == 'forward':
+        call_me.assert_has_calls([
+            call('base new listener handler', fresh_base_handler),
+            call('uplifted new listener handler', fresh_base_handler),
+            call('uplifted new listener handler', fresh_uplifted_handler)
+        ])
+    elif proxy_new_listener == 'backward':
+        call_me.assert_has_calls([
+            call('base new listener handler', fresh_base_handler),
+            call('uplifted new listener handler', fresh_uplifted_handler),
+            call('base new listener handler', fresh_uplifted_handler)
+        ])
+    else:
+        raise Exception('unrecognized proxy_new_listener')
