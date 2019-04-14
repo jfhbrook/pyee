@@ -12,13 +12,20 @@ def evolve(cls, underlying, *args, **kwargs):
     it. Afterwards, any modifications made to the underlying event emitter
     and the new "evolved" event emitter are not shared.
 
+    This is mostly helpful if you have a simple underlying event emitter
+    with event handlers already attached to it, but you want to use that
+    event emitter in a new context - for example, using a ``BaseEventEmitter``
+    supplied by a third party library into an ``AsyncIOEventEmitter`` for
+    use in your ``asyncio`` app.
+
     Note that ``cls`` must be able to directly handle all of the same kinds
-    of handlers as ``underlying``. For example, you could evolve a
-    ``BaseEventEmitter`` into an ``AsyncIOEventEmitter``, but evolving a
+    of handlers as ``underlying``. For example, when evolving a
     ``AsyncIOEventEmitter`` with asyncio coroutine handlers into a
-    ``TwistedEventEmitter``, calls to those handlers from the evolved event
-    emitter will fail as ``TwistedEventEmitter`` only knows how to run
-    Deferreds, not Futures/Tasks.
+    ``TwistedEventEmitter``, the ``evolve`` call will successfully return
+    a ``TwistedEventEmitter`` but calls to those asyncio coroutine handlers
+    from the evolved event emitter will fail as ``TwistedEventEmitter`` only
+    knows how to run Deferreds, not Futures/Tasks. In this case, you're
+    probably "stuck" with ``asyncio``.
     """
     new = cls(*args, **kwargs)
 
