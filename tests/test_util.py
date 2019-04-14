@@ -38,9 +38,9 @@ def test_uplift():
         call_me('shared event on uplifted emitter')
 
     # Events on uplifted proxy correctly
-    uplifted_ee.emit('base_event')
-    uplifted_ee.emit('shared_event')
-    uplifted_ee.emit('uplifted_event')
+    assert uplifted_ee.emit('base_event')
+    assert uplifted_ee.emit('shared_event')
+    assert uplifted_ee.emit('uplifted_event')
 
     call_me.assert_has_calls([
         call('base event on base emitter'),
@@ -52,9 +52,9 @@ def test_uplift():
     call_me.reset_mock()
 
     # Events on underlying proxy correctly
-    base_ee.emit('base_event')
-    base_ee.emit('shared_event')
-    base_ee.emit('uplifted_event')
+    assert base_ee.emit('base_event')
+    assert base_ee.emit('shared_event')
+    assert base_ee.emit('uplifted_event')
 
     call_me.assert_has_calls([
         call('base event on base emitter'),
