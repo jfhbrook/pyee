@@ -29,7 +29,9 @@ def _wrap(left, right, error_handler):
 
     def unwrap():
         left.emit = o_left_emit
+        del left.unwrap
         right.emit = o_right_emit
+        del right.unwrap
 
     left.emit = wrapped_emit
     left.unwrap = unwrap

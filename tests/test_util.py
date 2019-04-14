@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import pytest
+
 from mock import call, Mock
 from pyee import BaseEventEmitter
 from pyee.util import uplift
@@ -86,6 +88,12 @@ def test_uplift():
 
     # Quick check for unwrap
     uplifted_ee.unwrap()
+
+    with pytest.raises(AttributeError):
+        getattr(uplifted_ee, 'unwrap')
+
+    with pytest.raises(AttributeError):
+        getattr(base_ee, 'unwrap')
 
     assert not uplifted_ee.emit('base_event')
     assert uplifted_ee.emit('shared_event')
