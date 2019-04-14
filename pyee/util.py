@@ -4,8 +4,8 @@ from collections import OrderedDict
 
 
 def evolve(cls, underlying, *args, **kwargs):
-    """A helper to create instances of ``cls`` that inherit event behavior
-    from an ``underlying`` instance.
+    """A helper to create instances of an event emitter ``cls`` that inherit
+    event behavior from an ``underlying`` event emitter instance.
 
     When called, this instantiates a new instance of ``cls`` and then copies
     all the handlers on ``underlying`` to that new instance, before returning
