@@ -35,7 +35,7 @@ from pyee._base import (
 )
 from pyee._compat import CompatEventEmitter as EventEmitter
 
-__all__ = ['BaseEventEmitter', 'EventEmitter', 'PyeeException', 'evolve']
+__all__ = ['BaseEventEmitter', 'EventEmitter', 'PyeeException']
 
 try:
     from pyee._asyncio import AsyncIOEventEmitter  # noqa
