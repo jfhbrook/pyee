@@ -87,17 +87,9 @@ class BaseEventEmitter(object):
     def _call_handlers(self, event, args, kwargs):
         handled = False
 
-        # new_listener events do not fire on their own creation
-        if not (
-            event == 'new_listener'
-            and
-            len(args)
-            and
-            args[0] == 'new_listener'
-        ):
-            for f in list(self._events[event].values()):
-                self._emit_run(f, args, kwargs)
-                handled = True
+        for f in list(self._events[event].values()):
+            self._emit_run(f, args, kwargs)
+            handled = True
 
         return handled
 

@@ -157,12 +157,12 @@ def test_proxy_new_listener(proxy_new_listener):
 
     @base_ee.on('new_listener')
     def base_new_listener_handler(event, f):
-        assert event == 'event'
+        assert event in ('event', 'new_listener')
         call_me('base new listener handler', f)
 
     @uplifted_ee.on('new_listener')
     def uplifted_new_listener_handler(event, f):
-        assert event == 'event'
+        assert event in ('event', 'new_listener')
         call_me('uplifted new listener handler', f)
 
     def fresh_base_handler():
