@@ -66,7 +66,6 @@ def test_uplift():
     call_me.reset_mock()
 
     # Exception handling alwyas prefers uplifted
-
     base_error = Exception('base error')
     uplifted_error = Exception('uplifted error')
 
