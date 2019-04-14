@@ -52,8 +52,6 @@ class LazyImportException(PyeeException):
     object, but the lazy loading system can't tell which is which. Moreover,
     the error message can not be customized when inheriting from either.
     '''
-    def __init__(self, *args, **kwargs):
-        return PyeeException.__init__(self, *args, **kwargs)
 
 
 LAZY_IMPORTS = {

@@ -7,14 +7,12 @@ __all__ = ['BaseEventEmitter', 'PyeeException']
 
 class PyeeException(Exception):
     """An exception internal to pyee."""
-    pass
 
 
 class UnspecifiedErrorException(Exception):
     """An exception raised when an ``error`` event occurs without an
     Exception to raise.
     """
-    pass
 
 
 class BaseEventEmitter(object):
