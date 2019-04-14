@@ -66,7 +66,7 @@ class BaseEventEmitter(object):
 
     def _add_event_handler(self, event, k, v):
         # Fire 'new_listener' *before* adding the new listener!
-        self.emit('new_listener', k)
+        self.emit('new_listener', event, k)
 
         # Add the necessary function
         # Note that k and v are the same for `on` handlers, but
@@ -87,9 +87,17 @@ class BaseEventEmitter(object):
     def _call_handlers(self, event, args, kwargs):
         handled = False
 
-        for f in list(self._events[event].values()):
-            self._emit_run(f, args, kwargs)
-            handled = True
+        # new_listener events do not fire on their own creation
+        if not (
+            event == 'new_listener'
+            and
+            len(args)
+            and
+            args[0] == 'new_listener'
+        ):
+            for f in list(self._events[event].values()):
+                self._emit_run(f, args, kwargs)
+                handled = True
 
         return handled
 

@@ -9,8 +9,6 @@ def _wrap(left, right, error_handler, proxy_new_listener):
 
     @wraps(left_emit)
     def wrapped_emit(event, *args, **kwargs):
-
-        # Do it for the left side
         left_handled = left._call_handlers(event, args, kwargs)
 
         # Do it for the right side
