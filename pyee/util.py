@@ -44,7 +44,8 @@ def uplift(cls, underlying, *args, **kwargs):
     event emitter in a new context - for example, you may want to ``uplift``  a
     ``BaseEventEmitter`` supplied by a third party library into an
     ``AsyncIOEventEmitter`` so that you may register async event handlers
-    in your ``asyncio`` app.
+    in your ``asyncio`` app. This trick will also often work for a deprecated
+    ``EventEmitter`` instance.
 
     When called, this instantiates a new instance of ``cls`` and overwrites
     the ``emit`` method on the ``old`` event emitter to also emit events on
