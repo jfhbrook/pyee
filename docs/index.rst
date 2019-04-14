@@ -42,6 +42,8 @@ API Docs:
 .. autoclass:: pyee._compat.CompatEventEmitter
     :members:
 
+.. autoclass:: pyee.util.evolve
+
 
 Some Links
 ==========
