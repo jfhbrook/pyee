@@ -5,6 +5,6 @@ pytest-runner==4.4
 mock==2.0.0
 Sphinx==2.0.1
 twine==1.13.0
-Twisted==18.9.0
+Twisted==19.2.1
 tox==3.8.6
 vcversioner==2.16.0.0
