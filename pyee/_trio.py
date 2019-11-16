@@ -2,7 +2,7 @@
 
 from contextlib import asynccontextmanager
 import trio
-from pyee._base import BaseEventEmitter
+from pyee._base import BaseEventEmitter, PyeeException
 
 __all__ = ['TrioEventEmitter']
 
@@ -48,6 +48,11 @@ class TrioEventEmitter(BaseEventEmitter):
     def __init__(self, nursery=None, manager=None):
         super(TrioEventEmitter, self).__init__()
         if nursery:
+            if manager:
+                raise PyeeException(
+                    'You may either pass a nursery or a nursery manager '
+                    'but not both'
+                )
             self._nursery = nursery
             self._manager = None
         elif manager:
