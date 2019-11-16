@@ -16,9 +16,10 @@ setup(
     setup_requires=[
         'pytest-runner',
         'pytest-asyncio; python_version > "3.4"',
+        'pytest-trio; python_version > "3.4"',
         'vcversioner'
     ],
-    tests_require=['twisted', 'futures; python_version < "3.0"'],
+    tests_require=['twisted', 'trio', 'futures; python_version < "3.0"'],
     include_package_data=True,
 
     description="A port of node.js's EventEmitter to python.",
