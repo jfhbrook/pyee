@@ -80,7 +80,7 @@ class TrioEventEmitter(BaseEventEmitter):
         async context management methods are implemented using this
         function, but it may also be used directly for clarity.
         """
-        if hasattr(self, '_nursery'):
+        if getattr(self, '_nursery', None):
             yield self._nursery
         else:
             async with self._manager as nursery:
@@ -93,7 +93,7 @@ class TrioEventEmitter(BaseEventEmitter):
 
     async def __aexit__(self, type, value, traceback):
         rv = await self._context.__aexit__(type, value, traceback)
-        del self._context
-        del self._nursery
-        del self._manager
+        self._context = None
+        self._nursery = None
+        self._manager = None
         return rv
