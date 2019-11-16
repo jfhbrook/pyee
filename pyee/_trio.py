@@ -37,7 +37,7 @@ class TrioEventEmitter(BaseEventEmitter):
 
     For trio coroutine event handlers, calling emit is non-blocking. In other
     words, you should not attempt to await emit; the coroutine is scheduled
-    in a fire-and-forget fashion
+    in a fire-and-forget fashion.
 
     Note that this behavior is a little against the grain for typical trio use.
     When using this abstraction, consider wiring ``TrioEventEmitter`` events
