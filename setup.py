@@ -16,7 +16,7 @@ setup(
     setup_requires=[
         'pytest-runner',
         'pytest-asyncio; python_version > "3.4"',
-        'pytest-trio; python_version > "3.4"',
+        'pytest-trio; python_version > "3.7"',
         'vcversioner'
     ],
     tests_require=['twisted', 'trio', 'futures; python_version < "3.0"'],
