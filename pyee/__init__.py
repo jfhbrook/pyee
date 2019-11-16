@@ -59,5 +59,5 @@ except ImportError:
 try:
     from pyee._trio import TrioEventEmitter  # noqa
     __all__.append('TrioEventEmitter')
-except ImportError, SyntaxError:
+except (ImportError, SyntaxError):
     pass
