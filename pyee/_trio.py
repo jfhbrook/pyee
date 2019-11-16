@@ -70,6 +70,11 @@ class TrioEventEmitter(BaseEventEmitter):
 
     @asynccontextmanager
     async def context(self):
+        """Returns an async contextmanager which manages the underlying
+        nursery to the EventEmitter. The ``TrioEventEmitter``'s
+        async context management methods are implemented using this
+        function, but it may also be used directly for clarity.
+        """
         if hasattr(self, '_nursery'):
             yield self._nursery
         else:
