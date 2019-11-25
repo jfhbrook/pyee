@@ -8,7 +8,7 @@ __all__ = ['TrioEventEmitter']
 
 
 class TrioEventEmitter(BaseEventEmitter):
-    """An even emitter class which can run trio coroutines in a trio nursery.
+    """An event emitter class which can run trio tasks in a trio nursery.
 
     By default, this class will lazily create both a nursery manager (the
     object returned from ``trio.open_nursery()`` and a nursery (the object
@@ -38,12 +38,6 @@ class TrioEventEmitter(BaseEventEmitter):
     For trio coroutine event handlers, calling emit is non-blocking. In other
     words, you should not attempt to await emit; the coroutine is scheduled
     in a fire-and-forget fashion.
-
-    Note that this behavior is a little against the grain for typical trio use.
-    When using this abstraction, consider wiring ``TrioEventEmitter`` events
-    to trio Events and/or memory channels; and also consider if those
-    abstractions can be used to more directly solve your problem.
-
     """
     def __init__(self, nursery=None, manager=None):
         super(TrioEventEmitter, self).__init__()
