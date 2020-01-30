@@ -4,7 +4,7 @@ import pytest
 
 from mock import call, Mock
 from pyee import BaseEventEmitter
-from pyee.util import uplift
+from pyee.uplift import uplift
 
 
 class UpliftedEventEmitter(BaseEventEmitter):

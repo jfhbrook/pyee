@@ -44,7 +44,7 @@ API Docs:
 
 .. autoexception:: pyee.PyeeException
 
-.. autofunction:: pyee.util.uplift
+.. autofunction:: pyee.uplift.uplift
 
 
 Some Links
