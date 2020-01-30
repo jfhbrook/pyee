@@ -54,6 +54,9 @@ class AsyncIOEventEmitter(BaseEventEmitter):
             if f:
                 @f.add_done_callback
                 def _callback(f):
+                    if f.cancelled():
+                        return
+
                     exc = f.exception()
                     if exc:
                         self.emit('error', exc)

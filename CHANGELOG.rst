@@ -1,4 +1,5 @@
 - Added a ``TrioEventEmitter`` class for intended use with trio
+- ``AsyncIOEventEmitter`` now correctly handles cancellations
 
 2019/04/11 Version 6.0.0
 -----------------------
