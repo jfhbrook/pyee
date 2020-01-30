@@ -12,7 +12,7 @@ class CompatEventEmitter(BaseEventEmitter):
     """An EventEmitter exposed for compatibility with prior versions of
     pyee. This functionality is deprecated; you should instead use either
     ``AsyncIOEventEmitter``, ``TwistedEventEmitter``, ``ExecutorEventEmitter``,
-    or ``BaseEventEmitter``.
+    ``TrioEventEmitter`` or ``BaseEventEmitter``.
 
     This class is similar to the ``AsyncIOEventEmitter`` class, but also allows
     for overriding the scheduler function (``ensure_future`` by default as in
