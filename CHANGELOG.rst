@@ -1,3 +1,7 @@
+2020/01/30 Version 7.0.1
+------------------------
+- Some tweaks to the docs
+
 2020/01/30 Version 7.0.0
 ------------------------
 - Added a ``TrioEventEmitter`` class for intended use with trio
