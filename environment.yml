@@ -2,15 +2,17 @@ name: pyee
 dependencies:
   - python=3.7.2
   - pip=19.0.3
-  - Twisted=18.9.0
+  - Twisted=19.2.0
   - pip:
     - flake8==3.7.7
-    - pytest==4.4.0
+    - pytest==5.2.4
     - pytest-asyncio==0.10.0
     - pytest-runner==4.4
+    - pytest-trio==0.5.2
     - mock==2.0.0
     - Sphinx==2.0.1
     - twine==1.13.0
     - tox==3.8.6
+    - trio==0.13.0
     - vcversioner==2.16.0.0
 

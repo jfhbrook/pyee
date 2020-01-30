@@ -33,6 +33,9 @@ API Docs:
 .. autoclass:: ExecutorEventEmitter
     :members:
 
+.. autoclass:: TrioEventEmitter
+    :members:
+
 .. autoclass:: EventEmitter
     :members:
 

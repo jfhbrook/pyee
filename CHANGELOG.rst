@@ -1,3 +1,5 @@
+- Added a ``TrioEventEmitter`` class for intended use with trio
+
 2019/04/11 Version 6.0.0
 -----------------------
 - Added a ``BaseEventEmitter`` class which is entirely synchronous and
