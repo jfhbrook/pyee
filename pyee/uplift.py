@@ -93,7 +93,7 @@ def uplift(
     Tuning this option can be useful depending on how the underlying event
     emitter does error handling. The default is 'new'.
 
-   The ``proxy_new_listener`` option can be configured to control how
+    The ``proxy_new_listener`` option can be configured to control how
     ``new_listener`` events are treated:
 
     - 'forward': ``new_listener`` events are propagated from the underlying
