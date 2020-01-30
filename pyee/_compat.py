@@ -36,7 +36,8 @@ class CompatEventEmitter(BaseEventEmitter):
             'pyee.EventEmitter is deprecated and will be removed in a future '
             'major version; you should instead use either '
             'pyee.AsyncIOEventEmitter, pyee.TwistedEventEmitter, '
-            'pyee.ExecutorEventEmitter or pyee.BaseEventEmitter.'
+            'pyee.ExecutorEventEmitter, pyee.TrioEventEmitter, '
+            ' or pyee.BaseEventEmitter.'
         ))
 
         super(CompatEventEmitter, self).__init__()
