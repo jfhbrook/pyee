@@ -114,8 +114,7 @@ async def test_asyncio_cancellation(event_loop):
     ee.emit('event')
 
     try:
-        result = await wait_for(should_not_call, 0.1)
-        assert not result
+        await wait_for(should_not_call, 0.1)
     except TimeoutError:
         pass
     else:
