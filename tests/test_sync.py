@@ -90,7 +90,7 @@ def test_new_listener_event():
     def event_handler(data):
         pass
 
-    call_me.assert_called_once()
+    call_me.assert_called_once_with('event', event_handler)
 
 
 def test_listener_removal():

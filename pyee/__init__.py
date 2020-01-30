@@ -33,7 +33,6 @@ from pyee._base import (
     BaseEventEmitter,
     PyeeException
 )
-
 from pyee._compat import CompatEventEmitter as EventEmitter
 
 __all__ = ['BaseEventEmitter', 'EventEmitter', 'PyeeException']

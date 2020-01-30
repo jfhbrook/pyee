@@ -1,5 +1,7 @@
 - Added a ``TrioEventEmitter`` class for intended use with trio
 - ``AsyncIOEventEmitter`` now correctly handles cancellations
+- Add a new experimental ``pyee.uplift`` API for adding new functionality to
+  existing event emitters
 
 2019/04/11 Version 6.0.0
 -----------------------

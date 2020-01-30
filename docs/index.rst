@@ -42,6 +42,10 @@ API Docs:
 .. autoclass:: pyee._compat.CompatEventEmitter
     :members:
 
+.. autoexception:: pyee.PyeeException
+
+.. autofunction:: pyee.uplift.uplift
+
 
 Some Links
 ==========

@@ -84,6 +84,15 @@ class BaseEventEmitter(object):
             else:
                 raise PyeeException("Uncaught, unspecified 'error' event.")
 
+    def _call_handlers(self, event, args, kwargs):
+        handled = False
+
+        for f in list(self._events[event].values()):
+            self._emit_run(f, args, kwargs)
+            handled = True
+
+        return handled
+
     def emit(self, event, *args, **kwargs):
         """Emit ``event``, passing ``*args`` and ``**kwargs`` to each attached
         function. Returns ``True`` if any functions are attached to ``event``;
@@ -96,11 +105,7 @@ class BaseEventEmitter(object):
         Assuming ``data`` is an attached function, this will call
         ``data('00101001')'``.
         """
-        handled = False
-
-        for f in list(self._events[event].values()):
-            self._emit_run(f, args, kwargs)
-            handled = True
+        handled = self._call_handlers(event, args, kwargs)
 
         if not handled:
             self._emit_handle_potential_error(event, args[0] if args else None)
