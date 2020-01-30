@@ -4,7 +4,9 @@ import pytest
 import pytest_asyncio.plugin  # noqa
 
 from asyncio import Future, wait_for
+from concurrent.futures import TimeoutError
 from mock import Mock
+
 from twisted.internet.defer import ensureDeferred, succeed
 
 from pyee import EventEmitter, AsyncIOEventEmitter, TwistedEventEmitter
@@ -93,13 +95,11 @@ async def test_asyncio_error(cls, event_loop):
 
 
 @pytest.mark.asyncio
-async def test_asyncio_cancelation(event_loop):
-    """Test that AsyncIOEventEmitter can handle Future cancelations"""
-
-    should_not_call = Mock()
+async def test_asyncio_cancellation(event_loop):
+    """Test that AsyncIOEventEmitter can handle Future cancellations"""
 
     cancel_me = Future(loop=event_loop)
-    complete_me = Future(loop=event_loop)
+    should_not_call = Future(loop=event_loop)
 
     ee = AsyncIOEventEmitter(loop=event_loop)
 
@@ -109,13 +109,17 @@ async def test_asyncio_cancelation(event_loop):
 
     @ee.on('error')
     def handle_error(exc):
-        should_not_call(exc)
-        complete_me.set_result(None)
+        should_not_call.set_result(None)
 
-    result = await wait_for(complete_me, 0.1)
+    ee.emit('event')
 
-    assert not result
-    should_not_call.assert_not_called()
+    try:
+        result = await wait_for(should_not_call, 0.1)
+        assert not result
+    except TimeoutError:
+        pass
+    else:
+        raise PyeeTestError()
 
 
 @pytest.mark.asyncio
