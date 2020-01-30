@@ -5,7 +5,7 @@ from functools import wraps
 
 def _wrap(left, right, error_handler, proxy_new_listener):
     left_emit = left.emit
-    right_emit = right.emit
+    left_unwrap = getattr(left, 'unwrap', None)
 
     @wraps(left_emit)
     def wrapped_emit(event, *args, **kwargs):
@@ -30,9 +30,14 @@ def _wrap(left, right, error_handler, proxy_new_listener):
 
     def unwrap():
         left.emit = left_emit
-        del left.unwrap
-        right.emit = right_emit
-        del right.unwrap
+        if left_unwrap:
+            left.unwrap = left_unwrap
+        else:
+            del left.unwrap
+        left.emit = left_emit
+
+        if hasattr(right, 'unwrap'):
+            right.unwrap()
 
     left.emit = wrapped_emit
     left.unwrap = unwrap
