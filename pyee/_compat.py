@@ -37,7 +37,7 @@ class CompatEventEmitter(BaseEventEmitter):
             'major version; you should instead use either '
             'pyee.AsyncIOEventEmitter, pyee.TwistedEventEmitter, '
             'pyee.ExecutorEventEmitter, pyee.TrioEventEmitter, '
-            ' or pyee.BaseEventEmitter.'
+            'or pyee.BaseEventEmitter.'
         ))
 
         super(CompatEventEmitter, self).__init__()
