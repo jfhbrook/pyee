@@ -93,6 +93,32 @@ async def test_asyncio_error(cls, event_loop):
 
 
 @pytest.mark.asyncio
+async def test_asyncio_cancelation(event_loop):
+    """Test that AsyncIOEventEmitter can handle Future cancelations"""
+
+    should_not_call = Mock()
+
+    cancel_me = Future(loop=event_loop)
+    complete_me = Future(loop=event_loop)
+
+    ee = AsyncIOEventEmitter(loop=event_loop)
+
+    @ee.on('event')
+    async def event_handler():
+        cancel_me.cancel()
+
+    @ee.on('error')
+    def handle_error(exc):
+        should_not_call(exc)
+        complete_me.set_result(None)
+
+    result = await wait_for(complete_me, 0.1)
+
+    assert not result
+    should_not_call.assert_not_called()
+
+
+@pytest.mark.asyncio
 async def test_sync_error(event_loop):
     """Test that regular functions have the same error handling as coroutines
     """
