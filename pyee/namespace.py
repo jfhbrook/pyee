@@ -45,6 +45,9 @@ class NamespaceEventEmitter(BaseEventEmitter):
             error,
         )
 
+    def on(self, event, f=None):
+        return super().on(self._to_namespace(event), f)
+
     def emit(self, event, *args, **kwargs):
         return super().emit(self._to_namespace(event), *args, **kwargs)
 
@@ -68,7 +71,6 @@ try:
         pass
 
     __all__.append("NamespaceAsyncIOEventEmitter")
-
 except ImportError:
     pass
 
