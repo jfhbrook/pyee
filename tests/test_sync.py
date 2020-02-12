@@ -8,6 +8,7 @@ from mock import Mock
 from pytest import raises
 
 from pyee import BaseEventEmitter, EventEmitter
+from pyee.namespace import NamespaceEventEmitter
 
 
 class PyeeTestException(Exception):
@@ -16,7 +17,8 @@ class PyeeTestException(Exception):
 
 @pytest.mark.parametrize('cls', [
     BaseEventEmitter,
-    EventEmitter
+    EventEmitter,
+    NamespaceEventEmitter
 ])
 def test_emit_sync(cls):
     """Basic synchronous emission works"""
@@ -37,7 +39,8 @@ def test_emit_sync(cls):
 
 @pytest.mark.parametrize('cls', [
     BaseEventEmitter,
-    EventEmitter
+    EventEmitter,
+    NamespaceEventEmitter
 ])
 def test_emit_error(cls):
     """Errors raise with no event handler, otherwise emit on handler"""
@@ -59,13 +62,17 @@ def test_emit_error(cls):
     call_me.assert_called_once()
 
 
-def test_emit_return():
+@pytest.mark.parametrize('cls', [
+    BaseEventEmitter,
+    NamespaceEventEmitter
+])
+def test_emit_return(cls):
     """Emit returns True when handlers are registered on an event, and false
     otherwise.
     """
 
     call_me = Mock()
-    ee = BaseEventEmitter()
+    ee = cls()
 
     # make sure emitting without a callback returns False
     assert not ee.emit('data')
@@ -78,7 +85,11 @@ def test_emit_return():
 
 
 def test_new_listener_event():
-    """The 'new_listener' event fires whenever a new listerner is added."""
+    """The 'new_listener' event fires whenever a new listener is added.
+
+    Don't test NamespaceEventEmitter here due to difference in behaviour.
+    A test specific for NamespaceEventEmitter is implemented in test_namespace.py
+    """
 
     call_me = Mock()
     ee = BaseEventEmitter()
@@ -94,7 +105,11 @@ def test_new_listener_event():
 
 
 def test_listener_removal():
-    """Removing listeners removes the correct listener from an event."""
+    """Removing listeners removes the correct listener from an event.
+
+    Don't test NamespaceEventEmitter here due to difference in behaviour.
+    A test specific for NamespaceEventEmitter is implemented in test_namespace.py
+    """
 
     ee = BaseEventEmitter()
 
@@ -142,13 +157,17 @@ def test_listener_removal():
     assert ee._events['event'] == OrderedDict()
 
 
-def test_listener_removal_on_emit():
+@pytest.mark.parametrize('cls', [
+    BaseEventEmitter,
+    NamespaceEventEmitter
+])
+def test_listener_removal_on_emit(cls):
     """Test that a listener removed during an emit is called inside the current
     emit cycle.
     """
 
     call_me = Mock()
-    ee = BaseEventEmitter()
+    ee = cls()
 
     def should_remove():
         ee.remove_listener('remove', call_me)
@@ -163,7 +182,7 @@ def test_listener_removal_on_emit():
     call_me.reset_mock()
 
     # Also test with the listeners added in the opposite order
-    ee = BaseEventEmitter()
+    ee = cls()
     ee.on('remove', call_me)
     ee.on('remove', should_remove)
 
@@ -172,7 +191,11 @@ def test_listener_removal_on_emit():
     call_me.assert_called_once()
 
 
-def test_once():
+@pytest.mark.parametrize('cls', [
+    BaseEventEmitter,
+    NamespaceEventEmitter
+])
+def test_once(cls):
     """Test that `once()` method works propers.
     """
 
@@ -180,7 +203,7 @@ def test_once():
     # gets removed afterwards
 
     call_me = Mock()
-    ee = BaseEventEmitter()
+    ee = cls()
 
     def once_handler(data):
         assert data == 'emitter is emitted!'
@@ -196,11 +219,15 @@ def test_once():
     assert ee._events['event'] == OrderedDict()
 
 
-def test_once_removal():
+@pytest.mark.parametrize('cls', [
+    BaseEventEmitter,
+    NamespaceEventEmitter
+])
+def test_once_removal(cls):
     """Removal of once functions works
     """
 
-    ee = BaseEventEmitter()
+    ee = cls()
 
     def once_handler(data):
         pass
@@ -214,11 +241,15 @@ def test_once_removal():
     assert ee._events['event'] == OrderedDict()
 
 
-def test_listeners():
+@pytest.mark.parametrize('cls', [
+    BaseEventEmitter,
+    NamespaceEventEmitter
+])
+def test_listeners(cls):
     """`listeners()` returns a copied list of listeners."""
 
     call_me = Mock()
-    ee = BaseEventEmitter()
+    ee = cls()
 
     @ee.on('event')
     def event_handler():
@@ -241,12 +272,16 @@ def test_listeners():
     call_me.assert_not_called()
 
 
-def test_properties_preserved():
+@pytest.mark.parametrize('cls', [
+    BaseEventEmitter,
+    NamespaceEventEmitter
+])
+def test_properties_preserved(cls):
     """Test that the properties of decorated functions are preserved."""
 
     call_me = Mock()
     call_me_also = Mock()
-    ee = BaseEventEmitter()
+    ee = cls()
 
     @ee.on('always')
     def always_event_handler():

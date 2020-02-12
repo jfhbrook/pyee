@@ -1,19 +1,25 @@
 # -*- coding: utf-8 -*-
 
+import pytest
 from mock import Mock
 from time import sleep
 
 from pyee import ExecutorEventEmitter
+from pyee.namespace import NamespaceExecutorEventEmitter
 
 
 class PyeeTestError(Exception):
     pass
 
 
-def test_executor_emit():
+@pytest.mark.parametrize('cls', [
+    ExecutorEventEmitter,
+    NamespaceExecutorEventEmitter
+])
+def test_executor_emit(cls):
     """Test that ExecutorEventEmitters can emit events.
     """
-    with ExecutorEventEmitter() as ee:
+    with cls() as ee:
         should_call = Mock()
 
         @ee.on('event')
@@ -26,10 +32,14 @@ def test_executor_emit():
         should_call.assert_called_once()
 
 
-def test_executor_once():
+@pytest.mark.parametrize('cls', [
+    ExecutorEventEmitter,
+    NamespaceExecutorEventEmitter
+])
+def test_executor_once(cls):
     """Test that ExecutorEventEmitters also emit events for once.
     """
-    with ExecutorEventEmitter() as ee:
+    with cls() as ee:
         should_call = Mock()
 
         @ee.once('event')
@@ -42,10 +52,14 @@ def test_executor_once():
         should_call.assert_called_once()
 
 
-def test_executor_error():
+@pytest.mark.parametrize('cls', [
+    ExecutorEventEmitter,
+    NamespaceExecutorEventEmitter
+])
+def test_executor_error(cls):
     """Test that ExecutorEventEmitters handle errors.
     """
-    with ExecutorEventEmitter() as ee:
+    with cls() as ee:
         should_call = Mock()
 
         @ee.on('event')

@@ -1,6 +1,10 @@
 from pyee import BaseEventEmitter
 
-__all__ = ["NamespaceEventEmitter"]
+__all__ = ["NamespaceBlacklistException", "NamespaceEventEmitter"]
+
+
+class NamespaceBlacklistException(Exception):
+    pass
 
 
 class NamespaceEventEmitter(BaseEventEmitter):
@@ -12,10 +16,12 @@ class NamespaceEventEmitter(BaseEventEmitter):
     def _to_namespace(cls, event):
         if isinstance(event, tuple):
             if len(event) == 0:
-                raise TypeError("Namespace tuples must have at least one entry")
+                raise ValueError(
+                    "Namespace tuples must have at least one entry"
+                )
 
             if event[0] in cls.NAMESPACE_BLACKLIST:
-                raise RuntimeError(
+                raise NamespaceBlacklistException(
                     "%s is a blacklisted namespace. It can only be emitted/listened as a simple event"
                 )
 
@@ -31,7 +37,10 @@ class NamespaceEventEmitter(BaseEventEmitter):
 
         if isinstance(namespace, tuple):
             for step in range(len(namespace)):
-                handled = super()._call_handlers(namespace[: step + 1], args, kwargs)
+                handled = (
+                    super()._call_handlers(namespace[: step + 1], args, kwargs)
+                    or handled
+                )
         else:
             handled = super()._call_handlers(namespace, args, kwargs)
 
@@ -67,7 +76,9 @@ class NamespaceEventEmitter(BaseEventEmitter):
 try:
     from pyee._asyncio import AsyncIOEventEmitter  # noqa
 
-    class NamespaceAsyncIOEventEmitter(NamespaceEventEmitter, AsyncIOEventEmitter):
+    class NamespaceAsyncIOEventEmitter(
+        NamespaceEventEmitter, AsyncIOEventEmitter
+    ):
         pass
 
     __all__.append("NamespaceAsyncIOEventEmitter")
@@ -77,8 +88,13 @@ except ImportError:
 try:
     from pyee._twisted import TwistedEventEmitter  # noqa
 
-    class NamespaceTwistedEventEmitter(NamespaceEventEmitter, TwistedEventEmitter):
-        NAMESPACE_BLACKLIST = (*NamespaceEventEmitter.NAMESPACE_BLACKLIST, "failure")
+    class NamespaceTwistedEventEmitter(
+        NamespaceEventEmitter, TwistedEventEmitter
+    ):
+        NAMESPACE_BLACKLIST = (
+            *NamespaceEventEmitter.NAMESPACE_BLACKLIST,
+            "failure",
+        )
 
     __all__.append("NamespaceTwistedEventEmitter")
 except ImportError:
@@ -87,7 +103,9 @@ except ImportError:
 try:
     from pyee._executor import ExecutorEventEmitter  # noqa
 
-    class NamespaceExecutorEventEmitter(NamespaceEventEmitter, ExecutorEventEmitter):
+    class NamespaceExecutorEventEmitter(
+        NamespaceEventEmitter, ExecutorEventEmitter
+    ):
         pass
 
     __all__.append("NamespaceExecutorEventEmitter")

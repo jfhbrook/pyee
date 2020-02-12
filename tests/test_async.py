@@ -3,13 +3,13 @@
 import pytest
 import pytest_asyncio.plugin  # noqa
 
-from asyncio import Future, wait_for
-from concurrent.futures import TimeoutError
+from asyncio import Future, wait_for, TimeoutError
 from mock import Mock
 
 from twisted.internet.defer import ensureDeferred, succeed
 
 from pyee import EventEmitter, AsyncIOEventEmitter, TwistedEventEmitter
+from pyee.namespace import NamespaceAsyncIOEventEmitter, NamespaceTwistedEventEmitter
 
 
 class PyeeTestError(Exception):
@@ -18,7 +18,8 @@ class PyeeTestError(Exception):
 
 @pytest.mark.parametrize('cls', [
     AsyncIOEventEmitter,
-    EventEmitter
+    EventEmitter,
+    NamespaceAsyncIOEventEmitter
 ])
 @pytest.mark.asyncio
 async def test_asyncio_emit(cls, event_loop):
@@ -43,7 +44,8 @@ async def test_asyncio_emit(cls, event_loop):
 
 @pytest.mark.parametrize('cls', [
     AsyncIOEventEmitter,
-    EventEmitter
+    EventEmitter,
+    NamespaceAsyncIOEventEmitter
 ])
 @pytest.mark.asyncio
 async def test_asyncio_once_emit(cls, event_loop):
@@ -68,7 +70,8 @@ async def test_asyncio_once_emit(cls, event_loop):
 
 @pytest.mark.parametrize('cls', [
     AsyncIOEventEmitter,
-    EventEmitter
+    EventEmitter,
+    NamespaceAsyncIOEventEmitter
 ])
 @pytest.mark.asyncio
 async def test_asyncio_error(cls, event_loop):
@@ -94,14 +97,18 @@ async def test_asyncio_error(cls, event_loop):
     assert isinstance(result, PyeeTestError)
 
 
+@pytest.mark.parametrize('cls', [
+    AsyncIOEventEmitter,
+    NamespaceAsyncIOEventEmitter
+])
 @pytest.mark.asyncio
-async def test_asyncio_cancellation(event_loop):
+async def test_asyncio_cancellation(cls, event_loop):
     """Test that AsyncIOEventEmitter can handle Future cancellations"""
 
     cancel_me = Future(loop=event_loop)
     should_not_call = Future(loop=event_loop)
 
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = cls(loop=event_loop)
 
     @ee.on('event')
     async def event_handler():
@@ -121,11 +128,15 @@ async def test_asyncio_cancellation(event_loop):
         raise PyeeTestError()
 
 
+@pytest.mark.parametrize('cls', [
+    AsyncIOEventEmitter,
+    NamespaceAsyncIOEventEmitter
+])
 @pytest.mark.asyncio
-async def test_sync_error(event_loop):
+async def test_sync_error(cls, event_loop):
     """Test that regular functions have the same error handling as coroutines
     """
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = cls(loop=event_loop)
 
     should_call = Future(loop=event_loop)
 
@@ -143,10 +154,10 @@ async def test_sync_error(event_loop):
 
     assert isinstance(result, PyeeTestError)
 
-
 @pytest.mark.parametrize('cls,kwargs', [
     (TwistedEventEmitter, dict()),
-    (EventEmitter, dict(scheduler=ensureDeferred))
+    (EventEmitter, dict(scheduler=ensureDeferred)),
+    (NamespaceTwistedEventEmitter, dict()),
 ])
 def test_twisted_emit(cls, kwargs):
     """Test that twisted-supporting event emitters can handle wrapping
@@ -168,7 +179,8 @@ def test_twisted_emit(cls, kwargs):
 
 @pytest.mark.parametrize('cls,kwargs', [
     (TwistedEventEmitter, dict()),
-    (EventEmitter, dict(scheduler=ensureDeferred))
+    (EventEmitter, dict(scheduler=ensureDeferred)),
+    (NamespaceTwistedEventEmitter, dict()),
 ])
 def test_twisted_once(cls, kwargs):
     """Test that twisted-supporting event emitters also wrap coroutines for
@@ -188,10 +200,14 @@ def test_twisted_once(cls, kwargs):
     should_call.assert_called_once()
 
 
-def test_twisted_error():
+@pytest.mark.parametrize('cls', [
+    TwistedEventEmitter,
+    NamespaceTwistedEventEmitter
+])
+def test_twisted_error(cls):
     """Test that TwistedEventEmitters handle Failures when wrapping coroutines.
     """
-    ee = TwistedEventEmitter()
+    ee = cls()
 
     should_call = Mock()
 
