@@ -38,16 +38,20 @@ class NamespaceEventEmitter(BaseEventEmitter):
         if isinstance(namespace, tuple):
             for step in range(len(namespace)):
                 handled = (
-                    super()._call_handlers(namespace[: step + 1], args, kwargs)
+                    super(NamespaceEventEmitter, self)._call_handlers(
+                        namespace[: step + 1], args, kwargs
+                    )
                     or handled
                 )
         else:
-            handled = super()._call_handlers(namespace, args, kwargs)
+            handled = super(NamespaceEventEmitter, self)._call_handlers(
+                namespace, args, kwargs
+            )
 
         return handled
 
     def _emit_handle_potential_error(self, namespace, error):
-        return super()._emit_handle_potential_error(
+        return super(NamespaceEventEmitter, self)._emit_handle_potential_error(
             "error"
             if isinstance(namespace, tuple) and namespace[0] == "error"
             else namespace,
@@ -55,22 +59,34 @@ class NamespaceEventEmitter(BaseEventEmitter):
         )
 
     def on(self, event, f=None):
-        return super().on(self._to_namespace(event), f)
+        return super(NamespaceEventEmitter, self).on(
+            self._to_namespace(event), f
+        )
 
     def emit(self, event, *args, **kwargs):
-        return super().emit(self._to_namespace(event), *args, **kwargs)
+        return super(NamespaceEventEmitter, self).emit(
+            self._to_namespace(event), *args, **kwargs
+        )
 
     def once(self, event, f=None):
-        return super().once(self._to_namespace(event), f)
+        return super(NamespaceEventEmitter, self).once(
+            self._to_namespace(event), f
+        )
 
     def listeners(self, event):
-        return super().listeners(self._to_namespace(event))
+        return super(NamespaceEventEmitter, self).listeners(
+            self._to_namespace(event)
+        )
 
     def remove_listener(self, event, f):
-        return super().remove_listener(self._to_namespace(event), f)
+        return super(NamespaceEventEmitter, self).remove_listener(
+            self._to_namespace(event), f
+        )
 
     def remove_all_listeners(self, event=None):
-        return super().remove_all_listeners(self._to_namespace(event))
+        return super(NamespaceEventEmitter, self).remove_all_listeners(
+            self._to_namespace(event)
+        )
 
 
 try:
