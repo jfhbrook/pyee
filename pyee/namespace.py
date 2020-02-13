@@ -107,8 +107,7 @@ try:
     class NamespaceTwistedEventEmitter(
         NamespaceEventEmitter, TwistedEventEmitter
     ):
-        NAMESPACE_BLACKLIST = (
-            *NamespaceEventEmitter.NAMESPACE_BLACKLIST,
+        NAMESPACE_BLACKLIST = NamespaceEventEmitter.NAMESPACE_BLACKLIST + (
             "failure",
         )
 
