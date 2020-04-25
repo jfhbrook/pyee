@@ -1,8 +1,8 @@
 name: pyee
 dependencies:
-  - python=3.7.2
-  - pip=19.0.3
-  - Twisted=19.2.0
+  - python=3.7.6
+  - pip=20.0.2
+  - Twisted=20.3.0
   - pip:
     - flake8==3.7.7
     - pytest==5.2.4
