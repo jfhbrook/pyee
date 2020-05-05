@@ -4,7 +4,12 @@ import pytest
 import pytest_asyncio.plugin  # noqa
 
 from asyncio import Future, wait_for
-from concurrent.futures import TimeoutError
+
+try:
+    from asyncio.exceptions import TimeoutError
+except ImportError:
+    from concurrent.futures import TimeoutError
+
 from mock import Mock
 
 from twisted.internet.defer import ensureDeferred, succeed
