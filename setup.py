@@ -21,7 +21,7 @@ setup(
     ],
     tests_require=[
         'twisted',
-        'trio; python_version > "3.7"',
+        'trio; python_version > "3.6"',
         'futures; python_version < "3.0"'
     ],
     include_package_data=True,
