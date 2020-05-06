@@ -8,3 +8,4 @@ Listed in no particular order:
 - @Zearin
 - René Kijewski @Kijewski
 - Gabe Appleton @gappleto97
+- Daniel M. Capella @polyzen <polyzen@archlinux.org>
