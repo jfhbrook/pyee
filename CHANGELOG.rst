@@ -1,3 +1,12 @@
+2020/05/12 Version 7.0.2
+------------------------
+- Support Python 3.8 by attempting to import TimeoutError from
+  ``asyncio.exceptions``
+- Add LICENSE to package manifest
+- Add trio testing to tox
+- Add Python 3.8 to tox
+- Fix Python 2.7 in tox
+
 2020/01/30 Version 7.0.1
 ------------------------
 - Some tweaks to the docs
