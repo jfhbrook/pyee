@@ -10,3 +10,4 @@ README
 pyee.egg-info/
 version.txt
 scratchpad.ipynb
+.tox/
