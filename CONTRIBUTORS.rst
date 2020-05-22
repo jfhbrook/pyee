@@ -9,3 +9,4 @@ Listed in no particular order:
 - René Kijewski @Kijewski
 - Gabe Appleton @gappleto97
 - Daniel M. Capella @polyzen <polyzen@archlinux.org>
+- @decentral1se <hi@decentral1se>
