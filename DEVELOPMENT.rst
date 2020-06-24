@@ -2,10 +2,12 @@ Development And Publishing:
 ------------
 
 - Set up either a virtualenv or a conda env
+
   - if using a virtualenv, `pip install -r requirements_dev.txt` will install
     development dependencies
   - if using conda, `conda env create` in this directory will create the
     environment and `conda env update` will update.
+
 - You can link this project to your current environment with
   ``python setup.py develop``.
 - Tests can be ran with ``make test``.
