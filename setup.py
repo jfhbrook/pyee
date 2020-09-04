@@ -31,6 +31,7 @@ setup(
     author="Joshua Holbrook",
     author_email="josh.holbrook@gmail.com",
     url="https://github.com/jfhbrook/pyee",
+    license="MIT",
     keywords=[
         "events", "emitter", "node.js", "node", "eventemitter",
         "event_emitter"
