@@ -1,3 +1,8 @@
+2020/09/04 Version 7.0.3
+------------------------
+- Tag license as MIT in setup.py
+- Update requirements and environment to pip -e the package
+
 2020/05/12 Version 7.0.2
 ------------------------
 - Support Python 3.8 by attempting to import TimeoutError from
