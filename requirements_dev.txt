@@ -11,3 +11,4 @@ Twisted==20.3.0
 tox==3.8.6
 trio==0.13.0
 vcversioner==2.16.0.0
+-e .
