@@ -13,13 +13,13 @@ setup(
     vcversioner={},
 
     packages=find_packages(),
-    setup_requires=[
+    tests_require=[
         'pytest-runner',
         'pytest-asyncio; python_version > "3.4"',
         'pytest-trio; python_version > "3.7"',
         'vcversioner'
     ],
-    tests_require=[
+    setup_requires=[
         'twisted',
         'trio; python_version > "3.6"',
         'futures; python_version < "3.0"'
