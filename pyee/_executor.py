@@ -9,8 +9,7 @@ __all__ = ['ExecutorEventEmitter']
 
 class ExecutorEventEmitter(EventEmitter):
     """An event emitter class which runs handlers in a ``concurrent.futures``
-    executor. If using python 2, this will fall back to trying to use the
-    ``futures`` backported library (caveats there apply).
+    executor.
 
     By default, this class creates a default ``ThreadPoolExecutor``, but
     a custom executor may also be passed in explicitly to, for instance,

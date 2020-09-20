@@ -1,3 +1,7 @@
+2020/09/20 Version 8.0.1
+------------------------
+- Update README to reflect new API
+
 2020/09/20 Version 8.0.0
 ------------------------
 - Drop support for Python 2.7
