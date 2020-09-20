@@ -1,3 +1,10 @@
+2020/09/20 Version 7.0.4
+------------------------
+- setup_requires vs tests_require now correct
+- tests_require updated to pass in tox
+- 3.7 testing removed from tox
+- 2.7 testing removed from Travis
+
 2020/09/04 Version 7.0.3
 ------------------------
 - Tag license as MIT in setup.py
