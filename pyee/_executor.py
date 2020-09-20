@@ -2,10 +2,7 @@
 
 from pyee._base import BaseEventEmitter
 
-try:
-    from concurrent.futures import ThreadPoolExecutor
-except ImportError:
-    from futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 
 __all__ = ['ExecutorEventEmitter']
 

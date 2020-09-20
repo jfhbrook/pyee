@@ -14,19 +14,12 @@ setup(
 
     packages=find_packages(),
     tests_require=[
-        'attrs == 19.3.0; python_version < "3.0"',
-        'futures; python_version < "3.0"',
-        'mock; python_version >= "3.6"',
-        'mock == 3.0.5; python_version < "3.6"',
-        'pyhamcrest == 1.10.1; python_version < "3.5"',
-        'pyparsing == 2.4.7; python_version < "3.0"',
-        'pytest; python_version > "3.4"',
-        'pytest == 4.6.11; python_version <= "3.4"',
+        'mock',
+        'pytest',
         'pytest-asyncio; python_version >= "3.4"',
         'pytest-trio; python_version >= "3.7"',
         'trio; python_version > "3.6"',
-        'twisted',
-        'zipp == 3.0.0; python_version < "3.0"'
+        'twisted'
     ],
     setup_requires=[
         'pytest-runner',
