@@ -1,12 +1,10 @@
 language: python
 sudo: false
 python:
-  - "2.7"
-  - "3.5"
   - "3.7"
   - "3.8"
 install:
   - pip install pip --upgrade
   - pip install setuptools --upgrade
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install -r requirements_dev_py2.txt; elif [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then pip install -r requirements_dev_py35.txt; else pip install -r requirements_dev.txt; fi
-script: python setup.py develop && python setup.py test
+  - pip install -e .
+script: python setup.py test
