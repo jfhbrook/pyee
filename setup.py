@@ -14,15 +14,21 @@ setup(
 
     packages=find_packages(),
     tests_require=[
-        'pytest-runner',
-        'pytest-asyncio; python_version > "3.4"',
-        'pytest-trio; python_version > "3.7"',
-        'vcversioner'
+        'futures; python_version < "3.0"',
+        'mock; python_version >= "3.6"',
+        'mock == 3.0.5; python_version < "3.6"',
+        'pyparsing == 2.4.7; python_version < "3.0"',
+        'pytest; python_version > "3.4"',
+        'pytest == 4.6.11; python_version <= "3.4"',
+        'pytest-asyncio; python_version >= "3.4"',
+        'pytest-trio; python_version >= "3.7"',
+        'trio; python_version > "3.6"',
+        'twisted',
+        'zipp == 3.0.0; python_version < "3.0"'
     ],
     setup_requires=[
-        'twisted',
-        'trio; python_version > "3.6"',
-        'futures; python_version < "3.0"'
+        'pytest-runner',
+        'vcversioner'
     ],
     include_package_data=True,
 
