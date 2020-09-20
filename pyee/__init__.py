@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-pyee supplies a ``BaseEventEmitter`` class that is similar to the
+pyee supplies a ``EventEmitter`` class that is similar to the
 ``EventEmitter`` class from Node.js. In addition, it supplies the subclasses
 ``AsyncIOEventEmitter``, ``TwistedEventEmitter`` and ``ExecutorEventEmitter``
 for supporting async and threaded execution with asyncio, twisted, and
@@ -13,9 +13,9 @@ Example
 
 ::
 
-    In [1]: from pyee import BaseEventEmitter
+    In [1]: from pyee import EventEmitter
 
-    In [2]: ee = BaseEventEmitter()
+    In [2]: ee = EventEmitter()
 
     In [3]: @ee.on('event')
        ...: def event_handler():
@@ -29,11 +29,23 @@ Example
 
 """
 
+from warnings import warn
+
 from pyee._base import (
-    BaseEventEmitter,
+    EventEmitter,
     PyeeException
 )
-from pyee._compat import CompatEventEmitter as EventEmitter
+
+
+class BaseEventEmitter(EventEmitter):
+    def __init__(self):
+        warn(DeprecationWarning(
+            'pyee.BaseEventEmitter is deprecated and will be removed in a '
+            'future major version; you should instead use pyee.EventEmitter.'
+        ))
+
+        super(BaseEventEmitter, self).__init__()
+
 
 __all__ = ['BaseEventEmitter', 'EventEmitter', 'PyeeException']
 

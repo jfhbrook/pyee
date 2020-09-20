@@ -2,12 +2,12 @@
 
 from contextlib import asynccontextmanager
 import trio
-from pyee._base import BaseEventEmitter, PyeeException
+from pyee._base import EventEmitter, PyeeException
 
 __all__ = ['TrioEventEmitter']
 
 
-class TrioEventEmitter(BaseEventEmitter):
+class TrioEventEmitter(EventEmitter):
     """An event emitter class which can run trio tasks in a trio nursery.
 
     By default, this class will lazily create both a nursery manager (the

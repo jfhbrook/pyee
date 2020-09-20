@@ -1,28 +1,21 @@
 # -*- coding: utf-8 -*-
-import pytest
-
-from inspect import getmro
 from collections import OrderedDict
 
 from mock import Mock
 from pytest import raises
 
-from pyee import BaseEventEmitter, EventEmitter
+from pyee import EventEmitter
 
 
 class PyeeTestException(Exception):
     pass
 
 
-@pytest.mark.parametrize('cls', [
-    BaseEventEmitter,
-    EventEmitter
-])
-def test_emit_sync(cls):
+def test_emit_sync():
     """Basic synchronous emission works"""
 
     call_me = Mock()
-    ee = cls()
+    ee = EventEmitter()
 
     @ee.on('event')
     def event_handler(data, **kwargs):
@@ -35,15 +28,11 @@ def test_emit_sync(cls):
     call_me.assert_called_once()
 
 
-@pytest.mark.parametrize('cls', [
-    BaseEventEmitter,
-    EventEmitter
-])
-def test_emit_error(cls):
+def test_emit_error():
     """Errors raise with no event handler, otherwise emit on handler"""
 
     call_me = Mock()
-    ee = cls()
+    ee = EventEmitter()
 
     test_exception = PyeeTestException('lololol')
 
@@ -65,7 +54,7 @@ def test_emit_return():
     """
 
     call_me = Mock()
-    ee = BaseEventEmitter()
+    ee = EventEmitter()
 
     # make sure emitting without a callback returns False
     assert not ee.emit('data')
@@ -81,7 +70,7 @@ def test_new_listener_event():
     """The 'new_listener' event fires whenever a new listerner is added."""
 
     call_me = Mock()
-    ee = BaseEventEmitter()
+    ee = EventEmitter()
 
     ee.on('new_listener', call_me)
 
@@ -96,7 +85,7 @@ def test_new_listener_event():
 def test_listener_removal():
     """Removing listeners removes the correct listener from an event."""
 
-    ee = BaseEventEmitter()
+    ee = EventEmitter()
 
     # Some functions to pass to the EE
     def first():
@@ -148,7 +137,7 @@ def test_listener_removal_on_emit():
     """
 
     call_me = Mock()
-    ee = BaseEventEmitter()
+    ee = EventEmitter()
 
     def should_remove():
         ee.remove_listener('remove', call_me)
@@ -163,7 +152,7 @@ def test_listener_removal_on_emit():
     call_me.reset_mock()
 
     # Also test with the listeners added in the opposite order
-    ee = BaseEventEmitter()
+    ee = EventEmitter()
     ee.on('remove', call_me)
     ee.on('remove', should_remove)
 
@@ -180,7 +169,7 @@ def test_once():
     # gets removed afterwards
 
     call_me = Mock()
-    ee = BaseEventEmitter()
+    ee = EventEmitter()
 
     def once_handler(data):
         assert data == 'emitter is emitted!'
@@ -200,7 +189,7 @@ def test_once_removal():
     """Removal of once functions works
     """
 
-    ee = BaseEventEmitter()
+    ee = EventEmitter()
 
     def once_handler(data):
         pass
@@ -218,7 +207,7 @@ def test_listeners():
     """`listeners()` returns a copied list of listeners."""
 
     call_me = Mock()
-    ee = BaseEventEmitter()
+    ee = EventEmitter()
 
     @ee.on('event')
     def event_handler():
@@ -246,7 +235,7 @@ def test_properties_preserved():
 
     call_me = Mock()
     call_me_also = Mock()
-    ee = BaseEventEmitter()
+    ee = EventEmitter()
 
     @ee.on('always')
     def always_event_handler():
@@ -272,36 +261,3 @@ def test_properties_preserved():
     # Calling the event handler directly doesn't clear the handler
     ee.emit('once')
     call_me_also.assert_called_once()
-
-
-def test_inheritance():
-    """Test that inheritance is preserved from object"""
-    assert object in getmro(BaseEventEmitter)
-
-    class example(BaseEventEmitter):
-        def __init__(self):
-            super(example, self).__init__()
-
-    assert BaseEventEmitter in getmro(example)
-    assert object in getmro(example)
-
-
-def test_multiple_inheritance():
-    """Test that inheritance is preserved along a lengthy MRO"""
-    class example(BaseEventEmitter):
-        def __init__(self):
-            super(example, self).__init__()
-
-    class _example(example):
-        def __init__(self):
-            super(_example, self).__init__()
-
-    class example2(_example):
-        def __init__(self):
-            super(example2, self).__init__()
-
-    class _example2(_example):
-        def __init__(self):
-            super(_example2, self).__init__()
-
-    a = _example2()  # noqa

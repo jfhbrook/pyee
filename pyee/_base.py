@@ -2,7 +2,7 @@
 
 from collections import defaultdict, OrderedDict
 
-__all__ = ['BaseEventEmitter', 'PyeeException']
+__all__ = ['EventEmitter', 'PyeeException']
 
 
 class PyeeException(Exception):
@@ -10,7 +10,7 @@ class PyeeException(Exception):
     pass
 
 
-class BaseEventEmitter(object):
+class EventEmitter:
     """The base event emitter class. All other event emitters inherit from
     this class.
 
