@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyee._base import BaseEventEmitter
+from pyee._base import EventEmitter
 
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
@@ -14,7 +14,7 @@ except ImportError:
 __all__ = ['TwistedEventEmitter']
 
 
-class TwistedEventEmitter(BaseEventEmitter):
+class TwistedEventEmitter(EventEmitter):
     """An event emitter class which can run twisted coroutines and handle
     returned Deferreds, in addition to synchronous blocking functions. For
     example::

@@ -3,18 +3,18 @@
 import pytest
 
 from mock import call, Mock
-from pyee import BaseEventEmitter
+from pyee import EventEmitter
 from pyee.uplift import uplift
 
 
-class UpliftedEventEmitter(BaseEventEmitter):
+class UpliftedEventEmitter(EventEmitter):
     pass
 
 
 def test_uplift_emit():
     call_me = Mock()
 
-    base_ee = BaseEventEmitter()
+    base_ee = EventEmitter()
 
     @base_ee.on('base_event')
     def base_handler():
@@ -98,7 +98,7 @@ def test_uplift_emit():
   'new', 'underlying', 'neither'
 ])
 def test_exception_handling(error_handling):
-    base_ee = BaseEventEmitter()
+    base_ee = EventEmitter()
     uplifted_ee = uplift(
         UpliftedEventEmitter, base_ee,
         error_handling=error_handling
@@ -147,7 +147,7 @@ def test_exception_handling(error_handling):
 def test_proxy_new_listener(proxy_new_listener):
     call_me = Mock()
 
-    base_ee = BaseEventEmitter()
+    base_ee = EventEmitter()
 
     uplifted_ee = uplift(
         UpliftedEventEmitter,
