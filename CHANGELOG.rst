@@ -1,3 +1,9 @@
+2020/09/20 Version 8.0.0
+------------------------
+- Drop support for Python 2.7
+- Remove CompatEventEmitter and rename BaseEventEmitter to EventEmitter
+- Create an alias for BaseEventEmitter with a deprecation warning
+
 2020/09/20 Version 7.0.4
 ------------------------
 - setup_requires vs tests_require now correct
