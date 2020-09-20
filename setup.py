@@ -14,6 +14,7 @@ setup(
 
     packages=find_packages(),
     tests_require=[
+        'attrs == 19.3.0; python_version < "3.0"',
         'futures; python_version < "3.0"',
         'mock; python_version >= "3.6"',
         'mock == 3.0.5; python_version < "3.6"',
