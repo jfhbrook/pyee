@@ -1,3 +1,8 @@
+2020/10/08 Version 8.1.0
+------------------------
+- Improved thread safety in base EventEmitter
+- Documentation fix in ExecutorEventEmitter
+
 2020/09/20 Version 8.0.1
 ------------------------
 - Update README to reflect new API
