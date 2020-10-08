@@ -9,3 +9,6 @@ Listed in no particular order:
 - René Kijewski @Kijewski
 - Gabe Appleton @gappleto97
 - Daniel M. Capella @polyzen <polyzen@archlinux.org>
+- Fabian Affolter @fabaff <mail@fabian-affolter.ch>
+- Anton Bolshakov @blshkv
+- Åke Forslund @forslund <ake.forslund@gmail.com>
