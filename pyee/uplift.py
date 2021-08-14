@@ -58,7 +58,7 @@ def uplift(
     This is mostly helpful if you have a simple underlying event emitter
     that you don't have direct control over, but you want to use that
     event emitter in a new context - for example, you may want to ``uplift`` a
-    ``BaseEventEmitter`` supplied by a third party library into an
+    ``EventEmitter`` supplied by a third party library into an
     ``AsyncIOEventEmitter`` so that you may register async event handlers
     in your ``asyncio`` app but still be able to receive events from the
     underlying event emitter and call the underlying event emitter's existing
@@ -111,7 +111,7 @@ def uplift(
     emitter an event handler was added to!
 
     Note that both the new event emitter returned by ``cls`` and the
-    underlying event emitter should inherit from ``BaseEventEmitter``, or at
+    underlying event emitter should inherit from ``EventEmitter``, or at
     least implement the interface for the undocumented ``_call_handlers`` and
     ``_emit_handle_potential_error`` methods.
     """
