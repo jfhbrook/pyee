@@ -15,7 +15,7 @@ setup(
     include_package_data=True,
     description="A port of node.js's EventEmitter to python.",
     long_description=long_description,
-    author="Joshua Holbrook",
+    author="Josh Holbrook",
     author_email="josh.holbrook@gmail.com",
     url="https://github.com/jfhbrook/pyee",
     license="MIT",
