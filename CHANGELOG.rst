@@ -1,6 +1,16 @@
+2021/8/14 Version 8.2.0
+-----------------------
+
+- Remove test_requires and setup_requires directives from setup.py
+- Remove vcversioner from dependencies
+- Streamline requirements.txt and environment.yml files
+- Update and extend CONTRIBUTING.rst
+- CI with GitHub Actions instead of Travis
+- switch default branch to ``main``
+
 2020/10/08 Version 8.1.0
 ------------------------
-- Improved thread safety in base EventEmitter
+- Improve thread safety in base EventEmitter
 - Documentation fix in ExecutorEventEmitter
 
 2020/09/20 Version 8.0.1
