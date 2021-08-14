@@ -7,7 +7,7 @@ upload:
 	twine upload dist/*
 
 test: lint
-	python setup.py test
+	pytest ./tests
 
 tox:
 	tox

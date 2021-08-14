@@ -10,23 +10,9 @@ with open(README_rst, 'r') as f:
 
 setup(
     name="pyee",
-    vcversioner={},
-
+    version="8.2.0",
     packages=find_packages(),
-    tests_require=[
-        'mock',
-        'pytest',
-        'pytest-asyncio; python_version >= "3.4"',
-        'pytest-trio; python_version >= "3.7"',
-        'trio; python_version > "3.6"',
-        'twisted'
-    ],
-    setup_requires=[
-        'pytest-runner',
-        'vcversioner'
-    ],
     include_package_data=True,
-
     description="A port of node.js's EventEmitter to python.",
     long_description=long_description,
     author="Joshua Holbrook",
