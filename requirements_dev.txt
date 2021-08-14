@@ -1,6 +1,4 @@
-flake8==3.8.3
+-r requirements_test.txt
 Sphinx==3.2.1
 tox==3.20.0
 twine==3.2.0
-vcversioner==2.16.0.0
--e .

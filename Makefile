@@ -1,3 +1,9 @@
+init:
+	conda env create
+
+update:
+	conda env update
+
 package:
 	python setup.py check
 	python setup.py sdist
