@@ -1,3 +1,9 @@
+Pre-Release
+-----------
+
+- Add .readthedocs.yaml file
+
+
 2021/8/14 Version 8.2.0
 -----------------------
 
