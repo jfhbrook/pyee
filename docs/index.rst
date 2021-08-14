@@ -56,3 +56,7 @@ Some Links
 * :ref:`modindex`
 * :ref:`search`
 
+Changelog
+=========
+
+.. include:: ../CHANGELOG.rst

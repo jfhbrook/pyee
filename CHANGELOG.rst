@@ -1,13 +1,14 @@
 2021/8/14 Version 8.2.0
 -----------------------
 
-- Remove test_requires and setup_requires directives from setup.py
+- Remove test_requires and setup_requires directives from setup.py (closing #82)
 - Remove vcversioner from dependencies
 - Streamline requirements.txt and environment.yml files
 - Update and extend CONTRIBUTING.rst
 - CI with GitHub Actions instead of Travis
 - Format all code with black
 - Switch default branch to ``main``
+- Add the CHANGELOG to Sphinx docs (closing #51)
 - Updated copyright information
 
 2020/10/08 Version 8.1.0
