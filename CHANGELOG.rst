@@ -7,7 +7,8 @@
 - Update and extend CONTRIBUTING.rst
 - CI with GitHub Actions instead of Travis
 - Format all code with black
-- switch default branch to ``main``
+- Switch default branch to ``main``
+- Updated copyright information
 
 2020/10/08 Version 8.1.0
 ------------------------
