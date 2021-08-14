@@ -31,11 +31,11 @@ async def test_asyncio_emit(event_loop):
 
     should_call = Future(loop=event_loop)
 
-    @ee.on('event')
+    @ee.on("event")
     async def event_handler():
         should_call.set_result(True)
 
-    ee.emit('event')
+    ee.emit("event")
 
     result = await wait_for(should_call, 0.1)
 
@@ -52,11 +52,11 @@ async def test_asyncio_once_emit(event_loop):
 
     should_call = Future(loop=event_loop)
 
-    @ee.once('event')
+    @ee.once("event")
     async def event_handler():
         should_call.set_result(True)
 
-    ee.emit('event')
+    ee.emit("event")
 
     result = await wait_for(should_call, 0.1)
 
@@ -72,15 +72,15 @@ async def test_asyncio_error(event_loop):
 
     should_call = Future(loop=event_loop)
 
-    @ee.on('event')
+    @ee.on("event")
     async def event_handler():
         raise PyeeTestError()
 
-    @ee.on('error')
+    @ee.on("error")
     def handle_error(exc):
         should_call.set_result(exc)
 
-    ee.emit('event')
+    ee.emit("event")
 
     result = await wait_for(should_call, 0.1)
 
@@ -96,15 +96,15 @@ async def test_asyncio_cancellation(event_loop):
 
     ee = AsyncIOEventEmitter(loop=event_loop)
 
-    @ee.on('event')
+    @ee.on("event")
     async def event_handler():
         cancel_me.cancel()
 
-    @ee.on('error')
+    @ee.on("error")
     def handle_error(exc):
         should_not_call.set_result(None)
 
-    ee.emit('event')
+    ee.emit("event")
 
     try:
         await wait_for(should_not_call, 0.1)
@@ -116,21 +116,20 @@ async def test_asyncio_cancellation(event_loop):
 
 @pytest.mark.asyncio
 async def test_sync_error(event_loop):
-    """Test that regular functions have the same error handling as coroutines
-    """
+    """Test that regular functions have the same error handling as coroutines"""
     ee = AsyncIOEventEmitter(loop=event_loop)
 
     should_call = Future(loop=event_loop)
 
-    @ee.on('event')
+    @ee.on("event")
     def sync_handler():
         raise PyeeTestError()
 
-    @ee.on('error')
+    @ee.on("error")
     def handle_error(exc):
         should_call.set_result(exc)
 
-    ee.emit('event')
+    ee.emit("event")
 
     result = await wait_for(should_call, 0.1)
 
@@ -145,12 +144,12 @@ def test_twisted_emit():
 
     should_call = Mock()
 
-    @ee.on('event')
+    @ee.on("event")
     async def event_handler():
-        _ = await succeed('yes!')
+        _ = await succeed("yes!")
         should_call(True)
 
-    ee.emit('event')
+    ee.emit("event")
 
     should_call.assert_called_once()
 
@@ -163,31 +162,30 @@ def test_twisted_once():
 
     should_call = Mock()
 
-    @ee.once('event')
+    @ee.once("event")
     async def event_handler():
-        _ = await succeed('yes!')
+        _ = await succeed("yes!")
         should_call(True)
 
-    ee.emit('event')
+    ee.emit("event")
 
     should_call.assert_called_once()
 
 
 def test_twisted_error():
-    """Test that TwistedEventEmitters handle Failures when wrapping coroutines.
-    """
+    """Test that TwistedEventEmitters handle Failures when wrapping coroutines."""
     ee = TwistedEventEmitter()
 
     should_call = Mock()
 
-    @ee.on('event')
+    @ee.on("event")
     async def event_handler():
         raise PyeeTestError()
 
-    @ee.on('failure')
+    @ee.on("failure")
     def handle_error(e):
         should_call(e)
 
-    ee.emit('event')
+    ee.emit("event")
 
     should_call.assert_called_once()

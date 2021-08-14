@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 import trio
 from pyee._base import EventEmitter, PyeeException
 
-__all__ = ['TrioEventEmitter']
+__all__ = ["TrioEventEmitter"]
 
 
 class TrioEventEmitter(EventEmitter):
@@ -39,13 +39,13 @@ class TrioEventEmitter(EventEmitter):
     words, you should not attempt to await emit; the coroutine is scheduled
     in a fire-and-forget fashion.
     """
+
     def __init__(self, nursery=None, manager=None):
         super(TrioEventEmitter, self).__init__()
         if nursery:
             if manager:
                 raise PyeeException(
-                    'You may either pass a nursery or a nursery manager '
-                    'but not both'
+                    "You may either pass a nursery or a nursery manager " "but not both"
                 )
             self._nursery = nursery
             self._manager = None
@@ -60,7 +60,7 @@ class TrioEventEmitter(EventEmitter):
             try:
                 await f(*args, **kwargs)
             except Exception as exc:
-                self.emit('error', exc)
+                self.emit("error", exc)
 
         return runner
 
@@ -74,7 +74,7 @@ class TrioEventEmitter(EventEmitter):
         async context management methods are implemented using this
         function, but it may also be used directly for clarity.
         """
-        if getattr(self, '_nursery', None):
+        if getattr(self, "_nursery", None):
             yield self._nursery
         else:
             async with self._manager as nursery:

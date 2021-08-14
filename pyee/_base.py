@@ -3,11 +3,12 @@
 from collections import defaultdict, OrderedDict
 from threading import Lock
 
-__all__ = ['EventEmitter', 'PyeeException']
+__all__ = ["EventEmitter", "PyeeException"]
 
 
 class PyeeException(Exception):
     """An exception internal to pyee."""
+
     pass
 
 
@@ -37,6 +38,7 @@ class EventEmitter:
     raised exceptions are not automatically handled for you---you must catch
     your own exceptions, and treat them accordingly.
     """
+
     def __init__(self):
         self._events = defaultdict(OrderedDict)
         self._lock = Lock()
@@ -68,7 +70,7 @@ class EventEmitter:
 
     def _add_event_handler(self, event, k, v):
         # Fire 'new_listener' *before* adding the new listener!
-        self.emit('new_listener', event, k)
+        self.emit("new_listener", event, k)
 
         # Add the necessary function
         # Note that k and v are the same for `on` handlers, but
@@ -81,7 +83,7 @@ class EventEmitter:
         f(*args, **kwargs)
 
     def _emit_handle_potential_error(self, event, error):
-        if event == 'error':
+        if event == "error":
             if error:
                 raise error
             else:
@@ -121,6 +123,7 @@ class EventEmitter:
         """The same as ``ee.on``, except that the listener is automatically
         removed after being called.
         """
+
         def _wrapper(f):
             def g(*args, **kwargs):
                 with self._lock:
@@ -162,6 +165,5 @@ class EventEmitter:
                 self._events = defaultdict(OrderedDict)
 
     def listeners(self, event):
-        """Returns a list of all listeners registered to the ``event``.
-        """
+        """Returns a list of all listeners registered to the ``event``."""
         return list(self._events[event].keys())

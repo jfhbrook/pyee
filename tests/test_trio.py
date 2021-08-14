@@ -22,11 +22,11 @@ async def test_trio_emit():
 
         should_call = trio.Event()
 
-        @ee.on('event')
+        @ee.on("event")
         async def event_handler():
             should_call.set()
 
-        ee.emit('event')
+        ee.emit("event")
 
         result = False
         with trio.move_on_after(0.1):
@@ -45,11 +45,11 @@ async def test_trio_once_emit():
     async with TrioEventEmitter() as ee:
         should_call = trio.Event()
 
-        @ee.once('event')
+        @ee.once("event")
         async def event_handler():
             should_call.set()
 
-        ee.emit('event')
+        ee.emit("event")
 
         result = False
         with trio.move_on_after(0.1):
@@ -68,16 +68,16 @@ async def test_trio_error():
     async with TrioEventEmitter() as ee:
         send, rcv = trio.open_memory_channel(1)
 
-        @ee.on('event')
+        @ee.on("event")
         async def event_handler():
             raise PyeeTestError()
 
-        @ee.on('error')
+        @ee.on("error")
         async def handle_error(exc):
             async with send:
                 await send.send(exc)
 
-        ee.emit('event')
+        ee.emit("event")
 
         result = None
         with trio.move_on_after(0.1):
@@ -89,22 +89,21 @@ async def test_trio_error():
 
 @pytest.mark.trio
 async def test_sync_error(event_loop):
-    """Test that regular functions have the same error handling as coroutines
-    """
+    """Test that regular functions have the same error handling as coroutines"""
 
     async with TrioEventEmitter() as ee:
         send, rcv = trio.open_memory_channel(1)
 
-        @ee.on('event')
+        @ee.on("event")
         def sync_handler():
             raise PyeeTestError()
 
-        @ee.on('error')
+        @ee.on("error")
         async def handle_error(exc):
             async with send:
                 await send.send(exc)
 
-        ee.emit('event')
+        ee.emit("event")
 
         result = None
         with trio.move_on_after(0.1):

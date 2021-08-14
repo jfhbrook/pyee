@@ -4,7 +4,7 @@ from pyee._base import EventEmitter
 
 from concurrent.futures import ThreadPoolExecutor
 
-__all__ = ['ExecutorEventEmitter']
+__all__ = ["ExecutorEventEmitter"]
 
 
 class ExecutorEventEmitter(EventEmitter):
@@ -39,6 +39,7 @@ class ExecutorEventEmitter(EventEmitter):
 
     No effort is made to ensure thread safety, beyond using an executor.
     """
+
     def __init__(self, executor=None):
         super(ExecutorEventEmitter, self).__init__()
         if executor:
@@ -53,7 +54,7 @@ class ExecutorEventEmitter(EventEmitter):
         def _callback(f):
             exc = f.exception()
             if exc:
-                self.emit('error', exc)
+                self.emit("error", exc)
 
     def shutdown(self, wait=True):
         """Call ``shutdown`` on the internal executor."""

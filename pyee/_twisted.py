@@ -11,7 +11,7 @@ except ImportError:
     iscoroutine = None
 
 
-__all__ = ['TwistedEventEmitter']
+__all__ = ["TwistedEventEmitter"]
 
 
 class TwistedEventEmitter(EventEmitter):
@@ -45,6 +45,7 @@ class TwistedEventEmitter(EventEmitter):
 
     Similar behavior occurs for "sync" functions which return Deferreds.
     """
+
     def __init__(self):
         super(TwistedEventEmitter, self).__init__()
 
@@ -52,7 +53,7 @@ class TwistedEventEmitter(EventEmitter):
         try:
             result = f(*args, **kwargs)
         except Exception:
-            self.emit('failure', Failure())
+            self.emit("failure", Failure())
         else:
             if iscoroutine and iscoroutine(result):
                 d = ensureDeferred(result)
@@ -61,15 +62,16 @@ class TwistedEventEmitter(EventEmitter):
             else:
                 d = None
             if d:
+
                 @d.addErrback
                 def _errback(failure):
                     if failure:
-                        self.emit('failure', failure)
+                        self.emit("failure", failure)
 
     def _emit_handle_potential_error(self, event, error):
-        if event == 'failure':
-            self.emit('error', error.value)
+        if event == "failure":
+            self.emit("error", error.value)
         else:
-            (
-                super(TwistedEventEmitter, self)
-            )._emit_handle_potential_error(event, error)
+            (super(TwistedEventEmitter, self))._emit_handle_potential_error(
+                event, error
+            )

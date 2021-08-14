@@ -3,9 +3,9 @@
 from os import path
 from setuptools import find_packages, setup
 
-README_rst = path.join(path.abspath(path.dirname(__file__)), 'README.rst')
+README_rst = path.join(path.abspath(path.dirname(__file__)), "README.rst")
 
-with open(README_rst, 'r') as f:
+with open(README_rst, "r") as f:
     long_description = f.read()
 
 setup(
@@ -19,10 +19,7 @@ setup(
     author_email="josh.holbrook@gmail.com",
     url="https://github.com/jfhbrook/pyee",
     license="MIT",
-    keywords=[
-        "events", "emitter", "node.js", "node", "eventemitter",
-        "event_emitter"
-    ],
+    keywords=["events", "emitter", "node.js", "node", "eventemitter", "event_emitter"],
     classifiers=[
         "Programming Language :: Python",
         "Development Status :: 4 - Beta",
@@ -35,6 +32,6 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
-        "Topic :: Other/Nonlisted Topic"
-    ]
+        "Topic :: Other/Nonlisted Topic",
+    ],
 )

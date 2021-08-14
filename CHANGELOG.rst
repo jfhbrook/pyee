@@ -6,6 +6,7 @@
 - Streamline requirements.txt and environment.yml files
 - Update and extend CONTRIBUTING.rst
 - CI with GitHub Actions instead of Travis
+- Format all code with black
 - switch default branch to ``main``
 
 2020/10/08 Version 8.1.0

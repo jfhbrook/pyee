@@ -3,7 +3,7 @@
 from asyncio import ensure_future, Future, iscoroutine
 from pyee._base import EventEmitter
 
-__all__ = ['AsyncIOEventEmitter']
+__all__ = ["AsyncIOEventEmitter"]
 
 
 class AsyncIOEventEmitter(EventEmitter):
@@ -31,6 +31,7 @@ class AsyncIOEventEmitter(EventEmitter):
     In other words, you do not have to await any results from emit, and the
     coroutine is scheduled in a fire-and-forget fashion.
     """
+
     def __init__(self, loop=None):
         super(AsyncIOEventEmitter, self).__init__()
         self._loop = loop
@@ -39,7 +40,7 @@ class AsyncIOEventEmitter(EventEmitter):
         try:
             coro = f(*args, **kwargs)
         except Exception as exc:
-            self.emit('error', exc)
+            self.emit("error", exc)
         else:
             if iscoroutine(coro):
                 if self._loop:
@@ -52,6 +53,7 @@ class AsyncIOEventEmitter(EventEmitter):
                 f = None
 
             if f:
+
                 @f.add_done_callback
                 def _callback(f):
                     if f.cancelled():
@@ -59,4 +61,4 @@ class AsyncIOEventEmitter(EventEmitter):
 
                     exc = f.exception()
                     if exc:
-                        self.emit('error', exc)
+                        self.emit("error", exc)

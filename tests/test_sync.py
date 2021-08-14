@@ -17,13 +17,13 @@ def test_emit_sync():
     call_me = Mock()
     ee = EventEmitter()
 
-    @ee.on('event')
+    @ee.on("event")
     def event_handler(data, **kwargs):
         call_me()
-        assert data == 'emitter is emitted!'
+        assert data == "emitter is emitted!"
 
     # Making sure data is passed propers
-    ee.emit('event', 'emitter is emitted!', error=False)
+    ee.emit("event", "emitter is emitted!", error=False)
 
     call_me.assert_called_once()
 
@@ -34,17 +34,17 @@ def test_emit_error():
     call_me = Mock()
     ee = EventEmitter()
 
-    test_exception = PyeeTestException('lololol')
+    test_exception = PyeeTestException("lololol")
 
     with raises(PyeeTestException):
-        ee.emit('error', test_exception)
+        ee.emit("error", test_exception)
 
-    @ee.on('error')
+    @ee.on("error")
     def on_error(exc):
         call_me()
 
     # No longer raises and error instead return True indicating handled
-    assert ee.emit('error', test_exception) is True
+    assert ee.emit("error", test_exception) is True
     call_me.assert_called_once()
 
 
@@ -57,13 +57,13 @@ def test_emit_return():
     ee = EventEmitter()
 
     # make sure emitting without a callback returns False
-    assert not ee.emit('data')
+    assert not ee.emit("data")
 
     # add a callback
-    ee.on('data')(call_me)
+    ee.on("data")(call_me)
 
     # should return True now
-    assert ee.emit('data')
+    assert ee.emit("data")
 
 
 def test_new_listener_event():
@@ -72,14 +72,14 @@ def test_new_listener_event():
     call_me = Mock()
     ee = EventEmitter()
 
-    ee.on('new_listener', call_me)
+    ee.on("new_listener", call_me)
 
     # Should fire new_listener event
-    @ee.on('event')
+    @ee.on("event")
     def event_handler(data):
         pass
 
-    call_me.assert_called_once_with('event', event_handler)
+    call_me.assert_called_once_with("event", event_handler)
 
 
 def test_listener_removal():
@@ -91,44 +91,36 @@ def test_listener_removal():
     def first():
         return 1
 
-    ee.on('event', first)
+    ee.on("event", first)
 
-    @ee.on('event')
+    @ee.on("event")
     def second():
         return 2
 
-    @ee.on('event')
+    @ee.on("event")
     def third():
         return 3
 
     def fourth():
         return 4
 
-    ee.on('event', fourth)
+    ee.on("event", fourth)
 
-    assert ee._events['event'] == OrderedDict([
-        (first, first),
-        (second, second),
-        (third, third),
-        (fourth, fourth)
-    ])
+    assert ee._events["event"] == OrderedDict(
+        [(first, first), (second, second), (third, third), (fourth, fourth)]
+    )
 
-    ee.remove_listener('event', second)
+    ee.remove_listener("event", second)
 
-    assert ee._events['event'] == OrderedDict([
-        (first, first),
-        (third, third),
-        (fourth, fourth)
-    ])
+    assert ee._events["event"] == OrderedDict(
+        [(first, first), (third, third), (fourth, fourth)]
+    )
 
-    ee.remove_listener('event', first)
-    assert ee._events['event'] == OrderedDict([
-        (third, third),
-        (fourth, fourth)
-    ])
+    ee.remove_listener("event", first)
+    assert ee._events["event"] == OrderedDict([(third, third), (fourth, fourth)])
 
-    ee.remove_all_listeners('event')
-    assert ee._events['event'] == OrderedDict()
+    ee.remove_all_listeners("event")
+    assert ee._events["event"] == OrderedDict()
 
 
 def test_listener_removal_on_emit():
@@ -140,12 +132,12 @@ def test_listener_removal_on_emit():
     ee = EventEmitter()
 
     def should_remove():
-        ee.remove_listener('remove', call_me)
+        ee.remove_listener("remove", call_me)
 
-    ee.on('remove', should_remove)
-    ee.on('remove', call_me)
+    ee.on("remove", should_remove)
+    ee.on("remove", call_me)
 
-    ee.emit('remove')
+    ee.emit("remove")
 
     call_me.assert_called_once()
 
@@ -153,17 +145,16 @@ def test_listener_removal_on_emit():
 
     # Also test with the listeners added in the opposite order
     ee = EventEmitter()
-    ee.on('remove', call_me)
-    ee.on('remove', should_remove)
+    ee.on("remove", call_me)
+    ee.on("remove", should_remove)
 
-    ee.emit('remove')
+    ee.emit("remove")
 
     call_me.assert_called_once()
 
 
 def test_once():
-    """Test that `once()` method works propers.
-    """
+    """Test that `once()` method works propers."""
 
     # very similar to "test_emit" but also makes sure that the event
     # gets removed afterwards
@@ -172,35 +163,34 @@ def test_once():
     ee = EventEmitter()
 
     def once_handler(data):
-        assert data == 'emitter is emitted!'
+        assert data == "emitter is emitted!"
         call_me()
 
     # Tests to make sure that after event is emitted that it's gone.
-    ee.once('event', once_handler)
+    ee.once("event", once_handler)
 
-    ee.emit('event', 'emitter is emitted!')
+    ee.emit("event", "emitter is emitted!")
 
     call_me.assert_called_once()
 
-    assert ee._events['event'] == OrderedDict()
+    assert ee._events["event"] == OrderedDict()
 
 
 def test_once_removal():
-    """Removal of once functions works
-    """
+    """Removal of once functions works"""
 
     ee = EventEmitter()
 
     def once_handler(data):
         pass
 
-    handle = ee.once('event', once_handler)
+    handle = ee.once("event", once_handler)
 
     assert handle == once_handler
 
-    ee.remove_listener('event', handle)
+    ee.remove_listener("event", handle)
 
-    assert ee._events['event'] == OrderedDict()
+    assert ee._events["event"] == OrderedDict()
 
 
 def test_listeners():
@@ -209,15 +199,15 @@ def test_listeners():
     call_me = Mock()
     ee = EventEmitter()
 
-    @ee.on('event')
+    @ee.on("event")
     def event_handler():
         pass
 
-    @ee.once('event')
+    @ee.once("event")
     def once_handler():
         pass
 
-    listeners = ee.listeners('event')
+    listeners = ee.listeners("event")
 
     assert listeners[0] == event_handler
     assert listeners[1] == once_handler
@@ -225,7 +215,7 @@ def test_listeners():
     # listeners is a copy, you can't mutate the innards this way
     listeners[0] = call_me
 
-    ee.emit('event')
+    ee.emit("event")
 
     call_me.assert_not_called()
 
@@ -237,18 +227,18 @@ def test_properties_preserved():
     call_me_also = Mock()
     ee = EventEmitter()
 
-    @ee.on('always')
+    @ee.on("always")
     def always_event_handler():
         """An event handler."""
         call_me()
 
-    @ee.once('once')
+    @ee.once("once")
     def once_event_handler():
         """Another event handler."""
         call_me_also()
 
-    assert always_event_handler.__doc__ == 'An event handler.'
-    assert once_event_handler.__doc__ == 'Another event handler.'
+    assert always_event_handler.__doc__ == "An event handler."
+    assert once_event_handler.__doc__ == "Another event handler."
 
     always_event_handler()
     call_me.assert_called_once()
@@ -259,5 +249,5 @@ def test_properties_preserved():
     call_me_also.reset_mock()
 
     # Calling the event handler directly doesn't clear the handler
-    ee.emit('once')
+    ee.emit("once")
     call_me_also.assert_called_once()

@@ -5,14 +5,14 @@ from functools import wraps
 
 def _wrap(left, right, error_handler, proxy_new_listener):
     left_emit = left.emit
-    left_unwrap = getattr(left, 'unwrap', None)
+    left_unwrap = getattr(left, "unwrap", None)
 
     @wraps(left_emit)
     def wrapped_emit(event, *args, **kwargs):
         left_handled = left._call_handlers(event, args, kwargs)
 
         # Do it for the right side
-        if proxy_new_listener or event != 'new_listener':
+        if proxy_new_listener or event != "new_listener":
             right_handled = right._call_handlers(event, args, kwargs)
         else:
             right_handled = False
@@ -22,9 +22,7 @@ def _wrap(left, right, error_handler, proxy_new_listener):
         # Use the error handling on ``error_handler`` (should either be
         # ``left`` or ``right``)
         if not handled:
-            error_handler._emit_handle_potential_error(
-                event, args[0] if args else None
-            )
+            error_handler._emit_handle_potential_error(event, args[0] if args else None)
 
         return handled
 
@@ -36,7 +34,7 @@ def _wrap(left, right, error_handler, proxy_new_listener):
             del left.unwrap
         left.emit = left_emit
 
-        if hasattr(right, 'unwrap'):
+        if hasattr(right, "unwrap"):
             right.unwrap()
 
     left.emit = wrapped_emit
@@ -47,14 +45,12 @@ _PROXY_NEW_LISTENER_SETTINGS = dict(
     forward=(False, True),
     backward=(True, False),
     both=(True, True),
-    neither=(False, False)
+    neither=(False, False),
 )
 
 
 def uplift(
-    cls, underlying,
-    error_handling='new', proxy_new_listener='forward',
-    *args, **kwargs
+    cls, underlying, error_handling="new", proxy_new_listener="forward", *args, **kwargs
 ):
     """A helper to create instances of an event emitter ``cls`` that inherits
     event behavior from an ``underlying`` event emitter instance.
@@ -120,33 +116,20 @@ def uplift(
     ``_emit_handle_potential_error`` methods.
     """
 
-    new_proxy_new_listener, underlying_proxy_new_listener = (
-        _PROXY_NEW_LISTENER_SETTINGS[
-            proxy_new_listener
-         ]
-    )
+    (
+        new_proxy_new_listener,
+        underlying_proxy_new_listener,
+    ) = _PROXY_NEW_LISTENER_SETTINGS[proxy_new_listener]
 
     new = cls(*args, **kwargs)
 
     uplift_error_handlers = dict(
-        new=(new, new),
-        underlying=(underlying, underlying),
-        neither=(new, underlying)
+        new=(new, new), underlying=(underlying, underlying), neither=(new, underlying)
     )
 
-    new_error_handler, underlying_error_handler = uplift_error_handlers[
-        error_handling
-    ]
+    new_error_handler, underlying_error_handler = uplift_error_handlers[error_handling]
 
-    _wrap(
-        new, underlying,
-        new_error_handler,
-        new_proxy_new_listener
-    )
-    _wrap(
-        underlying, new,
-        underlying_error_handler,
-        underlying_proxy_new_listener
-    )
+    _wrap(new, underlying, new_error_handler, new_proxy_new_listener)
+    _wrap(underlying, new, underlying_error_handler, underlying_proxy_new_listener)
 
     return new

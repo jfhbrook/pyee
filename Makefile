@@ -21,6 +21,9 @@ tox:
 lint:
 	flake8
 
+format:
+	black ./pyee setup.py ./tests ./docs
+
 build_docs:
 	cd docs && make html
 

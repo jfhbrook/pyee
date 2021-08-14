@@ -19,17 +19,17 @@ def test_propagates_failure():
 
     should_call = Mock()
 
-    @ee.on('event')
+    @ee.on("event")
     @inlineCallbacks
     def event_handler():
         yield Failure(PyeeTestError())
 
-    @ee.on('failure')
+    @ee.on("failure")
     def handle_failure(f):
         assert isinstance(f, Failure)
         should_call(f)
 
-    ee.emit('event')
+    ee.emit("event")
 
     should_call.assert_called_once()
 
@@ -42,16 +42,16 @@ def test_propagates_sync_failure():
 
     should_call = Mock()
 
-    @ee.on('event')
+    @ee.on("event")
     def event_handler():
         raise PyeeTestError()
 
-    @ee.on('failure')
+    @ee.on("failure")
     def handle_failure(f):
         assert isinstance(f, Failure)
         should_call(f)
 
-    ee.emit('event')
+    ee.emit("event")
 
     should_call.assert_called_once()
 
@@ -65,16 +65,16 @@ def test_propagates_exception():
 
     should_call = Mock()
 
-    @ee.on('event')
+    @ee.on("event")
     @inlineCallbacks
     def event_handler():
         yield Failure(PyeeTestError())
 
-    @ee.on('error')
+    @ee.on("error")
     def handle_error(exc):
         assert isinstance(exc, Exception)
         should_call(exc)
 
-    ee.emit('event')
+    ee.emit("event")
 
     should_call.assert_called_once()

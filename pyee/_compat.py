@@ -32,13 +32,15 @@ class CompatEventEmitter(BaseEventEmitter):
     """
 
     def __init__(self, scheduler=ensure_future, loop=None):
-        warn(DeprecationWarning(
-            'pyee.EventEmitter is deprecated and will be removed in a future '
-            'major version; you should instead use either '
-            'pyee.AsyncIOEventEmitter, pyee.TwistedEventEmitter, '
-            'pyee.ExecutorEventEmitter, pyee.TrioEventEmitter, '
-            'or pyee.BaseEventEmitter.'
-        ))
+        warn(
+            DeprecationWarning(
+                "pyee.EventEmitter is deprecated and will be removed in a future "
+                "major version; you should instead use either "
+                "pyee.AsyncIOEventEmitter, pyee.TwistedEventEmitter, "
+                "pyee.ExecutorEventEmitter, pyee.TrioEventEmitter, "
+                "or pyee.BaseEventEmitter."
+            )
+        )
 
         super(CompatEventEmitter, self).__init__()
 
@@ -55,15 +57,17 @@ class CompatEventEmitter(BaseEventEmitter):
                 d = self._schedule(coro)
 
             # scheduler gave us an asyncio Future
-            if hasattr(d, 'add_done_callback'):
+            if hasattr(d, "add_done_callback"):
+
                 @d.add_done_callback
                 def _callback(f):
                     exc = f.exception()
                     if exc:
-                        self.emit('error', exc)
+                        self.emit("error", exc)
 
             # scheduler gave us a twisted Deferred
-            elif hasattr(d, 'addErrback'):
+            elif hasattr(d, "addErrback"):
+
                 @d.addErrback
                 def _callback(exc):
-                    self.emit('error', exc)
+                    self.emit("error", exc)
