@@ -86,7 +86,22 @@ To publish::
 
     make publish
 
+Push the Tag to GitHub
+~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    git push origin main --tags
+
 Check on RTD
 ~~~~~~~~~~~~
 
-RTD should build automatically but can be kicked off manually by logging in.
+RTD should build automatically but I find there's a delay so I like to kick it
+off manually. Log into `RTD <https://readthedocs.org>`, log in, then go
+to `the pyee project page <https://readthedocs.org/projects/pyee/>` and build
+latest and stable.
+
+Announce on Twitter
+~~~~~~~~~~~~~~~~~~~
+
+It's not official, but I like to announce the release on Twitter.
