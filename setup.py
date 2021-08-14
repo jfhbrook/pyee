@@ -10,7 +10,7 @@ with open(README_rst, "r") as f:
 
 setup(
     name="pyee",
-    version="8.2.0",
+    version="8.2.1",
     packages=find_packages(),
     include_package_data=True,
     description="A port of node.js's EventEmitter to python.",

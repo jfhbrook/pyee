@@ -31,10 +31,6 @@
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 
-from os import path
-
-import vcversioner
-
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.viewcode",
@@ -66,9 +62,7 @@ author = "Josh Holbrook"
 # built documents.
 #
 # The short X.Y version.
-version = vcversioner.find_version(
-    root=path.dirname(path.dirname(path.abspath(__file__)))
-).version
+version = "3.8.1"
 
 # The full version, including alpha/beta/rc tags.
 release = version
