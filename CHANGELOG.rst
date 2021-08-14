@@ -5,7 +5,7 @@
 - Remove vcversioner from dependencies
 - Streamline requirements.txt and environment.yml files
 - Update and extend CONTRIBUTING.rst
-- CI with GitHub Actions instead of Travis
+- CI with GitHub Actions instead of Travis (closing #56)
 - Format all code with black
 - Switch default branch to ``main``
 - Add the CHANGELOG to Sphinx docs (closing #51)
