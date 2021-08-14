@@ -2,6 +2,9 @@ Pre-Release
 -----------
 
 - Remove dead, untested, un-exposed CompatEventEmitter
+- Add docstring to BaseEventEmitter
+- Update docstrings to reference EventEmitter instead of BaseEventEmitter
+  throughout
 
 2021/8/14 Version 8.2.2
 -----------------------

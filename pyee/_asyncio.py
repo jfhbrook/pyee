@@ -18,7 +18,7 @@ class AsyncIOEventEmitter(EventEmitter):
     ``asyncio.ensure_future`` and the configured event loop (defaults to
     ``asyncio.get_event_loop()``).
 
-    Unlike the case with the BaseEventEmitter, all exceptions raised by
+    Unlike the case with the EventEmitter, all exceptions raised by
     event handlers are automatically emitted on the ``error`` event. This is
     important for asyncio coroutines specifically but is also handled for
     synchronous functions for consistency.

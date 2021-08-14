@@ -30,7 +30,7 @@ class TrioEventEmitter(EventEmitter):
 
         # Underlying nursery and manager have been cleaned up
 
-    Unlike the case with the BaseEventEmitter, all exceptions raised by event
+    Unlike the case with the EventEmitter, all exceptions raised by event
     handlers are automatically emitted on the ``error`` event. This is
     important for trio coroutines specifically but is also handled for
     synchronous functions for consistency.

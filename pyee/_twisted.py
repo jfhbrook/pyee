@@ -36,7 +36,7 @@ class TwistedEventEmitter(EventEmitter):
     exception is then emitted on the ``error`` event. If there are no ``error``
     handlers, the exception is raised. For consistency, when handlers raise
     errors synchronously, they're captured, wrapped in a Failure and treated
-    as an async failure. This is unlike the behavior of BaseEventEmitter,
+    as an async failure. This is unlike the behavior of EventEmitter,
     which have no special error handling.
 
     For twisted coroutine event handlers, calling emit is non-blocking.

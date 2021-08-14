@@ -21,7 +21,7 @@ API Docs:
 
 .. automodule:: pyee
 
-.. autoclass:: BaseEventEmitter
+.. autoclass:: EventEmitter
     :members:
 
 .. autoclass:: AsyncIOEventEmitter
@@ -36,10 +36,7 @@ API Docs:
 .. autoclass:: TrioEventEmitter
     :members:
 
-.. autoclass:: EventEmitter
-    :members:
-
-.. autoclass:: pyee._compat.CompatEventEmitter
+.. autoclass:: BaseEventEmitter
     :members:
 
 .. autoexception:: pyee.PyeeException

@@ -35,6 +35,10 @@ from pyee._base import EventEmitter, PyeeException
 
 
 class BaseEventEmitter(EventEmitter):
+    """
+    BaseEventEmitter is deprecated and an alias for EventEmitter.
+    """
+
     def __init__(self):
         warn(
             DeprecationWarning(
