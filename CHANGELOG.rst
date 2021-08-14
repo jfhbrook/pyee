@@ -1,5 +1,10 @@
+2021/8/14 Version 8.2.2
+-----------------------
+
+- Correct version in docs
+
 2021/8/14 Version 8.2.1
------------
+-----------------------
 
 - Add .readthedocs.yaml file
 - Remove vcversioner dependency from docs build
