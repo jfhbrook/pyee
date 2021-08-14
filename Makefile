@@ -12,7 +12,7 @@ package:
 upload:
 	twine upload dist/*
 
-test: lint
+test:
 	pytest ./tests
 
 tox:
