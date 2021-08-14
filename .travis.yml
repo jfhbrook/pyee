@@ -1,0 +1,15 @@
+language: python
+arch:
+  - ppc64le
+sudo: false
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.9"
+install:
+  - pip install pip --upgrade
+  - pip install setuptools --upgrade
+  - pip install -r requirements_test.txt
+script: make lint && make test
