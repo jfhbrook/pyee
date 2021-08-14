@@ -1,3 +1,8 @@
+Pre-Release
+-----------
+
+- Remove dead, untested, un-exposed CompatEventEmitter
+
 2021/8/14 Version 8.2.2
 -----------------------
 
