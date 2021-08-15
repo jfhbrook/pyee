@@ -2,7 +2,7 @@
 
 from contextlib import asynccontextmanager
 import trio
-from pyee._base import EventEmitter, PyeeException
+from pyee.base import EventEmitter, PyeeException
 
 __all__ = ["TrioEventEmitter"]
 

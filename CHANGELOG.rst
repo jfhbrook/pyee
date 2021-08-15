@@ -6,6 +6,8 @@ Pre-Release
 - Update docstrings to reference EventEmitter instead of BaseEventEmitter
   throughout
 - Move linting tools to test deps (fixed broken build)
+- Export framework specific EventEmitters under their own namespace and
+  deprecate importing them from the ``pyee`` namespace
 
 2021/8/14 Version 8.2.2
 -----------------------

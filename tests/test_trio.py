@@ -5,20 +5,24 @@ import pytest_trio.plugin  # noqa
 
 import trio
 
-from pyee import TrioEventEmitter
+from pyee import TrioEventEmitter as LegacyTrioEventEmitter
+from pyee.trio import TrioEventEmitter
+
+CLASSES = [TrioEventEmitter, LegacyTrioEventEmitter]
 
 
 class PyeeTestError(Exception):
     pass
 
 
+@pytest.mark.parametrize("cls", CLASSES)
 @pytest.mark.trio
-async def test_trio_emit():
+async def test_trio_emit(cls):
     """Test that the trio event emitter can handle wrapping
     coroutines
     """
 
-    async with TrioEventEmitter() as ee:
+    async with cls() as ee:
 
         should_call = trio.Event()
 
@@ -36,13 +40,14 @@ async def test_trio_emit():
         assert result
 
 
+@pytest.mark.parametrize("cls", CLASSES)
 @pytest.mark.trio
-async def test_trio_once_emit():
+async def test_trio_once_emit(cls):
     """Test that trio event emitters also wrap coroutines when
     using once
     """
 
-    async with TrioEventEmitter() as ee:
+    async with cls() as ee:
         should_call = trio.Event()
 
         @ee.once("event")
@@ -59,13 +64,14 @@ async def test_trio_once_emit():
         assert result
 
 
+@pytest.mark.parametrize("cls", CLASSES)
 @pytest.mark.trio
-async def test_trio_error():
+async def test_trio_error(cls):
     """Test that trio event emitters can handle errors when
     wrapping coroutines
     """
 
-    async with TrioEventEmitter() as ee:
+    async with cls() as ee:
         send, rcv = trio.open_memory_channel(1)
 
         @ee.on("event")
@@ -87,11 +93,12 @@ async def test_trio_error():
         assert isinstance(result, PyeeTestError)
 
 
+@pytest.mark.parametrize("cls", CLASSES)
 @pytest.mark.trio
-async def test_sync_error(event_loop):
+async def test_sync_error(cls):
     """Test that regular functions have the same error handling as coroutines"""
 
-    async with TrioEventEmitter() as ee:
+    async with cls() as ee:
         send, rcv = trio.open_memory_channel(1)
 
         @ee.on("event")

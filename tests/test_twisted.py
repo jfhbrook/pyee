@@ -1,21 +1,26 @@
 # -*- coding: utf-8 -*-
 
 from mock import Mock
+import pytest
 from twisted.internet.defer import inlineCallbacks
 from twisted.python.failure import Failure
 
-from pyee import TwistedEventEmitter
+from pyee import TwistedEventEmitter as LegacyTwistedEventEmitter
+from pyee.twisted import TwistedEventEmitter
+
+CLASSES = [TwistedEventEmitter, LegacyTwistedEventEmitter]
 
 
 class PyeeTestError(Exception):
     pass
 
 
-def test_propagates_failure():
+@pytest.mark.parametrize("cls", CLASSES)
+def test_propagates_failure(cls):
     """Test that TwistedEventEmitters can propagate failures
     from twisted Deferreds
     """
-    ee = TwistedEventEmitter()
+    ee = cls()
 
     should_call = Mock()
 
@@ -34,11 +39,12 @@ def test_propagates_failure():
     should_call.assert_called_once()
 
 
-def test_propagates_sync_failure():
+@pytest.mark.parametrize("cls", CLASSES)
+def test_propagates_sync_failure(cls):
     """Test that TwistedEventEmitters can propagate failures
     from twisted Deferreds
     """
-    ee = TwistedEventEmitter()
+    ee = cls()
 
     should_call = Mock()
 
@@ -56,12 +62,13 @@ def test_propagates_sync_failure():
     should_call.assert_called_once()
 
 
-def test_propagates_exception():
+@pytest.mark.parametrize("cls", CLASSES)
+def test_propagates_exception(cls):
     """Test that TwistedEventEmitters propagate failures as exceptions to
     the error event when no failure handler
     """
 
-    ee = TwistedEventEmitter()
+    ee = cls()
 
     should_call = Mock()
 

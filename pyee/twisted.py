@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyee._base import EventEmitter
+from pyee.base import EventEmitter
 
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
