@@ -43,6 +43,10 @@ API Docs:
 
 .. autofunction:: pyee.uplift.uplift
 
+.. autofunction:: pyee.cls.on
+
+.. autofunction:: pyee.cls.evented
+
 
 Some Links
 ==========
