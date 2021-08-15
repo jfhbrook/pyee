@@ -5,6 +5,7 @@ Pre-Release
 - Add docstring to BaseEventEmitter
 - Update docstrings to reference EventEmitter instead of BaseEventEmitter
   throughout
+- Move linting tools to test deps (fixed broken build)
 
 2021/8/14 Version 8.2.2
 -----------------------
