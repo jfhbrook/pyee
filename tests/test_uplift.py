@@ -102,7 +102,7 @@ def test_exception_handling(error_handling):
     base_ee = EventEmitter()
     uplifted_ee = uplift(UpliftedEventEmitter, base_ee, error_handling=error_handling)
 
-    # Exception handling alwyas prefers uplifted
+    # Exception handling always prefers uplifted
     base_error = Exception("base error")
     uplifted_error = Exception("uplifted error")
 
