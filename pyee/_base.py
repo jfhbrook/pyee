@@ -24,7 +24,7 @@ class EventEmitter:
       this event do not fire upon their own creation.
 
     - ``error``: When emitted raises an Exception by default, behavior can be
-      overriden by attaching callback to the event.
+      overridden by attaching callback to the event.
 
       For example::
 

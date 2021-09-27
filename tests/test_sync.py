@@ -67,7 +67,7 @@ def test_emit_return():
 
 
 def test_new_listener_event():
-    """The 'new_listener' event fires whenever a new listerner is added."""
+    """The 'new_listener' event fires whenever a new listener is added."""
 
     call_me = Mock()
     ee = EventEmitter()
