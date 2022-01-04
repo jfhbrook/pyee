@@ -80,6 +80,10 @@ class EventEmitter:
     def _emit_run(self, f, args, kwargs):
         f(*args, **kwargs)
 
+    def event_names(self):
+        # Returns an array listing the events
+        return list(self._events.keys())[1:]
+
     def _emit_handle_potential_error(self, event, error):
         if event == 'error':
             if error:
