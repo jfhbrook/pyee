@@ -1,15 +1,77 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
+from typing import Any, Callable, Dict, Optional, Protocol, Tuple, Union
+
+from typing_extensions import Literal
+
+from pyee.base import (
+    AnyHandlerP,
+    Arg,
+    Event,
+    EventEmitterP,
+    IArg,
+    IEvent,
+    IKwarg,
+    InternalEvent,
+    Kwarg,
+)
+
+UnwrapMethod = Callable[[], None]
 
 
-def _wrap(left, right, error_handler, proxy_new_listener):
+class UpliftedEventEmitterP(EventEmitterP[Event, Arg, Kwarg]):
+    @property
+    def unwrap(self) -> Optional[UnwrapMethod]:
+        ...
+
+    @unwrap.setter
+    def unwrap(self, unwrap: UnwrapMethod) -> None:
+        ...
+
+    @unwrap.deleter
+    def unwrap(self) -> None:
+        ...
+
+    def _call_handlers(
+        self,
+        event: Union[Event, InternalEvent],
+        args: Tuple[
+            Union[Arg, Exception, Event, InternalEvent, AnyHandlerP],
+            ...,
+        ],
+        kwargs: Dict[str, Kwarg],
+    ) -> bool:
+        ...
+
+    def _emit_handle_potential_error(
+        self,
+        event: Union[Event, InternalEvent],
+        error: Optional[Union[Arg, Exception, Event, InternalEvent, AnyHandlerP]],
+    ) -> None:
+        ...
+
+
+ErrorHandler = Any
+ErrorStrategy = str
+
+
+def _wrap(
+    left: UpliftedEventEmitterP[Event, Arg, Kwarg],
+    right: UpliftedEventEmitterP[Event, Arg, Kwarg],
+    error_handler: UpliftedEventEmitterP,
+    proxy_new_listener: bool,
+) -> None:
     left_emit = left.emit
     left_unwrap = getattr(left, "unwrap", None)
 
     @wraps(left_emit)
-    def wrapped_emit(event, *args, **kwargs):
-        left_handled = left._call_handlers(event, args, kwargs)
+    def wrapped_emit(
+        event: Union[Event, InternalEvent],
+        *args: Union[Arg, Exception, Event, InternalEvent, AnyHandlerP],
+        **kwargs: Kwarg
+    ) -> bool:
+        left_handled: bool = left._call_handlers(event, args, kwargs)
 
         # Do it for the right side
         if proxy_new_listener or event != "new_listener":
@@ -26,7 +88,7 @@ def _wrap(left, right, error_handler, proxy_new_listener):
 
         return handled
 
-    def unwrap():
+    def unwrap() -> None:
         left.emit = left_emit
         if left_unwrap:
             left.unwrap = left_unwrap
@@ -34,14 +96,15 @@ def _wrap(left, right, error_handler, proxy_new_listener):
             del left.unwrap
         left.emit = left_emit
 
-        if hasattr(right, "unwrap"):
-            right.unwrap()
+        right_unwrap: Optional[UnwrapMethod] = getattr(right, "unwrap", None)
+        if right_unwrap:
+            right_unwrap()
 
     left.emit = wrapped_emit
     left.unwrap = unwrap
 
 
-_PROXY_NEW_LISTENER_SETTINGS = dict(
+_PROXY_NEW_LISTENER_SETTINGS: Dict[str, Tuple[bool, bool]] = dict(
     forward=(False, True),
     backward=(True, False),
     both=(True, True),
@@ -49,8 +112,26 @@ _PROXY_NEW_LISTENER_SETTINGS = dict(
 )
 
 
+class UpliftableEventEmitterFactoryP(Protocol[Event, Arg, Kwarg]):
+    def __call__(
+        self, *args: Any, **kwargs: Any
+    ) -> UpliftedEventEmitterP[Event, Arg, Kwarg]:
+        ...
+
+
+ErrorStrategy = Union[Literal["new"], Literal["underlying"], Literal["neither"]]
+ProxyStrategy = Union[
+    Literal["forward"], Literal["backward"], Literal["both"], Literal["neither"]
+]
+
+
 def uplift(
-    cls, underlying, error_handling="new", proxy_new_listener="forward", *args, **kwargs
+    cls: UpliftableEventEmitterFactoryP[Event, Arg, Kwarg],
+    underlying: UpliftedEventEmitterP[Event, Arg, Kwarg],
+    error_handling: ErrorStrategy = "new",
+    proxy_new_listener: ProxyStrategy = "forward",
+    *args: Any,
+    **kwargs: Any
 ):
     """A helper to create instances of an event emitter ``cls`` that inherits
     event behavior from an ``underlying`` event emitter instance.
@@ -121,9 +202,15 @@ def uplift(
         underlying_proxy_new_listener,
     ) = _PROXY_NEW_LISTENER_SETTINGS[proxy_new_listener]
 
-    new = cls(*args, **kwargs)
+    new: UpliftedEventEmitterP[Event, Arg, Kwarg] = cls(*args, **kwargs)
 
-    uplift_error_handlers = dict(
+    uplift_error_handlers: Dict[
+        str,
+        Tuple[
+            UpliftedEventEmitterP[Event, Arg, Kwarg],
+            UpliftedEventEmitterP[Event, Arg, Kwarg],
+        ],
+    ] = dict(
         new=(new, new), underlying=(underlying, underlying), neither=(new, underlying)
     )
 

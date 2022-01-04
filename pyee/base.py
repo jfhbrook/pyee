@@ -25,11 +25,21 @@ Kwarg = TypeVar(name="Kwarg", contravariant=True)
 
 
 class AnyHandlerP(Protocol):
+    """
+    A handler with any args or kwargs. This type is used
+    to capture the type of a handler emitted by the
+    ``new_listener`` event.
+    """
+
     def __call__(self, *args: Any, **kwargs: Any) -> Any:
         ...
 
 
 class HandlerP(Protocol[Event, Arg, Kwarg]):
+    """
+    An event handler.
+    """
+
     def __call__(
         self,
         *args: Union[Arg, Exception, Event, InternalEvent, "AnyHandlerP"],
@@ -44,6 +54,10 @@ IKwarg = TypeVar(name="IKwarg")
 
 
 class DecoratorP(Protocol[IEvent, IArg, IKwarg]):
+    """
+    A handler decorator function.
+    """
+
     def __call__(
         self, f: HandlerP[IEvent, IArg, IKwarg]
     ) -> HandlerP[IEvent, IArg, IKwarg]:
@@ -170,14 +184,14 @@ class EventEmitter(Generic[Event, Arg, Kwarg]):
             ...,
         ],
         kwargs: Dict[str, Kwarg],
-    ):
+    ) -> None:
         f(*args, **kwargs)
 
     def _emit_handle_potential_error(
         self,
         event: Union[Event, InternalEvent],
         error: Optional[Union[Arg, Exception, Event, InternalEvent, AnyHandlerP]],
-    ):
+    ) -> None:
         if event == "error":
             if isinstance(error, Exception):
                 raise error
@@ -192,7 +206,7 @@ class EventEmitter(Generic[Event, Arg, Kwarg]):
             ...,
         ],
         kwargs: Dict[str, Kwarg],
-    ):
+    ) -> bool:
         handled = False
 
         with self._lock:
@@ -273,7 +287,9 @@ class EventEmitter(Generic[Event, Arg, Kwarg]):
         with self._lock:
             self._remove_listener(event, f)
 
-    def remove_all_listeners(self, event: Optional[Event] = None) -> None:
+    def remove_all_listeners(
+        self, event: Optional[Union[Event, InternalEvent]] = None
+    ) -> None:
         """Remove all listeners attached to ``event``.
         If ``event`` is ``None``, remove all listeners on all events.
         """
@@ -288,3 +304,59 @@ class EventEmitter(Generic[Event, Arg, Kwarg]):
     ) -> List[HandlerP[Event, Arg, Kwarg]]:
         """Returns a list of all listeners registered to the ``event``."""
         return list(self._events[event].keys())
+
+
+class EventEmitterP(Protocol[IEvent, IArg, IKwarg]):
+    """A protocol for event emitters. This may be used to type-check
+    EventEmitters structurally.
+    """
+
+    def __init__(self) -> None:
+        ...
+
+    def on(
+        self,
+        event: Union[IEvent, InternalEvent],
+        f: Optional[HandlerP[IEvent, IArg, IKwarg]] = None,
+    ) -> Union[HandlerP[IEvent, IArg, IKwarg], DecoratorP]:
+        ...
+
+    def listens_to(
+        self, event: Union[IEvent, InternalEvent]
+    ) -> DecoratorP[IEvent, IArg, IKwarg]:
+        ...
+
+    def add_listener(
+        self, event: Union[IEvent, InternalEvent], f: HandlerP[IEvent, IArg, IKwarg]
+    ) -> HandlerP[IEvent, IArg, IKwarg]:
+        ...
+
+    def emit(
+        self,
+        event: Union[IEvent, InternalEvent],
+        *args: Union[IArg, Exception, IEvent, InternalEvent, AnyHandlerP],
+        **kwargs: IKwarg,
+    ) -> bool:
+        ...
+
+    def once(
+        self,
+        event: Union[IEvent, InternalEvent],
+        f: Optional[HandlerP[IEvent, IArg, IKwarg]] = None,
+    ) -> Union[HandlerP[IEvent, IArg, IKwarg], DecoratorP[IEvent, IArg, IKwarg]]:
+        ...
+
+    def remove_listener(
+        self, event: Union[IEvent, InternalEvent], f: HandlerP[IEvent, IArg, IKwarg]
+    ) -> None:
+        ...
+
+    def remove_all_listeners(
+        self, event: Optional[Union[IEvent, InternalEvent]] = None
+    ) -> None:
+        ...
+
+    def listeners(
+        self, event: Union[IEvent, InternalEvent]
+    ) -> List[HandlerP[IEvent, IArg, IKwarg]]:
+        ...
