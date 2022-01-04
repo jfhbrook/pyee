@@ -21,6 +21,7 @@ setup(
     url="https://github.com/jfhbrook/pyee",
     license="MIT",
     keywords=["events", "emitter", "node.js", "node", "eventemitter", "event_emitter"],
+    install_requires=["typing-extensions"],
     classifiers=[
         "Programming Language :: Python",
         "Development Status :: 4 - Beta",

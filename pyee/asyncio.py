@@ -2,7 +2,7 @@
 
 from asyncio import ensure_future, Future, iscoroutine
 
-from pyee._base import EventEmitter
+from pyee.base import EventEmitter
 
 __all__ = ["AsyncIOEventEmitter"]
 

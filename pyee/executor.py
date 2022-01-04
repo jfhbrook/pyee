@@ -2,7 +2,7 @@
 
 from concurrent.futures import ThreadPoolExecutor
 
-from pyee._base import EventEmitter
+from pyee.base import EventEmitter
 
 __all__ = ["ExecutorEventEmitter"]
 
