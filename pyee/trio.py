@@ -1,15 +1,39 @@
 # -*- coding: utf-8 -*-
 
-from contextlib import asynccontextmanager
+from contextlib import AbstractAsyncContextManager, asynccontextmanager
+from types import TracebackType
+from typing import (
+    AsyncGenerator,
+    Awaitable,
+    Callable,
+    Dict,
+    Optional,
+    Tuple,
+    Type,
+    Union,
+)
 
 import trio
 
-from pyee.base import EventEmitter, PyeeException
+from pyee.base import (
+    AnyHandlerP,
+    Arg,
+    Event,
+    EventEmitter,
+    HandlerP,
+    InternalEvent,
+    Kwarg,
+    PyeeError,
+)
 
 __all__ = ["TrioEventEmitter"]
 
 
-class TrioEventEmitter(EventEmitter):
+Nursery = trio.Nursery
+NurseryManager = AbstractAsyncContextManager[trio.Nursery]
+
+
+class TrioEventEmitter(EventEmitter[Event, Arg, Kwarg]):
     """An event emitter class which can run trio tasks in a trio nursery.
 
     By default, this class will lazily create both a nursery manager (the
@@ -42,23 +66,28 @@ class TrioEventEmitter(EventEmitter):
     in a fire-and-forget fashion.
     """
 
-    def __init__(self, nursery=None, manager=None):
+    def __init__(self, nursery: Nursery = None, manager: NurseryManager = None):
         super(TrioEventEmitter, self).__init__()
         if nursery:
             if manager:
-                raise PyeeException(
+                raise PyeeError(
                     "You may either pass a nursery or a nursery manager " "but not both"
                 )
-            self._nursery = nursery
-            self._manager = None
+            self._nursery: Optional[Nursery] = nursery
+            self._manager: Optional[NurseryManager] = None
         elif manager:
             self._nursery = None
             self._manager = manager
         else:
             self._manager = trio.open_nursery()
 
-    def _async_runner(self, f, args, kwargs):
-        async def runner():
+    def _async_runner(
+        self,
+        f: HandlerP[Event, Arg, Kwarg],
+        args: Tuple[Union[Arg, Exception, Event, InternalEvent, AnyHandlerP], ...],
+        kwargs: Dict[str, Kwarg],
+    ) -> Callable[[], Awaitable[None]]:
+        async def runner() -> None:
             try:
                 await f(*args, **kwargs)
             except Exception as exc:
@@ -66,28 +95,48 @@ class TrioEventEmitter(EventEmitter):
 
         return runner
 
-    def _emit_run(self, f, args, kwargs):
+    def _emit_run(
+        self,
+        f: HandlerP[Event, Arg, Kwarg],
+        args: Tuple[Union[Arg, Exception, Event, InternalEvent, AnyHandlerP]],
+        kwargs: Dict[str, Kwarg],
+    ) -> None:
+        if not self._nursery:
+            raise PyeeError("Uninitialized trio nursery")
         self._nursery.start_soon(self._async_runner(f, args, kwargs))
 
     @asynccontextmanager
-    async def context(self):
+    async def context(
+        self,
+    ) -> AsyncGenerator["TrioEventEmitter[Event, Arg, Kwarg]", None]:
         """Returns an async contextmanager which manages the underlying
         nursery to the EventEmitter. The ``TrioEventEmitter``'s
         async context management methods are implemented using this
         function, but it may also be used directly for clarity.
         """
-        if getattr(self, "_nursery", None):
-            yield self._nursery
-        else:
+        if self._nursery is not None:
+            yield self
+        elif self._manager is not None:
             async with self._manager as nursery:
                 self._nursery = nursery
                 yield self
+        else:
+            raise PyeeError("Uninitialized nursery or nursery manager")
 
-    async def __aenter__(self):
-        self._context = self.context()
+    async def __aenter__(self) -> "TrioEventEmitter":
+        self._context: Optional[
+            AbstractAsyncContextManager["TrioEventEmitter[Event, Arg, Kwarg]"]
+        ] = self.context()
         return await self._context.__aenter__()
 
-    async def __aexit__(self, type, value, traceback):
+    async def __aexit__(
+        self,
+        type: Optional[Type[BaseException]],
+        value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> Optional[bool]:
+        if self._context is None:
+            raise PyeeError("Attempting to exit uninitialized context")
         rv = await self._context.__aexit__(type, value, traceback)
         self._context = None
         self._nursery = None
