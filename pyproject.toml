@@ -1,0 +1,6 @@
+[tool.isort]
+profile = "appnexus"
+known_application = "pyee"
+
+[tool.pyright]
+include = ["python"]

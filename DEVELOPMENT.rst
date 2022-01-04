@@ -4,23 +4,39 @@ Development And Publishing
 Environment Setup
 -----------------
 
+To create a local virtualenv, run::
+
+    make setup
+
+This will create a virtualenv at ``./venv``, install dependencies with pip,
+and install pyright using npm.
+
+To activate the environment in your shell::
+
+    . ./venv/bin/activate
+
+Alternately, run everything with the make tasks, which source the activate
+script before running commands.
+
 conda
 ~~~~~
 
-To create your environment, run::
+To create a Conda environment, run::
 
     conda env create
+    npm i
 
 To update the environment, run::
 
     conda env update
+    npm i --update
 
-pip/virtualenv
-~~~~~~~~~~~~~~
+To activate the environment, run::
 
-Create/activate your virtualenv and then run::
+    conda activate pyee
 
-    pip install -r requirements_dev.txt
+The other Makefile tasks should operate normally if the environment is
+activated.
 
 Formatting, Linting and Testing
 -------------------------------
