@@ -1,9 +1,26 @@
 # -*- coding: utf-8 -*-
 
+from typing import Dict, Tuple, TypeVar, Union
+
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
+from typing_extensions import Literal
 
-from pyee.base import EventEmitter
+from pyee.base import (
+    Any,
+    AnyHandlerP,
+    Arg,
+    Event,
+    EventEmitter,
+    HandlerP,
+    InternalEvent,
+    Kwarg,
+    Optional,
+    PyeeError,
+    Tuple,
+)
+
+FailureEvent = Literal["failure"]
 
 try:
     from asyncio import iscoroutine
@@ -14,7 +31,9 @@ except ImportError:
 __all__ = ["TwistedEventEmitter"]
 
 
-class TwistedEventEmitter(EventEmitter):
+class TwistedEventEmitter(
+    EventEmitter[Union[Event, FailureEvent], Union[Arg, Failure], Kwarg]
+):
     """An event emitter class which can run twisted coroutines and handle
     returned Deferreds, in addition to synchronous blocking functions. For
     example::
@@ -49,28 +68,48 @@ class TwistedEventEmitter(EventEmitter):
     def __init__(self):
         super(TwistedEventEmitter, self).__init__()
 
-    def _emit_run(self, f, args, kwargs):
+    def _emit_run(
+        self,
+        f: HandlerP[Union[Event, FailureEvent], Arg, Kwarg],
+        args: Tuple[
+            Union[Arg, Exception, Event, InternalEvent, FailureEvent, AnyHandlerP], ...
+        ],
+        kwargs: Dict[str, Kwarg],
+    ) -> None:
+        d = None
         try:
             result = f(*args, **kwargs)
         except Exception:
             self.emit("failure", Failure())
         else:
             if iscoroutine and iscoroutine(result):
-                d = ensureDeferred(result)
+                d: Deferred[Any] = ensureDeferred(result)
             elif isinstance(result, Deferred):
                 d = result
             else:
-                d = None
-            if d:
+                return
 
-                @d.addErrback
-                def _errback(failure):
-                    if failure:
-                        self.emit("failure", failure)
+            def errback(failure: Failure) -> None:
+                if failure:
+                    self.emit("failure", failure)
 
-    def _emit_handle_potential_error(self, event, error):
+            d.addErrback(errback)
+
+    def _emit_handle_potential_error(
+        self,
+        event: Union[Event, InternalEvent, FailureEvent],
+        error: Optional[Union[Exception, Failure]],
+    ) -> None:
         if event == "failure":
-            self.emit("error", error.value)
+            if isinstance(error, Failure):
+                try:
+                    error.raiseException()
+                except Exception as exc:
+                    self.emit("error", exc)
+            elif isinstance(error, Exception):
+                self.emit("error", error)
+            else:
+                self.emit("error", PyeeError(f"Unexpected failure object: {error}"))
         else:
             (super(TwistedEventEmitter, self))._emit_handle_potential_error(
                 event, error
