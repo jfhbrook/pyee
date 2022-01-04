@@ -4,7 +4,7 @@
   "description": "Node.js tools to support developing pyee",
   "main": "index.js",
   "scripts": {
-    "pyright": "pyright ./pyee"
+    "pyright": "pyright ./pyee ./tests"
   },
   "repository": {
     "type": "git",
