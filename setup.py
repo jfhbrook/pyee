@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from os import path
+
 from setuptools import find_packages, setup
 
 README_rst = path.join(path.abspath(path.dirname(__file__)), "README.rst")

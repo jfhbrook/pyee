@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from pyee._base import EventEmitter
-
 from concurrent.futures import ThreadPoolExecutor
+
+from pyee._base import EventEmitter
 
 __all__ = ["ExecutorEventEmitter"]
 

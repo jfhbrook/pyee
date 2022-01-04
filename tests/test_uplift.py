@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from mock import call, Mock
 import pytest
 
-from mock import call, Mock
 from pyee import EventEmitter
 from pyee.uplift import uplift
 
