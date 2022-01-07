@@ -26,7 +26,7 @@ tox:
 	if [ -d venv ]; then . ./venv/bin/activate; fi; tox
 
 lint:
-	if [ -d venv ]; then . ./venv/bin/activate; fi; flake8
+	if [ -d venv ]; then . ./venv/bin/activate; fi; flake8 ./pyee setup.py ./tests ./docs
 
 format:
 	if [ -d venv ]; then . ./venv/bin/activate; fi;  black ./pyee setup.py ./tests ./docs

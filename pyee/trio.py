@@ -12,7 +12,6 @@ __all__ = ["TrioEventEmitter"]
 
 
 Nursery = trio.Nursery
-NurseryManager = AbstractAsyncContextManager[trio.Nursery]
 
 
 class TrioEventEmitter(EventEmitter):
@@ -48,17 +47,21 @@ class TrioEventEmitter(EventEmitter):
     in a fire-and-forget fashion.
     """
 
-    def __init__(self, nursery: Nursery = None, manager: NurseryManager = None):
+    def __init__(
+        self,
+        nursery: Nursery = None,
+        manager: "AbstractAsyncContextManager[trio.Nursery]" = None,
+    ):
         super(TrioEventEmitter, self).__init__()
+        self._nursery: Optional[Nursery] = None
+        self._manager: Optional["AbstractAsyncContextManager[trio.Nursery]"] = None
         if nursery:
             if manager:
                 raise PyeeError(
                     "You may either pass a nursery or a nursery manager " "but not both"
                 )
-            self._nursery: Optional[Nursery] = nursery
-            self._manager: Optional[NurseryManager] = None
+            self._nursery = nursery
         elif manager:
-            self._nursery = None
             self._manager = manager
         else:
             self._manager = trio.open_nursery()

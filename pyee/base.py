@@ -2,7 +2,7 @@
 
 from collections import defaultdict, OrderedDict
 from threading import Lock
-from typing import Any, Callable, Dict, List, Optional, Protocol, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple,
 
 
 class PyeeException(Exception):

@@ -4,25 +4,11 @@ from functools import wraps
 from typing import Any, Callable, cast, Dict, Optional, Tuple, Type, TypeVar, Union
 import warnings
 
-from typing_extensions import Literal, Protocol
+from typing_extensions import Literal
 
 from pyee.base import EventEmitter
 
 UpliftingEventEmitter = TypeVar(name="UpliftingEventEmitter", bound=EventEmitter)
-
-
-class Unwrappable(Protocol):
-    def unwrap(self) -> None:
-        ...
-
-    @classmethod
-    def from_event_emitter(
-        cls: Type["Unwrappable"], event_emitter: EventEmitter
-    ) -> Optional["Unwrappable"]:
-        if hasattr(event_emitter, "unwrap"):
-            return cast(cls, event_emitter)
-
-        return None
 
 
 EMIT_WRAPPERS: Dict[EventEmitter, Callable[[], None]] = dict()
@@ -33,7 +19,12 @@ def unwrap(event_emitter: EventEmitter) -> None:
         EMIT_WRAPPERS[event_emitter]()
 
 
-def _wrap(left: Any, right: Any, error_handler: Any, proxy_new_listener: bool) -> None:
+def _wrap(
+    left: EventEmitter,
+    right: EventEmitter,
+    error_handler: Any,
+    proxy_new_listener: bool,
+) -> None:
     left_emit = left.emit
     left_unwrap: Optional[Callable[[], None]] = EMIT_WRAPPERS.get(left)
 
@@ -56,21 +47,30 @@ def _wrap(left: Any, right: Any, error_handler: Any, proxy_new_listener: bool) -
 
         return handled
 
-    def unwrap() -> None:
+    def _unwrap() -> None:
+        warnings.warn(
+            DeprecationWarning(
+                "Patched ee.unwrap() is deprecated and will be removed in a "
+                "future release. Use pyee.uplift.unwrap instead."
+            )
+        )
+        unwrap(left)
+
+    def unwrap_hook() -> None:
         left.emit = left_emit
-        if left_unwrap is not None:
-            left.unwrap = left_unwrap
+        if left_unwrap:
+            EMIT_WRAPPERS[left] = left_unwrap
         else:
-            del left.unwrap
+            del EMIT_WRAPPERS[left]
         left.emit = left_emit
 
-        right_unwrap = getattr(right, "unwrap", None)
-        if right_unwrap:
-            right_unwrap()
+        unwrap(right)
 
     left.emit = wrapped_emit
 
-    EMIT_WRAPPERS[left_emit] = unwrap
+    EMIT_WRAPPERS[left] = unwrap_hook
+    unsafe: Any = cast(Any, left)
+    unsafe.unwrap = _unwrap
 
 
 _PROXY_NEW_LISTENER_SETTINGS: Dict[str, Tuple[bool, bool]] = dict(
