@@ -3,7 +3,9 @@
 setup:
 	python3 -m venv venv
 	if [ -d venv ]; then . ./venv/bin/activate; fi; pip install pip wheel --upgrade
+	if [ -d venv ]; then . ./venv/bin/activate; fi; pip install -r requirements.txt
 	if [ -d venv ]; then . ./venv/bin/activate; fi; pip install -r requirements_dev.txt
+	if [ -d venv ]; then . ./venv/bin/activate; fi; pip install -e .
 	npm i
 
 package: test lint

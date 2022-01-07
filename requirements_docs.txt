@@ -1,2 +1,0 @@
--r requirements_test.txt
-Sphinx==3.2.1
