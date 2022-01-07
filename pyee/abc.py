@@ -16,206 +16,53 @@ from typing import (
     Union,
 )
 
-from typing_extensions import Literal
+from typing_extensions import Literal, Protocol
+
+from pyee.errors import PyeeError
+from pyee.handlers import UserHandlerP, ErrorHandlerP, NewListenerHandlerP
+from pyee.table import Table
 
 
-class PyeeException(Exception):
-    """An exception internal to pyee."""
-
-
-class PyeeError(PyeeException):
-    """An error internal to pyee."""
-
-
-Event = TypeVar(name="Event", contravariant=True)
-ErrorEvent = Literal["error"]
+Event = TypeVar(name="Event")
+ErrorEvent = TypeVar(name="ErrorEvent", contravariant=True)
 NewListenerEvent = Literal["new_listener"]
-
 Arg = TypeVar(name="Arg", contravariant=True)
 Kwarg = TypeVar(name="Kwarg", contravariant=True)
+Error = TypeVar(name="Error")
 
 
-class HandlerP(Protocol[Arg, Kwarg]):
-    def __call__(
-        self,
-        *args: Arg,
-        **kwargs: Kwarg,
-    ) -> Any:
+# class NewListenerHandlerP(Protocol[NLEvent, NLErrorEvent, NLArg, NLKwarg, NLError]):
+
+Decoratee = TypeVar(name="Decoratee", bound=Callable)
+
+class DecoratorP(Protocol[Decoratee]):
+    def __call__(self, f: Decoratee) -> Decoratee:
         ...
 
 
-DArg = TypeVar(name="DArg", covariant=True)
-DKwarg = TypeVar(name="DKwarg", covariant=True)
-
-DHandler = HandlerP[DArg, DKwarg]
-
-
-TEvent = TypeVar(name="TEvent", contravariant=True)
-TError = TypeVar(name="TError")
-TArg = TypeVar(name="TArg")
-TKwarg = TypeVar(name="TKwarg")
-TErrorEvent = TypeVar(name="TErrorEvent")
-
-
-class Entry(ABC, Generic[TArg, TKwarg]):
-    def get_handler(self) -> HandlerP[TArg, TKwarg]:
-        ...
-
-
-class UserEntry(Entry[TArg, TKwarg]):
-    pass
-
-
-class ErrorEntry(Entry[TError, None]):
-    pass
-
-
-TUserHandler = HandlerP[TArg, TKwarg]
-TErrorHandler = HandlerP[TError, None]
-
-
-class NewListenerEntry(
-    Generic[TEvent, TErrorEvent, TError, TArg, TKwarg],
-    Entry[Union[TEvent, TErrorEvent, TUserHandler, TErrorHandler], None],
-):
-    pass
-
-
-TNewListenerHandler = HandlerP[
-    Union[TEvent, TErrorEvent, TUserHandler, TErrorHandler], None
-]
-
-THandler = Union[TUserHandler, TErrorHandler, TNewListenerHandler]
-
-TEntry = Union[Entry[TArg, TKwarg], ErrorEntry, NewListenerEntry]
-
-
-class Table(Generic[TEvent, TErrorEvent, TError, TArg, TKwarg]):
-    def __init__(self):
-        self.handlers: Dict[
-            Union[TEvent, TErrorEvent, NewListenerEvent],
-            "OrderedDict[THandler, TEntry]",
-        ]
-
-    def get_user_event_handler(self, event: TEvent, key: TUserHandler) -> TUserHandler:
-        entry: TEntry = self.handlers[event][key]
-        if isinstance(entry, UserEntry):
-            return entry.get_handler()
-        raise PyeeError(f"Unexpected handler: {entry.get_handler()}")
-
-    def get_error_handler(
-        self, event: TErrorEvent, key: TErrorHandler
-    ) -> TErrorHandler:
-        entry: TEntry = self.handlers[event][key]
-        if isinstance(entry, ErrorEntry):
-            return entry.get_handler()
-        raise PyeeError(f"Unexpected handler: {entry.get_handler()}")
-
-    def get_new_listener_handler(self, key: TNewListenerHandler) -> TNewListenerHandler:
-        entry: TEntry = self.handlers["new_listener"][key]
-        if isinstance(entry, NewListenerEntry):
-            return entry.get_handler()
-        raise PyeeError(f"Unexpected handler: {entry.get_handler()}")
-
-
-AEvent = TypeVar(name="AEvent", contravariant=True)
-AError = TypeVar(name="AError", contravariant=True)
-AErrorEvent = TypeVar(name="AErrorEvent", contravariant=True)
-AArg = TypeVar(name="AArg", contravariant=True)
-AKwarg = TypeVar(name="AKwarg", contravariant=True)
-
-AUserHandler = HandlerP[AArg, AKwarg]
-AErrorHandler = HandlerP[AError, None]
-ANewListenerHandler = HandlerP[
-    Union[AEvent, AErrorEvent, AUserHandler, AErrorHandler], None
-]
-
-AHandler = Union[AUserHandler, AErrorHandler, ANewListenerHandler]
-
-ADecorator = Callable[
-    [
-        HandlerP[
-            Union[AArg, AEvent, AErrorEvent, AError, AUserHandler, AErrorHandler],
-            AKwarg,
-        ]
-    ],
-    HandlerP[
-        Union[AArg, AEvent, AErrorEvent, AError, AUserHandler, AErrorHandler], AKwarg
-    ],
-]
-
-AEntry = Union[Entry[AArg, AKwarg], ErrorEntry, NewListenerEntry]
-
-
-class AbstractEventEmitter(Generic[AEvent, AErrorEvent, AError, AArg, AKwarg]):
+class AbstractEventEmitter(Generic[Event, ErrorEvent, Arg, Kwarg, Error]):
     def __init__(self) -> None:
-        self._table: Table[AEvent, AErrorEvent, AError, AArg, AKwarg] = Table()
+        self._table: Table[Event, ErrorEvent, Arg, Kwarg, Error] = Table()
         self._lock: Lock = Lock()
 
     def on(
         self,
-        event: Union[AEvent, AErrorEvent, NewListenerEvent],
-        f: Optional[
-            Union[
-                HandlerP[AArg, AKwarg],
-                HandlerP[AError, None],
-                HandlerP[
-                    Union[
-                        AArg,
-                        AEvent,
-                        AErrorEvent,
-                        NewListenerEvent,
-                        AError,
-                        HandlerP[AArg, AKwarg],
-                        HandlerP[AError, None],
-                    ],
-                    None,
-                ],
-            ]
+        event: Union[Event, ErrorEvent, NewListenerEvent],
+        f: Union[
+            UserHandlerP[Arg, Kwarg],
+            ErrorHandlerP[Error],
+            NewListenerHandlerP[Event, ErrorEvent, Arg, Kwarg, Error],
+            None
         ] = None,
     ) -> Union[
-        HandlerP[AArg, AKwarg],
-        HandlerP[AError, None],
-        HandlerP[
-            Union[
-                AArg,
-                AEvent,
-                AErrorEvent,
-                NewListenerEvent,
-                AError,
-                HandlerP[AArg, AKwarg],
-                HandlerP[AError, None],
-            ],
-            None,
-        ],
-        Callable[
-            [
-                HandlerP[
-                    Union[
-                        AArg,
-                        AEvent,
-                        AErrorEvent,
-                        NewListenerEvent,
-                        AError,
-                        AUserHandler,
-                        AErrorHandler,
-                    ],
-                    Optional[AKwarg],
-                ]
-            ],
-            HandlerP[
-                Union[
-                    AArg,
-                    AEvent,
-                    AErrorEvent,
-                    NewListenerEvent,
-                    AError,
-                    AUserHandler,
-                    AErrorHandler,
-                ],
-                Optional[AKwarg],
-            ],
-        ],
+        UserHandlerP[Arg, Kwarg],
+        ErrorHandlerP[Error],
+        NewListenerHandlerP[Event, ErrorEvent, Arg, Kwarg, Error],
+        DecoratorP[Union[
+            UserHandlerP[Arg, Kwarg],
+            ErrorHandlerP[Error],
+            NewListenerHandlerP[Event, ErrorEvent, Arg, Kwarg, Error]
+        ]]
     ]:
         if f is None:
             return self.listens_to(event)
@@ -223,99 +70,59 @@ class AbstractEventEmitter(Generic[AEvent, AErrorEvent, AError, AArg, AKwarg]):
             return self.add_listener(event, f)
 
     def listens_to(
-        self, event: Union[AEvent, AErrorEvent, NewListenerEvent]
-    ) -> Callable[
-        [
-            HandlerP[
-                Union[
-                    AArg,
-                    AEvent,
-                    AErrorEvent,
-                    NewListenerEvent,
-                    AError,
-                    AUserHandler,
-                    AErrorHandler,
-                ],
-                Optional[AKwarg],
-            ]
-        ],
-        HandlerP[
+        self, event: Union[Event, ErrorEvent, NewListenerEvent]
+    ) -> DecoratorP[
             Union[
-                AArg,
-                AEvent,
-                AErrorEvent,
-                NewListenerEvent,
-                AError,
-                AUserHandler,
-                AErrorHandler,
-            ],
-            Optional[AKwarg],
-        ],
-    ]:
-        def on(
-            f: HandlerP[
-                Union[
-                    AArg,
-                    AEvent,
-                    AErrorEvent,
-                    NewListenerEvent,
-                    AError,
-                    HandlerP[AArg, AKwarg],
-                    HandlerP[AError, None],
-                ],
-                Optional[AKwarg],
+                UserHandlerP[Arg, Kwarg],
+                ErrorHandlerP[Error],
+                NewListenerHandlerP[Event, ErrorEvent, Arg, Kwarg, Error]
             ]
-        ) -> HandlerP[
-            Union[
-                AArg,
-                AEvent,
-                AErrorEvent,
-                NewListenerEvent,
-                AError,
-                HandlerP[AArg, AKwarg],
-                HandlerP[AError, None],
-            ],
-            Optional[AKwarg],
         ]:
+
+        def on(
+            f: Union[
+                UserHandlerP[Arg, Kwarg],
+                ErrorHandlerP[Error],
+                NewListenerHandlerP[Event, ErrorEvent, Arg, Kwarg, Error]
+            ]
+        ) -> Union[
+            UserHandlerP[Arg, Kwarg],
+            ErrorHandlerP[Error],
+            NewListenerHandlerP[Event, ErrorEvent, Arg, Kwarg, Error]
+        ]: 
             return self.add_listener(event, f)
 
         return on
 
     def add_listener(
         self,
-        event: Union[AEvent, AErrorEvent, NewListenerEvent],
-        f: HandlerP[
-            Union[
-                AArg,
-                AEvent,
-                AErrorEvent,
-                NewListenerEvent,
-                AError,
-                HandlerP[AArg, AKwarg],
-                HandlerP[AError, None],
-            ],
-            Optional[AKwarg],
-        ],
-    ) -> HandlerP[
-        Union[
-            AArg,
-            AEvent,
-            AErrorEvent,
-            NewListenerEvent,
-            AError,
-            HandlerP[AArg, AKwarg],
-            HandlerP[AError, None],
-        ],
-        Optional[AKwarg],
+        event: Union[Event, ErrorEvent, NewListenerEvent],
+        f: Union[
+            UserHandlerP[Arg, Kwarg],
+            ErrorHandlerP[Error],
+            NewListenerHandlerP[Event, ErrorEvent, Arg, Kwarg, Error]
+        ]
+    ) -> Union[
+        UserHandlerP[Arg, Kwarg],
+        ErrorHandlerP[Error],
+        NewListenerHandlerP[Event, ErrorEvent, Arg, Kwarg, Error]
     ]:
         self._add_event_handler(event, f, f)
         return f
 
     def _add_event_handler(
         self,
-        event: Union[AEvent, AErrorEvent, NewListenerEvent],
-        k: AHandler,
-        v: AHandler,
+        event: Union[Event, ErrorEvent, NewListenerEvent],
+        k: Union[
+            UserHandlerP[Arg, Kwarg],
+            ErrorHandlerP[Error],
+            NewListenerHandlerP[Event, ErrorEvent, Arg, Kwarg, Error]
+        ],
+        v: Union[
+            UserHandlerP[Arg, Kwarg],
+            ErrorHandlerP[Error],
+            NewListenerHandlerP[Event, ErrorEvent, Arg, Kwarg, Error]
+        ]
     ):
         # Fire 'new_listener' *before* adding the new listener!
         self.emit("new_listener", event, k)
@@ -329,7 +136,7 @@ class AbstractEventEmitter(Generic[AEvent, AErrorEvent, AError, AArg, AKwarg]):
 
     def _emit_run(
         self,
-        f: HandlerP[Event, Arg, Kwarg],
+        f: 
         args: Tuple[
             Union[Arg, Exception, Event, InternalEvent, AnyHandlerP],
             ...,
