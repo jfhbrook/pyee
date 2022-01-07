@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine
-from typing import Any, Awaitable, Callable, cast, Dict, Optional, Tuple
+from typing import Any, Callable, cast, Dict, Optional, Tuple
 
 from pyee.base import EventEmitter
 
@@ -51,7 +51,7 @@ class AsyncIOEventEmitter(EventEmitter):
         else:
             if iscoroutine(coro):
                 if self._loop:
-                    fut = ensure_future(cast(Awaitable, coro), loop=self._loop)
+                    fut = ensure_future(cast(Any, coro), loop=self._loop)
                 else:
                     fut = ensure_future(coro)
             elif isinstance(coro, Future):
