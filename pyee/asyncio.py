@@ -51,11 +51,14 @@ class AsyncIOEventEmitter(EventEmitter):
         else:
             if iscoroutine(coro):
                 if self._loop:
-                    fut = ensure_future(cast(Any, coro), loop=self._loop)
+                    # ensure_future is *extremely* cranky about the types here,
+                    # but this is relatively well-tested and I think the types
+                    # are more strict than they should be
+                    fut: Any = ensure_future(cast(Any, coro), loop=self._loop)
                 else:
-                    fut = ensure_future(coro)
+                    fut = ensure_future(cast(Any, coro))
             elif isinstance(coro, Future):
-                fut = coro
+                fut = cast(Any, coro)
             else:
                 return
 
