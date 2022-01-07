@@ -51,7 +51,7 @@ class AsyncIOEventEmitter(EventEmitter):
         else:
             if iscoroutine(coro):
                 if self._loop:
-                    fut: Future = ensure_future(coro, loop=self._loop)
+                    fut = ensure_future(coro, loop=self._loop)
                 else:
                     fut = ensure_future(coro)
             elif isinstance(coro, Future):
