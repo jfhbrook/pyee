@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
-from typing import Any, Callable, cast, Dict, Optional, Tuple, Type, TypeVar, Union
+from typing import Any, Callable, Dict, Optional, Tuple, Type, TypeVar, Union
 import warnings
 
 from typing_extensions import Literal
@@ -62,6 +62,7 @@ def _wrap(
             EMIT_WRAPPERS[left] = left_unwrap
         else:
             del EMIT_WRAPPERS[left]
+            del left.unwrap  # type: ignore
         left.emit = left_emit
 
         unwrap(right)
@@ -69,8 +70,7 @@ def _wrap(
     left.emit = wrapped_emit
 
     EMIT_WRAPPERS[left] = unwrap_hook
-    unsafe: Any = cast(Any, left)
-    unsafe.unwrap = _unwrap
+    left.unwrap = _unwrap  # type: ignore
 
 
 _PROXY_NEW_LISTENER_SETTINGS: Dict[str, Tuple[bool, bool]] = dict(
