@@ -4,7 +4,7 @@ from mock import call, Mock
 import pytest
 
 from pyee import EventEmitter
-from pyee.uplift import uplift
+from pyee.uplift import unwrap, uplift
 
 
 class UpliftedEventEmitter(EventEmitter):
@@ -69,7 +69,7 @@ def test_uplift_emit():
     call_me.reset_mock()
 
     # Quick check for unwrap
-    uplifted_ee.unwrap()
+    unwrap(uplifted_ee)
 
     with pytest.raises(AttributeError):
         getattr(uplifted_ee, "unwrap")

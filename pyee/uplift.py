@@ -1,76 +1,44 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
-from typing import Any, Callable, Dict, Optional, Protocol, Tuple, Union
+from typing import Any, Callable, cast, Dict, Optional, Tuple, Type, TypeVar, Union
+import warnings
 
-from typing_extensions import Literal
+from typing_extensions import Literal, Protocol
 
-from pyee.base import (
-    AnyHandlerP,
-    Arg,
-    Event,
-    EventEmitterP,
-    IArg,
-    IEvent,
-    IKwarg,
-    InternalEvent,
-    Kwarg,
-)
+from pyee.base import EventEmitter
 
-UnwrapMethod = Callable[[], None]
+UpliftingEventEmitter = TypeVar(name="UpliftingEventEmitter", bound=EventEmitter)
 
 
-class UpliftedEventEmitterP(EventEmitterP[Event, Arg, Kwarg]):
-    @property
-    def unwrap(self) -> Optional[UnwrapMethod]:
-        ...
-
-    @unwrap.setter
-    def unwrap(self, unwrap: UnwrapMethod) -> None:
-        ...
-
-    @unwrap.deleter
+class Unwrappable(Protocol):
     def unwrap(self) -> None:
         ...
 
-    def _call_handlers(
-        self,
-        event: Union[Event, InternalEvent],
-        args: Tuple[
-            Union[Arg, Exception, Event, InternalEvent, AnyHandlerP],
-            ...,
-        ],
-        kwargs: Dict[str, Kwarg],
-    ) -> bool:
-        ...
+    @classmethod
+    def from_event_emitter(
+        cls: Type["Unwrappable"], event_emitter: EventEmitter
+    ) -> Optional["Unwrappable"]:
+        if hasattr(event_emitter, "unwrap"):
+            return cast(cls, event_emitter)
 
-    def _emit_handle_potential_error(
-        self,
-        event: Union[Event, InternalEvent],
-        error: Optional[Union[Arg, Exception, Event, InternalEvent, AnyHandlerP]],
-    ) -> None:
-        ...
+        return None
 
 
-ErrorHandler = Any
-ErrorStrategy = str
+EMIT_WRAPPERS: Dict[EventEmitter, Callable[[], None]] = dict()
 
 
-def _wrap(
-    left: UpliftedEventEmitterP[Event, Arg, Kwarg],
-    right: UpliftedEventEmitterP[Event, Arg, Kwarg],
-    error_handler: UpliftedEventEmitterP,
-    proxy_new_listener: bool,
-) -> None:
+def unwrap(event_emitter: EventEmitter) -> None:
+    if event_emitter in EMIT_WRAPPERS:
+        EMIT_WRAPPERS[event_emitter]()
+
+
+def _wrap(left: Any, right: Any, error_handler: Any, proxy_new_listener: bool) -> None:
     left_emit = left.emit
-    left_unwrap = getattr(left, "unwrap", None)
+    left_unwrap: Optional[Callable[[], None]] = EMIT_WRAPPERS.get(left)
 
     @wraps(left_emit)
-    def wrapped_emit(
-        event: Union[Event, InternalEvent],
-        *args: Union[Arg, Exception, Event, InternalEvent, AnyHandlerP],
-        **kwargs: Kwarg
-    ) -> bool:
+    def wrapped_emit(event: str, *args: Any, **kwargs: Any) -> bool:
         left_handled: bool = left._call_handlers(event, args, kwargs)
 
         # Do it for the right side
@@ -90,18 +58,19 @@ def _wrap(
 
     def unwrap() -> None:
         left.emit = left_emit
-        if left_unwrap:
+        if left_unwrap is not None:
             left.unwrap = left_unwrap
         else:
             del left.unwrap
         left.emit = left_emit
 
-        right_unwrap: Optional[UnwrapMethod] = getattr(right, "unwrap", None)
+        right_unwrap = getattr(right, "unwrap", None)
         if right_unwrap:
             right_unwrap()
 
     left.emit = wrapped_emit
-    left.unwrap = unwrap
+
+    EMIT_WRAPPERS[left_emit] = unwrap
 
 
 _PROXY_NEW_LISTENER_SETTINGS: Dict[str, Tuple[bool, bool]] = dict(
@@ -112,13 +81,6 @@ _PROXY_NEW_LISTENER_SETTINGS: Dict[str, Tuple[bool, bool]] = dict(
 )
 
 
-class UpliftableEventEmitterFactoryP(Protocol[Event, Arg, Kwarg]):
-    def __call__(
-        self, *args: Any, **kwargs: Any
-    ) -> UpliftedEventEmitterP[Event, Arg, Kwarg]:
-        ...
-
-
 ErrorStrategy = Union[Literal["new"], Literal["underlying"], Literal["neither"]]
 ProxyStrategy = Union[
     Literal["forward"], Literal["backward"], Literal["both"], Literal["neither"]
@@ -126,13 +88,13 @@ ProxyStrategy = Union[
 
 
 def uplift(
-    cls: UpliftableEventEmitterFactoryP[Event, Arg, Kwarg],
-    underlying: UpliftedEventEmitterP[Event, Arg, Kwarg],
+    cls: Type[UpliftingEventEmitter],
+    underlying: EventEmitter,
     error_handling: ErrorStrategy = "new",
     proxy_new_listener: ProxyStrategy = "forward",
     *args: Any,
     **kwargs: Any
-):
+) -> UpliftingEventEmitter:
     """A helper to create instances of an event emitter ``cls`` that inherits
     event behavior from an ``underlying`` event emitter instance.
 
@@ -202,15 +164,9 @@ def uplift(
         underlying_proxy_new_listener,
     ) = _PROXY_NEW_LISTENER_SETTINGS[proxy_new_listener]
 
-    new: UpliftedEventEmitterP[Event, Arg, Kwarg] = cls(*args, **kwargs)
+    new: UpliftingEventEmitter = cls(*args, **kwargs)
 
-    uplift_error_handlers: Dict[
-        str,
-        Tuple[
-            UpliftedEventEmitterP[Event, Arg, Kwarg],
-            UpliftedEventEmitterP[Event, Arg, Kwarg],
-        ],
-    ] = dict(
+    uplift_error_handlers: Dict[str, Tuple[EventEmitter, EventEmitter]] = dict(
         new=(new, new), underlying=(underlying, underlying), neither=(new, underlying)
     )
 

@@ -1,26 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from typing import Dict, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, Tuple
 
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
-from typing_extensions import Literal
 
-from pyee.base import (
-    Any,
-    AnyHandlerP,
-    Arg,
-    Event,
-    EventEmitter,
-    HandlerP,
-    InternalEvent,
-    Kwarg,
-    Optional,
-    PyeeError,
-    Tuple,
-)
-
-FailureEvent = Literal["failure"]
+from pyee.base import EventEmitter, PyeeError
 
 try:
     from asyncio import iscoroutine
@@ -31,9 +16,7 @@ except ImportError:
 __all__ = ["TwistedEventEmitter"]
 
 
-class TwistedEventEmitter(
-    EventEmitter[Union[Event, FailureEvent], Union[Arg, Failure], Kwarg]
-):
+class TwistedEventEmitter(EventEmitter):
     """An event emitter class which can run twisted coroutines and handle
     returned Deferreds, in addition to synchronous blocking functions. For
     example::
@@ -70,11 +53,9 @@ class TwistedEventEmitter(
 
     def _emit_run(
         self,
-        f: HandlerP[Union[Event, FailureEvent], Arg, Kwarg],
-        args: Tuple[
-            Union[Arg, Exception, Event, InternalEvent, FailureEvent, AnyHandlerP], ...
-        ],
-        kwargs: Dict[str, Kwarg],
+        f: Callable,
+        args: Tuple[Any, ...],
+        kwargs: Dict[str, Any],
     ) -> None:
         d = None
         try:
@@ -95,11 +76,7 @@ class TwistedEventEmitter(
 
             d.addErrback(errback)
 
-    def _emit_handle_potential_error(
-        self,
-        event: Union[Event, InternalEvent, FailureEvent],
-        error: Optional[Union[Exception, Failure]],
-    ) -> None:
+    def _emit_handle_potential_error(self, event: str, error: Any) -> None:
         if event == "failure":
             if isinstance(error, Failure):
                 try:

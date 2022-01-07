@@ -2,22 +2,14 @@
 
 from concurrent.futures import Executor, Future, ThreadPoolExecutor
 from types import TracebackType
-from typing import Dict, Optional, Tuple, Type, TypeVar, Union
+from typing import Any, Callable, Dict, Optional, Tuple, Type
 
-from pyee.base import (
-    AnyHandlerP,
-    Arg,
-    Event,
-    EventEmitter,
-    HandlerP,
-    InternalEvent,
-    Kwarg,
-)
+from pyee.base import EventEmitter
 
 __all__ = ["ExecutorEventEmitter"]
 
 
-class ExecutorEventEmitter(EventEmitter[Event, Arg, Kwarg]):
+class ExecutorEventEmitter(EventEmitter):
     """An event emitter class which runs handlers in a ``concurrent.futures``
     executor.
 
@@ -59,9 +51,9 @@ class ExecutorEventEmitter(EventEmitter[Event, Arg, Kwarg]):
 
     def _emit_run(
         self,
-        f: HandlerP[Event, Arg, Kwarg],
-        args: Tuple[Union[Arg, Exception, Event, InternalEvent, AnyHandlerP], ...],
-        kwargs: Dict[str, Kwarg],
+        f: Callable,
+        args: Tuple[Any, ...],
+        kwargs: Dict[str, Any],
     ):
         future: Future = self._executor.submit(f, *args, **kwargs)
 

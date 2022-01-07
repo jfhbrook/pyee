@@ -1,22 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Optional, Tuple
 
-from pyee.base import (
-    AnyHandlerP,
-    Arg,
-    Event,
-    EventEmitter,
-    HandlerP,
-    InternalEvent,
-    Kwarg,
-)
+from pyee.base import EventEmitter
 
 __all__ = ["AsyncIOEventEmitter"]
 
 
-class AsyncIOEventEmitter(EventEmitter[Event, Arg, Kwarg]):
+class AsyncIOEventEmitter(EventEmitter):
     """An event emitter class which can run asyncio coroutines in addition to
     synchronous blocking functions. For example::
 
@@ -48,9 +40,9 @@ class AsyncIOEventEmitter(EventEmitter[Event, Arg, Kwarg]):
 
     def _emit_run(
         self,
-        f: HandlerP[Event, Arg, Kwarg],
-        args: Tuple[Union[Arg, Exception, Event, InternalEvent, AnyHandlerP], ...],
-        kwargs: Dict[str, Kwarg],
+        f: Callable,
+        args: Tuple[Any, ...],
+        kwargs: Dict[str, Any],
     ):
         try:
             coro: Any = f(*args, **kwargs)

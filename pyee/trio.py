@@ -2,29 +2,11 @@
 
 from contextlib import AbstractAsyncContextManager, asynccontextmanager
 from types import TracebackType
-from typing import (
-    AsyncGenerator,
-    Awaitable,
-    Callable,
-    Dict,
-    Optional,
-    Tuple,
-    Type,
-    Union,
-)
+from typing import Any, AsyncGenerator, Awaitable, Callable, Dict, Optional, Tuple, Type
 
 import trio
 
-from pyee.base import (
-    AnyHandlerP,
-    Arg,
-    Event,
-    EventEmitter,
-    HandlerP,
-    InternalEvent,
-    Kwarg,
-    PyeeError,
-)
+from pyee.base import EventEmitter, PyeeError
 
 __all__ = ["TrioEventEmitter"]
 
@@ -33,7 +15,7 @@ Nursery = trio.Nursery
 NurseryManager = AbstractAsyncContextManager[trio.Nursery]
 
 
-class TrioEventEmitter(EventEmitter[Event, Arg, Kwarg]):
+class TrioEventEmitter(EventEmitter):
     """An event emitter class which can run trio tasks in a trio nursery.
 
     By default, this class will lazily create both a nursery manager (the
@@ -83,9 +65,9 @@ class TrioEventEmitter(EventEmitter[Event, Arg, Kwarg]):
 
     def _async_runner(
         self,
-        f: HandlerP[Event, Arg, Kwarg],
-        args: Tuple[Union[Arg, Exception, Event, InternalEvent, AnyHandlerP], ...],
-        kwargs: Dict[str, Kwarg],
+        f: Callable,
+        args: Tuple[Any, ...],
+        kwargs: Dict[str, Any],
     ) -> Callable[[], Awaitable[None]]:
         async def runner() -> None:
             try:
@@ -97,9 +79,9 @@ class TrioEventEmitter(EventEmitter[Event, Arg, Kwarg]):
 
     def _emit_run(
         self,
-        f: HandlerP[Event, Arg, Kwarg],
-        args: Tuple[Union[Arg, Exception, Event, InternalEvent, AnyHandlerP]],
-        kwargs: Dict[str, Kwarg],
+        f: Callable,
+        args: Tuple[Any, ...],
+        kwargs: Dict[str, Any],
     ) -> None:
         if not self._nursery:
             raise PyeeError("Uninitialized trio nursery")
@@ -108,7 +90,7 @@ class TrioEventEmitter(EventEmitter[Event, Arg, Kwarg]):
     @asynccontextmanager
     async def context(
         self,
-    ) -> AsyncGenerator["TrioEventEmitter[Event, Arg, Kwarg]", None]:
+    ) -> AsyncGenerator["TrioEventEmitter", None]:
         """Returns an async contextmanager which manages the underlying
         nursery to the EventEmitter. The ``TrioEventEmitter``'s
         async context management methods are implemented using this
@@ -125,7 +107,7 @@ class TrioEventEmitter(EventEmitter[Event, Arg, Kwarg]):
 
     async def __aenter__(self) -> "TrioEventEmitter":
         self._context: Optional[
-            AbstractAsyncContextManager["TrioEventEmitter[Event, Arg, Kwarg]"]
+            AbstractAsyncContextManager["TrioEventEmitter"]
         ] = self.context()
         return await self._context.__aenter__()
 
