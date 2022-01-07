@@ -6,9 +6,9 @@ import pytest
 import pytest_asyncio.plugin  # noqa
 
 try:
-    from asyncio.exceptions import TimeoutError
+    from asyncio.exceptions import TimeoutError  # type: ignore
 except ImportError:
-    from concurrent.futures import TimeoutError
+    from concurrent.futures import TimeoutError  # type: ignore
 
 from mock import Mock
 from twisted.internet.defer import succeed
