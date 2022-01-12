@@ -9,7 +9,7 @@ New features:
 
 - Type annotations and type checking with ``pyright``
 - Exprimental ``pyee.cls`` module exposing an ``@evented`` class decorator
-  and a `@on` method decorator (see PR #84)
+  and a ``@on`` method decorator (see PR #84)
 
 Moved/deprecated interfaces:
 
