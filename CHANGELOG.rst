@@ -7,6 +7,7 @@ Compatibility:
 
 New features:
 
+- New ``EventEmitter.event_names()`` method (see PR #96)
 - Type annotations and type checking with ``pyright``
 - Exprimental ``pyee.cls`` module exposing an ``@evented`` class decorator
   and a ``@on`` method decorator (see PR #84)
