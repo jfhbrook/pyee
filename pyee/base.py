@@ -2,7 +2,7 @@
 
 from collections import OrderedDict
 from threading import Lock
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 
 class PyeeException(Exception):
@@ -122,9 +122,9 @@ class EventEmitter:
     ) -> None:
         f(*args, **kwargs)
 
-    def event_names(self) -> List[str]:
+    def event_names(self) -> Set[str]:
         """Get a list of events that this emitter is listening to."""
-        return list(self._events.keys())
+        return set(self._events.keys())
 
     def _emit_handle_potential_error(self, event: str, error: Any) -> None:
         if event == "error":

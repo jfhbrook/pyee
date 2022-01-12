@@ -22,7 +22,7 @@ def test_emit_sync():
         call_me()
         assert data == "emitter is emitted!"
 
-    assert ee.event_names() == ["event"]
+    assert ee.event_names() == {"event"}
 
     # Making sure data is passed propers
     ee.emit("event", "emitter is emitted!", error=False)
@@ -45,7 +45,7 @@ def test_emit_error():
     def on_error(exc):
         call_me()
 
-    assert ee.event_names() == ["error"]
+    assert ee.event_names() == {"error"}
 
     # No longer raises and error instead return True indicating handled
     assert ee.emit("error", test_exception) is True
@@ -60,7 +60,7 @@ def test_emit_return():
     call_me = Mock()
     ee = EventEmitter()
 
-    assert ee.event_names() == []
+    assert ee.event_names() == set()
 
     # make sure emitting without a callback returns False
     assert not ee.emit("data")
@@ -85,7 +85,7 @@ def test_new_listener_event():
     def event_handler(data):
         pass
 
-    assert ee.event_names() == ["new_listener", "event"]
+    assert ee.event_names() == {"new_listener", "event"}
 
     call_me.assert_called_once_with("event", event_handler)
 
@@ -114,7 +114,7 @@ def test_listener_removal():
 
     ee.on("event", fourth)
 
-    assert ee.event_names() == ["event"]
+    assert ee.event_names() == {"event"}
 
     assert ee._events["event"] == OrderedDict(
         [(first, first), (second, second), (third, third), (fourth, fourth)]
@@ -147,7 +147,7 @@ def test_listener_removal_on_emit():
     ee.on("remove", should_remove)
     ee.on("remove", call_me)
 
-    assert ee.event_names() == ["remove"]
+    assert ee.event_names() == {"remove"}
 
     ee.emit("remove")
 
@@ -160,7 +160,7 @@ def test_listener_removal_on_emit():
     ee.on("remove", call_me)
     ee.on("remove", should_remove)
 
-    assert ee.event_names() == ["remove"]
+    assert ee.event_names() == {"remove"}
 
     ee.emit("remove")
 
@@ -183,13 +183,13 @@ def test_once():
     # Tests to make sure that after event is emitted that it's gone.
     ee.once("event", once_handler)
 
-    assert ee.event_names() == ["event"]
+    assert ee.event_names() == {"event"}
 
     ee.emit("event", "emitter is emitted!")
 
     call_me.assert_called_once()
 
-    assert ee.event_names() == []
+    assert ee.event_names() == set()
 
     assert "event" not in ee._events
 
@@ -205,12 +205,12 @@ def test_once_removal():
     handle = ee.once("event", once_handler)
 
     assert handle == once_handler
-    assert ee.event_names() == ["event"]
+    assert ee.event_names() == {"event"}
 
     ee.remove_listener("event", handle)
 
     assert "event" not in ee._events
-    assert ee.event_names() == []
+    assert ee.event_names() == set()
 
 
 def test_listeners():
