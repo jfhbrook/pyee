@@ -15,8 +15,7 @@ EMIT_WRAPPERS: Dict[EventEmitter, Callable[[], None]] = dict()
 
 
 def unwrap(event_emitter: EventEmitter) -> None:
-    """Unwrap an uplifted EventEmitter, returning it to its prior state.
-    """
+    """Unwrap an uplifted EventEmitter, returning it to its prior state."""
     if event_emitter in EMIT_WRAPPERS:
         EMIT_WRAPPERS[event_emitter]()
 
