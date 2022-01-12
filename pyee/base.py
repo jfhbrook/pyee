@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from collections import defaultdict, OrderedDict
+from collections import OrderedDict
 from threading import Lock
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
@@ -44,7 +44,7 @@ class EventEmitter:
         self._events: Dict[
             str,
             "OrderedDict[Callable, Callable]",
-        ] = defaultdict(OrderedDict)
+        ] = dict()
         self._lock: Lock = Lock()
 
     def on(self, event: str, f: Optional[Callable] = None) -> Callable:
@@ -110,6 +110,8 @@ class EventEmitter:
         # different for `once` handlers, where v is a wrapped version
         # of k which removes itself before calling k
         with self._lock:
+            if event not in self._events:
+                self._events[event] = OrderedDict()
             self._events[event][k] = v
 
     def _emit_run(
@@ -140,7 +142,7 @@ class EventEmitter:
         handled = False
 
         with self._lock:
-            funcs = list(self._events[event].values())
+            funcs = list(self._events.get(event, OrderedDict()).values())
         for f in funcs:
             self._emit_run(f, args, kwargs)
             handled = True
@@ -207,6 +209,8 @@ class EventEmitter:
     def _remove_listener(self, event: str, f: Callable) -> None:
         """Naked unprotected removal."""
         self._events[event].pop(f)
+        if not len(self._events[event]):
+            del self._events[event]
 
     def remove_listener(self, event: str, f: Callable) -> None:
         """Removes the function ``f`` from ``event``."""
@@ -221,7 +225,7 @@ class EventEmitter:
             if event is not None:
                 self._events[event] = OrderedDict()
             else:
-                self._events = defaultdict(OrderedDict)
+                self._events = dict()
 
     def listeners(self, event: str) -> List[Callable]:
         """Returns a list of all listeners registered to the ``event``."""
