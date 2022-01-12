@@ -13,19 +13,19 @@ New features:
 
 Moved/deprecated interfaces:
 
-- pyee.TwistedEventEmitter -> pyee.twisted.TwistedEventEmitter
-- pyee.AsyncIOEventEmitter -> pyee.asyncio.AsyncIOEventEmitter
-- pyee.ExecutorEventEmitter -> pyee.executor.ExecutorEventEmitter
-- pyee.TrioEventEmitter -> pyee.trio.TrioEventEmitter
+- ``pyee.TwistedEventEmitter`` -> ``pyee.twisted.TwistedEventEmitter``
+- ``pyee.AsyncIOEventEmitter`` -> ``pyee.asyncio.AsyncIOEventEmitter``
+- ``pyee.ExecutorEventEmitter`` -> ``pyee.executor.ExecutorEventEmitter``
+- ``pyee.TrioEventEmitter`` -> ``pyee.trio.TrioEventEmitter``
 
 Removed interfaces:
 
-- pyee.CompatEventEmitter
+- ``pyee.CompatEventEmitter``
 
 Documentation fixes:
 
-- Add docstring to BaseEventEmitter
-- Update docstrings to reference EventEmitter instead of BaseEventEmitter
+- Add docstring to ``BaseEventEmitter``
+- Update docstrings to reference ``EventEmitter`` instead of ``BaseEventEmitter``
   throughout
 
 Developer Setup & CI:
