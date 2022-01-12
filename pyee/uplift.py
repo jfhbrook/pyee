@@ -15,6 +15,8 @@ EMIT_WRAPPERS: Dict[EventEmitter, Callable[[], None]] = dict()
 
 
 def unwrap(event_emitter: EventEmitter) -> None:
+    """Unwrap an uplifted EventEmitter, returning it to its prior state.
+    """
     if event_emitter in EMIT_WRAPPERS:
         EMIT_WRAPPERS[event_emitter]()
 
@@ -115,8 +117,8 @@ def uplift(
     method was handled by either emitter. Execution order prefers the event
     emitter on which ``emit`` was called.
 
-    ``uplift`` also adds an ``unwrap`` method to both instances, either of
-    which will unwrap both ``emit`` methods when called.
+    The ``unwrap`` function may be called on either instance; this will
+    unwrap both ``emit`` methods.
 
     The ``error_handling`` flag can be configured to control what happens to
     unhandled errors:
