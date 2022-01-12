@@ -35,7 +35,7 @@ format:
 build_docs:
 	if [ -d venv ]; then . ./venv/bin/activate; fi; cd docs && make html
 
-serve_docs:
+serve_docs: build_docs
 	if [ -d venv ]; then . ./venv/bin/activate; fi; cd docs/_build/html && python -m http.server
 
 clean:

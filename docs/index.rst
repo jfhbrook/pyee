@@ -21,19 +21,19 @@ API Docs:
 
 .. automodule:: pyee
 
-.. autoclass:: EventEmitter
+.. autoclass:: pyee.EventEmitter
     :members:
 
-.. autoclass:: AsyncIOEventEmitter
+.. autoclass:: pyee.asyncio.AsyncIOEventEmitter
     :members:
 
-.. autoclass:: TwistedEventEmitter
+.. autoclass:: pyee.twisted.TwistedEventEmitter
     :members:
 
-.. autoclass:: ExecutorEventEmitter
+.. autoclass:: pyee.executor.ExecutorEventEmitter
     :members:
 
-.. autoclass:: TrioEventEmitter
+.. autoclass:: pyee.trio.TrioEventEmitter
     :members:
 
 .. autoclass:: BaseEventEmitter

@@ -32,7 +32,7 @@ Example
 from warnings import warn
 
 from pyee.base import EventEmitter as EventEmitter
-from pyee.base import PyeeException
+from pyee.base import PyeeException, PyeeError
 
 
 class BaseEventEmitter(EventEmitter):
@@ -51,7 +51,7 @@ class BaseEventEmitter(EventEmitter):
         super(BaseEventEmitter, self).__init__()
 
 
-__all__ = ["BaseEventEmitter", "EventEmitter", "PyeeException"]
+__all__ = ["BaseEventEmitter", "EventEmitter", "PyeeException", "PyeeError"]
 
 try:
     from pyee.asyncio import AsyncIOEventEmitter as _AsyncIOEventEmitter  # noqa
