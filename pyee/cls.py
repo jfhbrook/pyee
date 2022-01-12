@@ -1,14 +1,19 @@
-from collections import namedtuple
+from dataclasses import dataclass
 from functools import wraps
+from typing import Callable, List, Type, TypeVar
 
 from pyee import EventEmitter
 
-EventHandler = namedtuple("Event", field_names=["event", "method"])
+
+@dataclass
+class Handler:
+    event: str
+    method: Callable
 
 
 class Handlers:
     def __init__(self):
-        self.reset()
+        self._handlers: List[Handler] = []
 
     def append(self, handler):
         self._handlers.append(handler)
@@ -23,14 +28,14 @@ class Handlers:
 _handlers = Handlers()
 
 
-def on(event):
+def on(event: str) -> Callable[[Callable], Callable]:
     """
     Register an event handler on an evented class. See the ``evented`` class
     decorator for a full example.
     """
 
-    def decorator(method):
-        _handlers.append(EventHandler(event=event, method=method))
+    def decorator(method: Callable) -> Callable:
+        _handlers.append(Handler(event=event, method=method))
         return method
 
     return decorator
@@ -44,7 +49,10 @@ def _bind(self, method):
     return bound
 
 
-def evented(cls):
+Cls = TypeVar(name="Cls", bound=Type)
+
+
+def evented(cls: Cls) -> Cls:
     """
     Configure an evented class.
 
@@ -85,10 +93,10 @@ def evented(cls):
             async def event_handler(self, *args, **kwargs):
                 await self.some_async_action(*args, **kwargs)
     """
-    handlers = list(_handlers)
+    handlers: List[Handler] = list(_handlers)
     _handlers.reset()
 
-    og_init = cls.__init__
+    og_init: Callable = cls.__init__
 
     @wraps(cls.__init__)
     def init(self, *args, **kwargs):
