@@ -9,10 +9,6 @@ class PyeeException(Exception):
     """An exception internal to pyee."""
 
 
-class PyeeError(PyeeException):
-    """An error internal to pyee."""
-
-
 class EventEmitter:
     """The base event emitter class. All other event emitters inherit from
     this class.
@@ -132,7 +128,7 @@ class EventEmitter:
             if isinstance(error, Exception):
                 raise error
             else:
-                raise PyeeError(f"Uncaught, unspecified 'error' event: {error}")
+                raise PyeeException(f"Uncaught, unspecified 'error' event: {error}")
 
     def _call_handlers(
         self,
