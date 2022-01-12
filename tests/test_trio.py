@@ -2,7 +2,6 @@
 
 import pytest
 import pytest_trio.plugin  # noqa
-
 import trio
 
 from pyee import TrioEventEmitter

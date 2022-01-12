@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from asyncio import ensure_future, Future, iscoroutine
-from pyee._base import EventEmitter
+from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine
+from typing import Any, Callable, cast, Dict, Optional, Tuple
+
+from pyee.base import EventEmitter
 
 __all__ = ["AsyncIOEventEmitter"]
 
@@ -32,33 +34,40 @@ class AsyncIOEventEmitter(EventEmitter):
     coroutine is scheduled in a fire-and-forget fashion.
     """
 
-    def __init__(self, loop=None):
+    def __init__(self, loop: Optional[AbstractEventLoop] = None):
         super(AsyncIOEventEmitter, self).__init__()
-        self._loop = loop
+        self._loop: Optional[AbstractEventLoop] = loop
 
-    def _emit_run(self, f, args, kwargs):
+    def _emit_run(
+        self,
+        f: Callable,
+        args: Tuple[Any, ...],
+        kwargs: Dict[str, Any],
+    ):
         try:
-            coro = f(*args, **kwargs)
+            coro: Any = f(*args, **kwargs)
         except Exception as exc:
             self.emit("error", exc)
         else:
             if iscoroutine(coro):
                 if self._loop:
-                    f = ensure_future(coro, loop=self._loop)
+                    # ensure_future is *extremely* cranky about the types here,
+                    # but this is relatively well-tested and I think the types
+                    # are more strict than they should be
+                    fut: Any = ensure_future(cast(Any, coro), loop=self._loop)
                 else:
-                    f = ensure_future(coro)
+                    fut = ensure_future(cast(Any, coro))
             elif isinstance(coro, Future):
-                f = coro
+                fut = cast(Any, coro)
             else:
-                f = None
+                return
 
-            if f:
+            def callback(f):
+                if f.cancelled():
+                    return
 
-                @f.add_done_callback
-                def _callback(f):
-                    if f.cancelled():
-                        return
+                exc: Exception = f.exception()
+                if exc:
+                    self.emit("error", exc)
 
-                    exc = f.exception()
-                    if exc:
-                        self.emit("error", exc)
+            fut.add_done_callback(callback)

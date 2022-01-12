@@ -1,1 +1,1 @@
--e .
+typing-extensions==4.0.1

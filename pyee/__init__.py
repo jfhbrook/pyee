@@ -13,7 +13,7 @@ Example
 
 ::
 
-    In [1]: from pyee import EventEmitter
+    In [1]: from pyee.base import EventEmitter
 
     In [2]: ee = EventEmitter()
 
@@ -31,7 +31,8 @@ Example
 
 from warnings import warn
 
-from pyee._base import EventEmitter, PyeeException
+from pyee.base import EventEmitter as EventEmitter
+from pyee.base import PyeeException
 
 
 class BaseEventEmitter(EventEmitter):
@@ -53,28 +54,84 @@ class BaseEventEmitter(EventEmitter):
 __all__ = ["BaseEventEmitter", "EventEmitter", "PyeeException"]
 
 try:
-    from pyee._asyncio import AsyncIOEventEmitter  # noqa
+    from pyee.asyncio import AsyncIOEventEmitter as _AsyncIOEventEmitter  # noqa
+
+    class AsyncIOEventEmitter(_AsyncIOEventEmitter):
+        """
+        AsyncIOEventEmitter has been moved to the pyee.asyncio module.
+        """
+
+        def __init__(self, loop=None):
+            warn(
+                DeprecationWarning(
+                    "pyee.AsyncIOEventEmitter has been moved to the pyee.asyncio "
+                    "module."
+                )
+            )
+            super(AsyncIOEventEmitter, self).__init__(loop=loop)
 
     __all__.append("AsyncIOEventEmitter")
 except ImportError:
     pass
 
 try:
-    from pyee._twisted import TwistedEventEmitter  # noqa
+    from pyee.twisted import TwistedEventEmitter as _TwistedEventEmitter  # noqa
+
+    class TwistedEventEmitter(_TwistedEventEmitter):
+        """
+        TwistedEventEmitter has been moved to the pyee.twisted module.
+        """
+
+        def __init__(self):
+            warn(
+                DeprecationWarning(
+                    "pyee.TwistedEventEmitter has been moved to the pyee.twisted "
+                    "module."
+                )
+            )
+            super(TwistedEventEmitter, self).__init__()
 
     __all__.append("TwistedEventEmitter")
 except ImportError:
     pass
 
 try:
-    from pyee._executor import ExecutorEventEmitter  # noqa
+    from pyee.executor import ExecutorEventEmitter as _ExecutorEventEmitter  # noqa
+
+    class ExecutorEventEmitter(_ExecutorEventEmitter):
+        """
+        ExecutorEventEmitter has been moved to the pyee.executor module.
+        """
+
+        def __init__(self, executor=None):
+            warn(
+                DeprecationWarning(
+                    "pyee.ExecutorEventEmitter has been moved to the pyee.executor "
+                    "module."
+                )
+            )
+            super(ExecutorEventEmitter, self).__init__(executor=executor)
 
     __all__.append("ExecutorEventEmitter")
 except ImportError:
     pass
 
 try:
-    from pyee._trio import TrioEventEmitter  # noqa
+    from pyee.trio import TrioEventEmitter as _TrioEventEmitter  # noqa
+
+    class TrioEventEmitter(_TrioEventEmitter):
+        """
+        TrioEventEmitter has been moved to the pyee.trio module.
+        """
+
+        def __init__(self, nursery=None, manager=None):
+            warn(
+                DeprecationWarning(
+                    "pyee.TrioEventEmitter has been moved to the pyee.trio module."
+                )
+            )
+
+            super(TrioEventEmitter, self).__init__(nursery=nursery, manager=manager)
 
     __all__.append("TrioEventEmitter")
 except (ImportError, SyntaxError):

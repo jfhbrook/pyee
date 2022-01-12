@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from pyee._base import EventEmitter
+from typing import Any, Callable, Dict, Tuple
 
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
+
+from pyee.base import EventEmitter, PyeeError
 
 try:
     from asyncio import iscoroutine
@@ -49,28 +51,42 @@ class TwistedEventEmitter(EventEmitter):
     def __init__(self):
         super(TwistedEventEmitter, self).__init__()
 
-    def _emit_run(self, f, args, kwargs):
+    def _emit_run(
+        self,
+        f: Callable,
+        args: Tuple[Any, ...],
+        kwargs: Dict[str, Any],
+    ) -> None:
+        d = None
         try:
             result = f(*args, **kwargs)
         except Exception:
             self.emit("failure", Failure())
         else:
             if iscoroutine and iscoroutine(result):
-                d = ensureDeferred(result)
+                d: Deferred[Any] = ensureDeferred(result)
             elif isinstance(result, Deferred):
                 d = result
             else:
-                d = None
-            if d:
+                return
 
-                @d.addErrback
-                def _errback(failure):
-                    if failure:
-                        self.emit("failure", failure)
+            def errback(failure: Failure) -> None:
+                if failure:
+                    self.emit("failure", failure)
 
-    def _emit_handle_potential_error(self, event, error):
+            d.addErrback(errback)
+
+    def _emit_handle_potential_error(self, event: str, error: Any) -> None:
         if event == "failure":
-            self.emit("error", error.value)
+            if isinstance(error, Failure):
+                try:
+                    error.raiseException()
+                except Exception as exc:
+                    self.emit("error", exc)
+            elif isinstance(error, Exception):
+                self.emit("error", error)
+            else:
+                self.emit("error", PyeeError(f"Unexpected failure object: {error}"))
         else:
             (super(TwistedEventEmitter, self))._emit_handle_potential_error(
                 event, error

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from pyee._base import EventEmitter
+from concurrent.futures import Executor, Future, ThreadPoolExecutor
+from types import TracebackType
+from typing import Any, Callable, Dict, Optional, Tuple, Type
 
-from concurrent.futures import ThreadPoolExecutor
+from pyee.base import EventEmitter
 
 __all__ = ["ExecutorEventEmitter"]
 
@@ -40,29 +42,38 @@ class ExecutorEventEmitter(EventEmitter):
     No effort is made to ensure thread safety, beyond using an executor.
     """
 
-    def __init__(self, executor=None):
+    def __init__(self, executor: Executor = None):
         super(ExecutorEventEmitter, self).__init__()
         if executor:
-            self._executor = executor
+            self._executor: Executor = executor
         else:
             self._executor = ThreadPoolExecutor()
 
-    def _emit_run(self, f, args, kwargs):
-        future = self._executor.submit(f, *args, **kwargs)
+    def _emit_run(
+        self,
+        f: Callable,
+        args: Tuple[Any, ...],
+        kwargs: Dict[str, Any],
+    ):
+        future: Future = self._executor.submit(f, *args, **kwargs)
 
         @future.add_done_callback
-        def _callback(f):
-            exc = f.exception()
-            if exc:
+        def _callback(f: Future) -> None:
+            exc: Optional[BaseException] = f.exception()
+            if isinstance(exc, Exception):
                 self.emit("error", exc)
+            elif exc is not None:
+                raise exc
 
-    def shutdown(self, wait=True):
+    def shutdown(self, wait: bool = True) -> None:
         """Call ``shutdown`` on the internal executor."""
 
         self._executor.shutdown(wait=wait)
 
-    def __enter__(self):
+    def __enter__(self) -> "ExecutorEventEmitter":
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(
+        self, type: Type[Exception], value: Exception, traceback: TracebackType
+    ) -> Optional[bool]:
         self.shutdown()

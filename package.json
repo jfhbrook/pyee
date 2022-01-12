@@ -1,0 +1,22 @@
+{
+  "name": "pyee-devtools",
+  "version": "1.0.0",
+  "description": "Node.js tools to support developing pyee",
+  "main": "index.js",
+  "scripts": {
+    "pyright": "pyright ./pyee ./tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jfhbrook/pyee.git"
+  },
+  "author": "Josh Holbrook",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jfhbrook/pyee/issues"
+  },
+  "homepage": "https://github.com/jfhbrook/pyee#readme",
+  "devDependencies": {
+    "pyright": "^1.1.159"
+  }
+}

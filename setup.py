@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from os import path
+
 from setuptools import find_packages, setup
 
 README_rst = path.join(path.abspath(path.dirname(__file__)), "README.rst")
@@ -20,6 +21,7 @@ setup(
     url="https://github.com/jfhbrook/pyee",
     license="MIT",
     keywords=["events", "emitter", "node.js", "node", "eventemitter", "event_emitter"],
+    install_requires=["typing-extensions"],
     classifiers=[
         "Programming Language :: Python",
         "Development Status :: 4 - Beta",

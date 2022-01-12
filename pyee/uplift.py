@@ -1,15 +1,36 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
+from typing import Any, Callable, Dict, Optional, Tuple, Type, TypeVar, Union
+import warnings
+
+from typing_extensions import Literal
+
+from pyee.base import EventEmitter
+
+UpliftingEventEmitter = TypeVar(name="UpliftingEventEmitter", bound=EventEmitter)
 
 
-def _wrap(left, right, error_handler, proxy_new_listener):
+EMIT_WRAPPERS: Dict[EventEmitter, Callable[[], None]] = dict()
+
+
+def unwrap(event_emitter: EventEmitter) -> None:
+    if event_emitter in EMIT_WRAPPERS:
+        EMIT_WRAPPERS[event_emitter]()
+
+
+def _wrap(
+    left: EventEmitter,
+    right: EventEmitter,
+    error_handler: Any,
+    proxy_new_listener: bool,
+) -> None:
     left_emit = left.emit
-    left_unwrap = getattr(left, "unwrap", None)
+    left_unwrap: Optional[Callable[[], None]] = EMIT_WRAPPERS.get(left)
 
     @wraps(left_emit)
-    def wrapped_emit(event, *args, **kwargs):
-        left_handled = left._call_handlers(event, args, kwargs)
+    def wrapped_emit(event: str, *args: Any, **kwargs: Any) -> bool:
+        left_handled: bool = left._call_handlers(event, args, kwargs)
 
         # Do it for the right side
         if proxy_new_listener or event != "new_listener":
@@ -26,22 +47,33 @@ def _wrap(left, right, error_handler, proxy_new_listener):
 
         return handled
 
-    def unwrap():
+    def _unwrap() -> None:
+        warnings.warn(
+            DeprecationWarning(
+                "Patched ee.unwrap() is deprecated and will be removed in a "
+                "future release. Use pyee.uplift.unwrap instead."
+            )
+        )
+        unwrap(left)
+
+    def unwrap_hook() -> None:
         left.emit = left_emit
         if left_unwrap:
-            left.unwrap = left_unwrap
+            EMIT_WRAPPERS[left] = left_unwrap
         else:
-            del left.unwrap
+            del EMIT_WRAPPERS[left]
+            del left.unwrap  # type: ignore
         left.emit = left_emit
 
-        if hasattr(right, "unwrap"):
-            right.unwrap()
+        unwrap(right)
 
     left.emit = wrapped_emit
-    left.unwrap = unwrap
+
+    EMIT_WRAPPERS[left] = unwrap_hook
+    left.unwrap = _unwrap  # type: ignore
 
 
-_PROXY_NEW_LISTENER_SETTINGS = dict(
+_PROXY_NEW_LISTENER_SETTINGS: Dict[str, Tuple[bool, bool]] = dict(
     forward=(False, True),
     backward=(True, False),
     both=(True, True),
@@ -49,9 +81,20 @@ _PROXY_NEW_LISTENER_SETTINGS = dict(
 )
 
 
+ErrorStrategy = Union[Literal["new"], Literal["underlying"], Literal["neither"]]
+ProxyStrategy = Union[
+    Literal["forward"], Literal["backward"], Literal["both"], Literal["neither"]
+]
+
+
 def uplift(
-    cls, underlying, error_handling="new", proxy_new_listener="forward", *args, **kwargs
-):
+    cls: Type[UpliftingEventEmitter],
+    underlying: EventEmitter,
+    error_handling: ErrorStrategy = "new",
+    proxy_new_listener: ProxyStrategy = "forward",
+    *args: Any,
+    **kwargs: Any
+) -> UpliftingEventEmitter:
     """A helper to create instances of an event emitter ``cls`` that inherits
     event behavior from an ``underlying`` event emitter instance.
 
@@ -121,9 +164,9 @@ def uplift(
         underlying_proxy_new_listener,
     ) = _PROXY_NEW_LISTENER_SETTINGS[proxy_new_listener]
 
-    new = cls(*args, **kwargs)
+    new: UpliftingEventEmitter = cls(*args, **kwargs)
 
-    uplift_error_handlers = dict(
+    uplift_error_handlers: Dict[str, Tuple[EventEmitter, EventEmitter]] = dict(
         new=(new, new), underlying=(underlying, underlying), neither=(new, underlying)
     )
 
