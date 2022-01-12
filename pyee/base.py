@@ -123,7 +123,7 @@ class EventEmitter:
         f(*args, **kwargs)
 
     def event_names(self) -> Set[str]:
-        """Get a list of events that this emitter is listening to."""
+        """Get a set of events that this emitter is listening to."""
         return set(self._events.keys())
 
     def _emit_handle_potential_error(self, event: str, error: Any) -> None:
