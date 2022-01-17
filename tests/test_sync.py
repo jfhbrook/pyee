@@ -240,6 +240,13 @@ def test_listeners():
     call_me.assert_not_called()
 
 
+def test_listeners_does_work_with_unknown_listeners():
+    """`listeners()` should not throw."""
+    ee = EventEmitter()
+    listeners = ee.listeners("event")
+    assert listeners == []
+
+
 def test_properties_preserved():
     """Test that the properties of decorated functions are preserved."""
 

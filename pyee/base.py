@@ -226,4 +226,4 @@ class EventEmitter:
 
     def listeners(self, event: str) -> List[Callable]:
         """Returns a list of all listeners registered to the ``event``."""
-        return list(self._events[event].keys())
+        return list(self._events.get(event, OrderedDict()).keys())
