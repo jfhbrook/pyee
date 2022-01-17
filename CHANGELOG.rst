@@ -1,11 +1,38 @@
-Pre-Release
+2022/01/11 Version 9.0.0
 -----------
 
-- Remove dead, untested, un-exposed CompatEventEmitter
-- Add docstring to BaseEventEmitter
-- Update docstrings to reference EventEmitter instead of BaseEventEmitter
+Compatibility:
+
+- Drop 3.6 support
+
+New features:
+
+- New ``EventEmitter.event_names()`` method (see PR #96)
+- Type annotations and type checking with ``pyright``
+- Exprimental ``pyee.cls`` module exposing an ``@evented`` class decorator
+  and a ``@on`` method decorator (see PR #84)
+
+Moved/deprecated interfaces:
+
+- ``pyee.TwistedEventEmitter`` -> ``pyee.twisted.TwistedEventEmitter``
+- ``pyee.AsyncIOEventEmitter`` -> ``pyee.asyncio.AsyncIOEventEmitter``
+- ``pyee.ExecutorEventEmitter`` -> ``pyee.executor.ExecutorEventEmitter``
+- ``pyee.TrioEventEmitter`` -> ``pyee.trio.TrioEventEmitter``
+
+Removed interfaces:
+
+- ``pyee.CompatEventEmitter``
+
+Documentation fixes:
+
+- Add docstring to ``BaseEventEmitter``
+- Update docstrings to reference ``EventEmitter`` instead of ``BaseEventEmitter``
   throughout
-- Move linting tools to test deps (fixed broken build)
+
+Developer Setup & CI:
+
+- Migrated builds from Travis to GitHub Actions
+- Refactor developer setup to use a local virtualenv
 
 2021/8/14 Version 8.2.2
 -----------------------
