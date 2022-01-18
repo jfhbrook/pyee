@@ -91,9 +91,9 @@ class EventEmitter:
 
     def add_listener(self, event: str, f: Callable) -> Callable:
         """Register the function ``f`` to the event name ``event``. This method
-        doesn't afford narrower types than ``EventEmitter#on`` but is a natural
-        pair to ``EventEmitter#listens_to`` and if nothing else has simpler
-        behavior.
+        doesn't afford a narrower return type than ``EventEmitter#on`` but is a
+        natural pair to ``EventEmitter#listens_to`` and if nothing else has
+        stricter arguments and simpler behavior.
         """
         self._add_event_handler(event, f, f)
         return f

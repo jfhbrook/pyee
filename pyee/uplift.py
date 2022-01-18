@@ -106,8 +106,7 @@ def uplift(
     ``AsyncIOEventEmitter`` so that you may register async event handlers
     in your ``asyncio`` app but still be able to receive events from the
     underlying event emitter and call the underlying event emitter's existing
-    handlers. This trick will also often work for a deprecated
-    ``EventEmitter`` instance.
+    handlers.
 
     When called, ``uplift`` instantiates a new instance of ``cls``, passing
     along any unrecognized arguments, and overwrites the ``emit`` method on
