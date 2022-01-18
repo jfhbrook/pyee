@@ -22,6 +22,7 @@ setup(
     license="MIT",
     keywords=["events", "emitter", "node.js", "node", "eventemitter", "event_emitter"],
     install_requires=["typing-extensions"],
+    tests_require=["twisted", "trio"],
     classifiers=[
         "Programming Language :: Python",
         "Development Status :: 4 - Beta",
