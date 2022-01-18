@@ -2,11 +2,14 @@
 
 from collections import OrderedDict
 from threading import Lock
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar, Union
 
 
 class PyeeException(Exception):
     """An exception internal to pyee."""
+
+
+Handler = TypeVar(name="Handler", bound=Callable)
 
 
 class EventEmitter:
@@ -43,7 +46,9 @@ class EventEmitter:
         ] = dict()
         self._lock: Lock = Lock()
 
-    def on(self, event: str, f: Optional[Callable] = None) -> Callable:
+    def on(
+        self, event: str, f: Optional[Handler] = None
+    ) -> Union[Handler, Callable[[Handler], Handler]]:
         """Registers the function ``f`` to the event name ``event``, if provided.
 
         If ``f`` isn't provided, this method calls ``EventEmitter#listens_to`, and
@@ -71,7 +76,7 @@ class EventEmitter:
         else:
             return self.add_listener(event, f)
 
-    def listens_to(self, event: str) -> Callable[[Callable], Callable]:
+    def listens_to(self, event: str) -> Callable[[Handler], Handler]:
         """Returns a decorator which will register the decorated function to
         the event name ``event``. Usage::
 
@@ -83,13 +88,13 @@ class EventEmitter:
         type safety over ``EventEmitter#on``.
         """
 
-        def on(f: Callable) -> Callable:
+        def on(f: Handler) -> Handler:
             self._add_event_handler(event, f, f)
             return f
 
         return on
 
-    def add_listener(self, event: str, f: Callable) -> Callable:
+    def add_listener(self, event: str, f: Handler) -> Handler:
         """Register the function ``f`` to the event name ``event``. This method
         doesn't afford a narrower return type than ``EventEmitter#on`` but is a
         natural pair to ``EventEmitter#listens_to`` and if nothing else has
