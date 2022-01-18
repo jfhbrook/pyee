@@ -1,5 +1,11 @@
-2022/01/11 Version 9.0.0
------------
+2022/01/17 Version 9.0.1
+------------------------
+
+- Fix regression where ``EventEmitter#listeners`` began crashing when called
+  with uninitialized listeners
+
+2022/01/17 Version 9.0.0
+------------------------
 
 Compatibility:
 
