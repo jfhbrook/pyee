@@ -1,3 +1,8 @@
+2022/01/17 Version 9.0.2
+------------------------
+
+- Add ``tests_require`` to setup.py (attempt to fix COPR build)
+
 2022/01/17 Version 9.0.1
 ------------------------
 
