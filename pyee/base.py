@@ -78,7 +78,7 @@ class EventEmitter:
 
     def listens_to(self, event: str) -> Callable[[Handler], Handler]:
         """Returns a decorator which will register the decorated function to
-        the event name ``event``. Usage::
+        the event name ``event``::
 
             @ee.listens_to("event")
             def data_handler(data):
@@ -95,10 +95,15 @@ class EventEmitter:
         return on
 
     def add_listener(self, event: str, f: Handler) -> Handler:
-        """Register the function ``f`` to the event name ``event``. This method
-        doesn't afford a narrower return type than ``EventEmitter#on`` but is a
-        natural pair to ``EventEmitter#listens_to`` and if nothing else has
-        stricter arguments and simpler behavior.
+        """Register the function ``f`` to the event name ``event``::
+
+            def data_handler(data):
+                print(data)
+
+            h = ee.add_listener("event", data_handler)
+
+        By not supporting the decorator use case, this method has improved
+        type safety over ``EventEmitter#on``.
         """
         self._add_event_handler(event, f, f)
         return f

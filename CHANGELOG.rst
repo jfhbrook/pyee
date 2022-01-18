@@ -1,7 +1,17 @@
+2022/01/18 Version 9.0.3
+------------------------
+
+- Improve type safety of ``EventEmitter#on``, ``EventEmitter#add_listener``
+  and ``EventEmitter#listens_to`` by parameterizing the ``Handler``
+- Minor fixes to documentation
+
 2022/01/17 Version 9.0.2
 ------------------------
 
-- Add ``tests_require`` to setup.py (attempt to fix COPR build)
+- Add ``tests_require`` to setup.py, fixing COPR build
+- Install as an editable package in ``environment.yml`` and
+  ``requirements_docs.txt``, fixing Conda workflows and ReadTheDocs
+  respectively
 
 2022/01/17 Version 9.0.1
 ------------------------

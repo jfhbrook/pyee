@@ -62,7 +62,7 @@ author = "Josh Holbrook"
 # built documents.
 #
 # The short X.Y version.
-version = "9.0.2"
+version = "9.0.3"
 
 # The full version, including alpha/beta/rc tags.
 release = version
