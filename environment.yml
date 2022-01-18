@@ -9,4 +9,6 @@ dependencies:
   - twine=3.2.0
   - twisted=20.3.0
   - pip:
+    - -r requirements.txt
     - -r requirements_dev.txt
+    - -e .
