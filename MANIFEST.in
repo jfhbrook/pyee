@@ -4,4 +4,5 @@ include CHANGELOG.rst
 include CONTRIBUTORS.rst
 include DEVELOPMENT.rst
 include version.txt
+include pyee/py.typed
 recursive-include tests *.py
