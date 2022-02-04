@@ -1,3 +1,9 @@
+2022/02/04 Version 9.0.4
+------------------------
+
+- Add ``py.typed`` file to ``MANIFEST.in`` (ensures mypy actually respects the
+  type annotations)
+
 2022/01/18 Version 9.0.3
 ------------------------
 

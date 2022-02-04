@@ -11,7 +11,7 @@ with open(README_rst, "r") as f:
 
 setup(
     name="pyee",
-    version="9.0.3",
+    version="9.0.4",
     packages=find_packages(),
     include_package_data=True,
     description="A port of node.js's EventEmitter to python.",
