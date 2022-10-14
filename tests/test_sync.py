@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
+from pickle import dumps, loads
 
 from mock import Mock
 from pytest import raises
@@ -278,3 +279,9 @@ def test_properties_preserved():
     # Calling the event handler directly doesn't clear the handler
     ee.emit("once")
     call_me_also.assert_called_once()
+
+
+def test_if_serializable():
+    """`pickle`ing should not throw."""
+    ee = EventEmitter()
+    ee_copy = loads(dumps(ee))
