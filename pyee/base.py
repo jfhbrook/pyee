@@ -2,8 +2,19 @@
 
 from collections import OrderedDict
 from threading import Lock
-from typing import (Any, Callable, Dict, List, Mapping, Optional, Set, Tuple,
-                    TypeVar, Union)
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Mapping,
+    Optional,
+    Set,
+    Tuple,
+    TypeVar,
+    Union,
+)
+
 
 
 class PyeeException(Exception):
