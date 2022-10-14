@@ -2,7 +2,8 @@
 
 from collections import OrderedDict
 from threading import Lock
-from typing import Any, Callable, Dict, List, Mapping, Optional, Set, Tuple, TypeVar, Union
+from typing import (Any, Callable, Dict, List, Mapping, Optional, Set, Tuple,
+                    TypeVar, Union)
 
 
 class PyeeException(Exception):
@@ -53,7 +54,7 @@ class EventEmitter:
         return state
 
     def __setstate__(self, state: Mapping[str, Any]) -> None:
-        """Rebuild sensitive/non-serializable state after retrieving from a serialized representation."""
+        """Rebuild sensitive/non-serializable state after deserializing."""
         self.__dict__.update(state)
         self._lock = Lock()
 
