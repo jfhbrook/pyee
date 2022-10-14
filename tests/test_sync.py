@@ -284,4 +284,6 @@ def test_properties_preserved():
 def test_if_serializable():
     """`pickle`ing should not throw."""
     ee = EventEmitter()
-    loads(dumps(ee))
+    ee_copy = loads(dumps(ee))
+    assert ee._lock
+    assert ee_copy._lock
