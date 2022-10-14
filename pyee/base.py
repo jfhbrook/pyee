@@ -16,7 +16,6 @@ from typing import (
 )
 
 
-
 class PyeeException(Exception):
     """An exception internal to pyee."""
 
