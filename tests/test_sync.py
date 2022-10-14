@@ -284,4 +284,4 @@ def test_properties_preserved():
 def test_if_serializable():
     """`pickle`ing should not throw."""
     ee = EventEmitter()
-    ee_copy = loads(dumps(ee))
+    loads(dumps(ee))
