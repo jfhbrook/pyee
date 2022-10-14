@@ -60,7 +60,7 @@ class EventEmitter:
     def __getstate__(self) -> Mapping[str, Any]:
         """Remove sensitive/non-serializable state before being serialized."""
         state = self.__dict__.copy()
-        del state['_lock']
+        del state["_lock"]
         return state
 
     def __setstate__(self, state: Mapping[str, Any]) -> None:
