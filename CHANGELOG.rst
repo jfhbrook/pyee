@@ -4,6 +4,7 @@
 - Development dependencies updated to latest
 - Dependency on mock removed in favor of unittest.mock
 - Additional type hints so pyright check passes on latest
+- Drop 3.7 support
 
 2022/02/04 Version 9.0.4
 ------------------------
