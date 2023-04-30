@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any, Callable, Dict, Tuple
+from typing import Any, Callable, Dict, Optional, Tuple
 
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
@@ -57,17 +57,17 @@ class TwistedEventEmitter(EventEmitter):
         args: Tuple[Any, ...],
         kwargs: Dict[str, Any],
     ) -> None:
-        d = None
+        d: Optional[Deferred[Any]] = None
         try:
             result = f(*args, **kwargs)
         except Exception:
             self.emit("failure", Failure())
         else:
             if iscoroutine and iscoroutine(result):
-                d: Deferred[Any] = ensureDeferred(result)
+                d = ensureDeferred(result)
             elif isinstance(result, Deferred):
                 d = result
-            else:
+            elif not d:
                 return
 
             def errback(failure: Failure) -> None:

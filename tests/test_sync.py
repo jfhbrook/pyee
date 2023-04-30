@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
 from pickle import dumps, loads
+from unittest.mock import Mock
 
-from mock import Mock
 from pytest import raises
 
 from pyee import EventEmitter

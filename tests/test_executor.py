@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from time import sleep
-
-from mock import Mock
+from unittest.mock import Mock
 
 from pyee import ExecutorEventEmitter
 

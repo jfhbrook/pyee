@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from mock import Mock
-from twisted.internet.defer import inlineCallbacks
+from typing import Generator
+from unittest.mock import Mock
+
+from twisted.internet.defer import Deferred, inlineCallbacks
 from twisted.python.failure import Failure
 
 from pyee import TwistedEventEmitter
@@ -21,8 +23,10 @@ def test_propagates_failure():
 
     @ee.on("event")
     @inlineCallbacks
-    def event_handler():
-        yield Failure(PyeeTestError())
+    def event_handler() -> Generator[Deferred[object], object, None]:
+        d = Deferred()
+        d.callback(Failure(PyeeTestError()))
+        yield d
 
     @ee.on("failure")
     def handle_failure(f):
@@ -67,8 +71,10 @@ def test_propagates_exception():
 
     @ee.on("event")
     @inlineCallbacks
-    def event_handler():
-        yield Failure(PyeeTestError())
+    def event_handler() -> Generator[Deferred[object], object, None]:
+        d = Deferred()
+        d.callback(Failure(PyeeTestError()))
+        yield d
 
     @ee.on("error")
     def handle_error(exc):
