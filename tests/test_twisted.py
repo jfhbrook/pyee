@@ -6,7 +6,7 @@ from unittest.mock import Mock
 from twisted.internet.defer import Deferred, inlineCallbacks
 from twisted.python.failure import Failure
 
-from pyee import TwistedEventEmitter
+from pyee.twisted import TwistedEventEmitter
 
 
 class PyeeTestError(Exception):

@@ -14,7 +14,8 @@ from unittest.mock import Mock
 
 from twisted.internet.defer import succeed
 
-from pyee import AsyncIOEventEmitter, TwistedEventEmitter
+from pyee.asyncio import AsyncIOEventEmitter
+from pyee.twisted import TwistedEventEmitter
 
 
 class PyeeTestError(Exception):

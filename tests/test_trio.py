@@ -4,7 +4,7 @@ import pytest
 import pytest_trio.plugin  # noqa
 import trio
 
-from pyee import TrioEventEmitter
+from pyee.trio import TrioEventEmitter
 
 
 class PyeeTestError(Exception):
