@@ -1,3 +1,10 @@
+2023/04/30 Version 9.1.0
+------------------------
+- ``EventEmitter`` supports pickling
+- Development dependencies updated to latest
+- Dependency on mock removed in favor of unittest.mock
+- Additional type hints so pyright check passes on latest
+
 2022/02/04 Version 9.0.4
 ------------------------
 
