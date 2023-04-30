@@ -1,1 +1,1 @@
-typing-extensions==4.0.1
+typing-extensions==4.5.0

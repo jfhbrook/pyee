@@ -10,10 +10,12 @@ try:
 except ImportError:
     from concurrent.futures import TimeoutError  # type: ignore
 
-from mock import Mock
+from unittest.mock import Mock
+
 from twisted.internet.defer import succeed
 
-from pyee import AsyncIOEventEmitter, TwistedEventEmitter
+from pyee.asyncio import AsyncIOEventEmitter
+from pyee.twisted import TwistedEventEmitter
 
 
 class PyeeTestError(Exception):

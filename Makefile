@@ -1,4 +1,6 @@
-.PHONY: setup setup-conda package upload check test tox lint format build_docs serve_docs clean
+.PHONY: default setup setup-conda package upload check test tox lint format build_docs serve_docs clean
+
+default: check test format lint
 
 setup:
 	python3 -m venv venv

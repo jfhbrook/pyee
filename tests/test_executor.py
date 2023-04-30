@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from time import sleep
+from unittest.mock import Mock
 
-from mock import Mock
-
-from pyee import ExecutorEventEmitter
+from pyee.executor import ExecutorEventEmitter
 
 
 class PyeeTestError(Exception):

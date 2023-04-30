@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from mock import call, Mock
+from unittest.mock import call, Mock
+
 import pytest
 
 from pyee import EventEmitter

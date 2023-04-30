@@ -4,7 +4,7 @@ import pytest
 import pytest_trio.plugin  # noqa
 import trio
 
-from pyee import TrioEventEmitter
+from pyee.trio import TrioEventEmitter
 
 
 class PyeeTestError(Exception):
@@ -18,7 +18,6 @@ async def test_trio_emit():
     """
 
     async with TrioEventEmitter() as ee:
-
         should_call = trio.Event()
 
         @ee.on("event")
