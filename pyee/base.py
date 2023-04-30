@@ -58,13 +58,11 @@ class EventEmitter:
         self._lock: Lock = Lock()
 
     def __getstate__(self) -> Mapping[str, Any]:
-        """Remove sensitive/non-serializable state before being serialized."""
         state = self.__dict__.copy()
         del state["_lock"]
         return state
 
     def __setstate__(self, state: Mapping[str, Any]) -> None:
-        """Rebuild sensitive/non-serializable state after deserializing."""
         self.__dict__.update(state)
         self._lock = Lock()
 
