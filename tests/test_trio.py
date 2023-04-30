@@ -18,7 +18,6 @@ async def test_trio_emit():
     """
 
     async with TrioEventEmitter() as ee:
-
         should_call = trio.Event()
 
         @ee.on("event")
