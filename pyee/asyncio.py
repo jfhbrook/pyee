@@ -10,23 +10,25 @@ __all__ = ["AsyncIOEventEmitter"]
 
 class AsyncIOEventEmitter(EventEmitter):
     """An event emitter class which can run asyncio coroutines in addition to
-    synchronous blocking functions. For example::
+    synchronous blocking functions. For example:
 
-        @ee.on('event')
-        async def async_handler(*args, **kwargs):
-            await returns_a_future()
+    ```py
+    @ee.on('event')
+    async def async_handler(*args, **kwargs):
+        await returns_a_future()
+    ```
 
     On emit, the event emitter  will automatically schedule the coroutine using
-    ``asyncio.ensure_future`` and the configured event loop (defaults to
-    ``asyncio.get_event_loop()``).
+    `asyncio.ensure_future` and the configured event loop (defaults to
+    `asyncio.get_event_loop()`).
 
     Unlike the case with the EventEmitter, all exceptions raised by
-    event handlers are automatically emitted on the ``error`` event. This is
+    event handlers are automatically emitted on the `error` event. This is
     important for asyncio coroutines specifically but is also handled for
     synchronous functions for consistency.
 
-    When ``loop`` is specified, the supplied event loop will be used when
-    scheduling work with ``ensure_future``. Otherwise, the default asyncio
+    When `loop` is specified, the supplied event loop will be used when
+    scheduling work with `ensure_future`. Otherwise, the default asyncio
     event loop is used.
 
     For asyncio coroutine event handlers, calling emit is non-blocking.

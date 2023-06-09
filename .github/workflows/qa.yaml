@@ -16,19 +16,17 @@ jobs:
       - name: Set up Node.js @latest
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 18
       - name: Install the world
         run: |
-          python -m pip install --upgrade pip wheel
-          pip install -r requirements.txt
-          pip install -r requirements_dev.txt
-          pip install -e .
-          npm i
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -e .[dev]
       - name: Run linting
         run: |
-          make lint
+          flake8 ./pyee ./tests
+          validate-pyproject ./pyproject.toml
       - name: Run type checking
         run: |
-          make check
+          npx pyright@latest
       - name: Run tests
-        run: make test
+        run: pytest ./tests

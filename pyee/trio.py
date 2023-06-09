@@ -18,27 +18,29 @@ class TrioEventEmitter(EventEmitter):
     """An event emitter class which can run trio tasks in a trio nursery.
 
     By default, this class will lazily create both a nursery manager (the
-    object returned from ``trio.open_nursery()`` and a nursery (the object
+    object returned from `trio.open_nursery()` and a nursery (the object
     yielded by using the nursery manager as an async context manager). It is
-    also possible to supply an existing nursery manager via the ``manager``
-    argument, or an existing nursery via the ``nursery`` argument.
+    also possible to supply an existing nursery manager via the `manager`
+    argument, or an existing nursery via the `nursery` argument.
 
     Instances of TrioEventEmitter are themselves async context managers, so
     that they may manage the lifecycle of the underlying trio nursery. For
     example, typical usage of this library may look something like this::
 
-        async with TrioEventEmitter() as ee:
-            # Underlying nursery is instantiated and ready to go
-            @ee.on('data')
-            async def handler(data):
-                print(data)
+    ```py
+    async with TrioEventEmitter() as ee:
+        # Underlying nursery is instantiated and ready to go
+        @ee.on('data')
+        async def handler(data):
+            print(data)
 
-            ee.emit('event')
+        ee.emit('event')
 
-        # Underlying nursery and manager have been cleaned up
+    # Underlying nursery and manager have been cleaned up
+    ```
 
     Unlike the case with the EventEmitter, all exceptions raised by event
-    handlers are automatically emitted on the ``error`` event. This is
+    handlers are automatically emitted on the `error` event. This is
     important for trio coroutines specifically but is also handled for
     synchronous functions for consistency.
 
@@ -49,8 +51,8 @@ class TrioEventEmitter(EventEmitter):
 
     def __init__(
         self,
-        nursery: Nursery = None,
-        manager: "AbstractAsyncContextManager[trio.Nursery]" = None,
+        nursery: Optional[Nursery] = None,
+        manager: Optional["AbstractAsyncContextManager[trio.Nursery]"] = None,
     ):
         super(TrioEventEmitter, self).__init__()
         self._nursery: Optional[Nursery] = None
@@ -95,7 +97,7 @@ class TrioEventEmitter(EventEmitter):
         self,
     ) -> AsyncGenerator["TrioEventEmitter", None]:
         """Returns an async contextmanager which manages the underlying
-        nursery to the EventEmitter. The ``TrioEventEmitter``'s
+        nursery to the EventEmitter. The `TrioEventEmitter`'s
         async context management methods are implemented using this
         function, but it may also be used directly for clarity.
         """

@@ -19,23 +19,27 @@ __all__ = ["TwistedEventEmitter"]
 class TwistedEventEmitter(EventEmitter):
     """An event emitter class which can run twisted coroutines and handle
     returned Deferreds, in addition to synchronous blocking functions. For
-    example::
+    example:
 
-        @ee.on('event')
-        @inlineCallbacks
-        def async_handler(*args, **kwargs):
-            yield returns_a_deferred()
+    ```py
+    @ee.on('event')
+    @inlineCallbacks
+    def async_handler(*args, **kwargs):
+        yield returns_a_deferred()
+    ```
 
-    or::
+    or:
 
-        @ee.on('event')
-        async def async_handler(*args, **kwargs):
-            await returns_a_deferred()
+    ```py
+    @ee.on('event')
+    async def async_handler(*args, **kwargs):
+        await returns_a_deferred()
+    ```
 
 
-    When async handlers fail, Failures are first emitted on the ``failure``
-    event. If there are no ``failure`` handlers, the Failure's associated
-    exception is then emitted on the ``error`` event. If there are no ``error``
+    When async handlers fail, Failures are first emitted on the `failure`
+    event. If there are no `failure` handlers, the Failure's associated
+    exception is then emitted on the `error` event. If there are no `error`
     handlers, the exception is raised. For consistency, when handlers raise
     errors synchronously, they're captured, wrapped in a Failure and treated
     as an async failure. This is unlike the behavior of EventEmitter,

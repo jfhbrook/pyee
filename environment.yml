@@ -3,12 +3,10 @@ channels:
   - conda-forge
   - default
 dependencies:
-  - python=3.8.3
-  - pip=20.2.3
-  - trio=0.17.0
-  - twine=3.2.0
-  - twisted=20.3.0
+  - python=3.10.11
+  - pip
+  - pip-tools
+  - wheel
   - pip:
-    - -r requirements.txt
     - -r requirements_dev.txt
     - -e .

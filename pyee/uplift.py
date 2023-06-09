@@ -41,8 +41,8 @@ def _wrap(
 
         handled = left_handled or right_handled
 
-        # Use the error handling on ``error_handler`` (should either be
-        # ``left`` or ``right``)
+        # Use the error handling on `error_handler` (should either be
+        # `left` or `right`)
         if not handled:
             error_handler._emit_handle_potential_error(event, args[0] if args else None)
 
@@ -96,29 +96,29 @@ def uplift(
     *args: Any,
     **kwargs: Any
 ) -> UpliftingEventEmitter:
-    """A helper to create instances of an event emitter ``cls`` that inherits
-    event behavior from an ``underlying`` event emitter instance.
+    """A helper to create instances of an event emitter `cls` that inherits
+    event behavior from an `underlying` event emitter instance.
 
     This is mostly helpful if you have a simple underlying event emitter
     that you don't have direct control over, but you want to use that
-    event emitter in a new context - for example, you may want to ``uplift`` a
-    ``EventEmitter`` supplied by a third party library into an
-    ``AsyncIOEventEmitter`` so that you may register async event handlers
-    in your ``asyncio`` app but still be able to receive events from the
+    event emitter in a new context - for example, you may want to `uplift` a
+    `EventEmitter` supplied by a third party library into an
+    `AsyncIOEventEmitter` so that you may register async event handlers
+    in your `asyncio` app but still be able to receive events from the
     underlying event emitter and call the underlying event emitter's existing
     handlers.
 
-    When called, ``uplift`` instantiates a new instance of ``cls``, passing
-    along any unrecognized arguments, and overwrites the ``emit`` method on
-    the ``underlying`` event emitter to also emit events on the new event
-    emitter and vice versa. In both cases, they return whether the ``emit``
+    When called, `uplift` instantiates a new instance of `cls`, passing
+    along any unrecognized arguments, and overwrites the `emit` method on
+    the `underlying` event emitter to also emit events on the new event
+    emitter and vice versa. In both cases, they return whether the `emit`
     method was handled by either emitter. Execution order prefers the event
-    emitter on which ``emit`` was called.
+    emitter on which `emit` was called.
 
-    The ``unwrap`` function may be called on either instance; this will
-    unwrap both ``emit`` methods.
+    The `unwrap` function may be called on either instance; this will
+    unwrap both `emit` methods.
 
-    The ``error_handling`` flag can be configured to control what happens to
+    The `error_handling` flag can be configured to control what happens to
     unhandled errors:
 
     - 'new': Error handling for the new event emitter is always used and the
@@ -132,31 +132,31 @@ def uplift(
     Tuning this option can be useful depending on how the underlying event
     emitter does error handling. The default is 'new'.
 
-    The ``proxy_new_listener`` option can be configured to control how
-    ``new_listener`` events are treated:
+    The `proxy_new_listener` option can be configured to control how
+    `new_listener` events are treated:
 
-    - 'forward': ``new_listener`` events are propagated from the underlying
-    - 'both': ``new_listener`` events are propagated as with other events.
-    - 'neither': ``new_listener`` events are only fired on their respective
+    - 'forward': `new_listener` events are propagated from the underlying
+    - 'both': `new_listener` events are propagated as with other events.
+    - 'neither': `new_listener` events are only fired on their respective
       event emitters.
       event emitter to the new event emitter but not vice versa.
-    - 'backward': ``new_listener`` events are propagated from the new event
+    - 'backward': `new_listener` events are propagated from the new event
       emitter to the underlying event emitter, but not vice versa.
 
-    Tuning this option can be useful depending on how the ``new_listener``
+    Tuning this option can be useful depending on how the `new_listener`
     event is used by the underlying event emitter, if at all. The default is
-    'forward', since ``underlying`` may not know how to handle certain
+    'forward', since `underlying` may not know how to handle certain
     handlers, such as asyncio coroutines.
 
     Each event emitter tracks its own internal table of handlers.
-    ``remove_listener``, ``remove_all_listeners`` and ``listeners`` all
+    `remove_listener`, `remove_all_listeners` and `listeners` all
     work independently. This means you will have to remember which event
     emitter an event handler was added to!
 
-    Note that both the new event emitter returned by ``cls`` and the
-    underlying event emitter should inherit from ``EventEmitter``, or at
-    least implement the interface for the undocumented ``_call_handlers`` and
-    ``_emit_handle_potential_error`` methods.
+    Note that both the new event emitter returned by `cls` and the
+    underlying event emitter should inherit from `EventEmitter`, or at
+    least implement the interface for the undocumented `_call_handlers` and
+    `_emit_handle_potential_error` methods.
     """
 
     (
