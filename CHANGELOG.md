@@ -1,6 +1,7 @@
 # Changelog
 
 - Add just task to tag releases in git
+- Update RTD badge in README.md
 
 ## 2023/06/08 Version 10.0.1
 

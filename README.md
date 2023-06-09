@@ -1,6 +1,6 @@
 # pyee
 
-.[](https://readthedocs.org/projects/pyee/badge/?version=latest)
+[![Documentation Status](https://readthedocs.org/projects/pyee/badge/?version=latest)](https://pyee.readthedocs.io/en/latest/?badge=latest)
 
 pyee supplies a `EventEmitter` object that is similar to the
 `EventEmitter` class from Node.js. It also supplies a number of subclasses
