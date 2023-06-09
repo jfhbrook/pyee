@@ -41,6 +41,7 @@ async def test_asyncio_emit(event_loop):
     result = await wait_for(should_call, 0.1)
 
     assert result is True
+    assert len(ee._waiting) == 0
 
 
 @pytest.mark.asyncio

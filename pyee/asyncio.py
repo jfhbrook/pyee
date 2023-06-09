@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine
-from typing import Any, Callable, cast, Dict, Optional, Tuple
+from typing import Any, Callable, cast, Dict, Optional, Set, Tuple
 
 from pyee.base import EventEmitter
 
@@ -37,6 +37,7 @@ class AsyncIOEventEmitter(EventEmitter):
     def __init__(self, loop: Optional[AbstractEventLoop] = None):
         super(AsyncIOEventEmitter, self).__init__()
         self._loop: Optional[AbstractEventLoop] = loop
+        self._waiting: Set[Future] = set()
 
     def _emit_run(
         self,
@@ -57,12 +58,15 @@ class AsyncIOEventEmitter(EventEmitter):
                     fut: Any = ensure_future(cast(Any, coro), loop=self._loop)
                 else:
                     fut = ensure_future(cast(Any, coro))
+
             elif isinstance(coro, Future):
                 fut = cast(Any, coro)
             else:
                 return
 
             def callback(f):
+                self._waiting.remove(f)
+
                 if f.cancelled():
                     return
 
@@ -71,3 +75,4 @@ class AsyncIOEventEmitter(EventEmitter):
                     self.emit("error", exc)
 
             fut.add_done_callback(callback)
+            self._waiting.add(fut)
