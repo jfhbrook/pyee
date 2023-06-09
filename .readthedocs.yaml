@@ -3,5 +3,4 @@ version: 2
 python:
   version: "3.8"
   install:
-    - requirements: requirements_dev.txt
-    - path: "."
+    - path: ".[dev]"
