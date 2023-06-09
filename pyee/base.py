@@ -215,7 +215,7 @@ class EventEmitter:
     def once(
         self,
         event: str,
-        f: Callable = None,
+        f: Optional[Callable] = None,
     ) -> Callable:
         """The same as `ee.on`, except that the listener is automatically
         removed after being called.

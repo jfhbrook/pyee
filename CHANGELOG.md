@@ -2,23 +2,40 @@
 
 ## 2023/06/08 Version 9.2.0
 
+Development Tooling Updates
+
 - Switch from `make` to `just`
-- Switch from straight `pip` to `pip-tools`
-- Switch from `setup.py` to `pyproject.toml`
-  - Still using `setuptools`
-  - Linting with `validate-pyproject`
-- Switch documentation generator from Sphinx to mkdocs
-- Switch documentation format from RST to markdown
+- Switch from vanilla `pip` to `pip-tools`
+- `environment.yml` updated
+- `environment.yml` not currently supported
+
+Packaging Updates
+
+- Switch from `setup.py` to `pyproject.toml` (still using setuptools)
+
+Documentation updates:
+
+- Switch documentation generator from Sphinx to mkdocs (including on ReadTheDocs)
+- Use Python 3.11 on ReadTheDocs
+- Change documentation them to `readthedocs` (old theme not available in mkdocs)
+- Switch documentation format from RST to markdown (Including in docstrings)
+
+Testing and Linting Updates:
+
+- use `npx` to run pyright
+- `pyproject.toml` linting with `validate-pyproject`
+
+API Updates:
+
+- Minor type annotation bugfixes
 
 ## 2023/06/08 Version 9.1.1
 
 - Store AsyncIO Futures in a set
 
-
 ## 2023/04/30 Version 9.1.0
 
 - `EventEmitter` supports pickling
->>>>>>> 085ab40 (Backport template to project):CHANGELOG.md
 - Development dependencies updated to latest
 - Dependency on mock removed in favor of unittest.mock
 - Additional type hints so pyright check passes on latest

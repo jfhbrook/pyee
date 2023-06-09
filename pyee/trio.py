@@ -51,8 +51,8 @@ class TrioEventEmitter(EventEmitter):
 
     def __init__(
         self,
-        nursery: Nursery = None,
-        manager: "AbstractAsyncContextManager[trio.Nursery]" = None,
+        nursery: Optional[Nursery] = None,
+        manager: Optional["AbstractAsyncContextManager[trio.Nursery]"] = None,
     ):
         super(TrioEventEmitter, self).__init__()
         self._nursery: Optional[Nursery] = None

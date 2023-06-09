@@ -44,7 +44,7 @@ class ExecutorEventEmitter(EventEmitter):
     No effort is made to ensure thread safety, beyond using an executor.
     """
 
-    def __init__(self, executor: Executor = None):
+    def __init__(self, executor: Optional[Executor] = None):
         super(ExecutorEventEmitter, self).__init__()
         if executor:
             self._executor: Executor = executor
