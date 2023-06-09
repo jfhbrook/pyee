@@ -1,6 +1,7 @@
 # Changelog
 
 - Remove package.json/package-lock.json
+- Use Python 3.8 on Read the Docs
 
 ## 2023/06/08 Version 10.0.0
 
