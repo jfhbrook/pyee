@@ -1,0 +1,8 @@
+site_name: pyee Documentation
+
+theme:
+  name: readthedocs
+
+plugins:
+  - include-markdown
+  - mkdocstrings

@@ -29,6 +29,6 @@ jobs:
           make lint
       - name: Run type checking
         run: |
-          make check
+          npx pyright@latest
       - name: Run tests
         run: make test

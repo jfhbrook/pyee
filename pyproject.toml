@@ -1,6 +1,71 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyee"
+version = "9.2.0"
+authors = [
+  {name = "Josh Holbrook", email = "josh.holbrook@gmail.com"}
+]
+description = "A rough port of Node.js's EventEmitter to Python with a few tricks of its own"
+readme = "README.md"
+keywords = ["events", "emitter", "node.js", "node", "eventemitter", "event_emitter"]
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Other/Nonlisted Topic",
+]
+
+dependencies = [
+    "typing-extensions"
+]
+
+[project.optional-dependencies]
+dev = [
+  "flake8",
+  "flake8-black",
+  "pytest",
+  "pytest-asyncio; python_version >= '3.4'",
+  "pytest-trio; python_version >= '3.7'",
+  "black",
+  "isort",
+  "jupyter-console",
+  "mkdocs",
+  "mkdocs-include-markdown-plugin",
+  "mkdocstrings[python]",
+  "tox",
+  "trio",
+  "trio; python_version > '3.6'",
+  "trio-typing; python_version > '3.6'",
+  "twine",
+  "twisted"
+]
+
 [tool.isort]
 profile = "appnexus"
 known_application = "pyee"
 
 [tool.pyright]
-include = ["python"]
+include = ["pyee", "tests"]
+
+[tool.pytest]
+addopts = "--verbose -s"
+testpaths = [ "tests" ]
+
+[tool.setuptools]
+packages = ["pyee"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+optional-dependencies.dev = { file = ["requirements_dev.txt"] }
