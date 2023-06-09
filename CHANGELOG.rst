@@ -1,3 +1,8 @@
+2023/06/08 Version 9.1.1
+------------------------
+
+- Store AsyncIO Futures in a set
+
 2023/04/30 Version 9.1.0
 ------------------------
 - ``EventEmitter`` supports pickling
