@@ -30,7 +30,7 @@ _handlers = Handlers()
 
 def on(event: str) -> Callable[[Callable], Callable]:
     """
-    Register an event handler on an evented class. See the ``evented`` class
+    Register an event handler on an evented class. See the `evented` class
     decorator for a full example.
     """
 
@@ -58,40 +58,44 @@ def evented(cls: Cls) -> Cls:
 
     Evented classes are classes which use an EventEmitter to call instance
     methods during runtime. To achieve this without this helper, you would
-    instantiate an ``EventEmitter`` in the ``__init__`` method and then call
-    ``event_emitter.on`` for every method on ``self``.
+    instantiate an `EventEmitter` in the `__init__` method and then call
+    `event_emitter.on` for every method on `self`.
 
-    This decorator and the ``on`` function help make things look a little nicer
+    This decorator and the `on` function help make things look a little nicer
     by defining the event handler on the method in the class and then adding
-    the ``__init__`` hook in a wrapper::
+    the `__init__` hook in a wrapper:
 
-        from pyee.cls import evented, on
+    ```py
+    from pyee.cls import evented, on
 
-        @evented
-        class Evented:
-            @on("event")
-            def event_handler(self, *args, **kwargs):
-                print(self, args, kwargs)
+    @evented
+    class Evented:
+        @on("event")
+        def event_handler(self, *args, **kwargs):
+            print(self, args, kwargs)
 
-        evented_obj = Evented()
+    evented_obj = Evented()
 
-        evented_obj.event_emitter.emit(
-            "event", "hello world", numbers=[1, 2, 3]
-        )
+    evented_obj.event_emitter.emit(
+        "event", "hello world", numbers=[1, 2, 3]
+    )
+    ```
 
-    The ``__init__`` wrapper will create a ``self.event_emitter: EventEmitter``
+    The `__init__` wrapper will create a `self.event_emitter: EventEmitter`
     automatically but you can also define your own event_emitter inside your
-    class's unwrapped ``__init__`` method. For example, to use this
-    decorator with a ``TwistedEventEmitter``::
+    class's unwrapped `__init__` method. For example, to use this
+    decorator with a `TwistedEventEmitter`::
 
-        @evented
-        class Evented:
-            def __init__(self):
-                self.event_emitter = TwistedEventEmitter()
+    ```py
+    @evented
+    class Evented:
+        def __init__(self):
+            self.event_emitter = TwistedEventEmitter()
 
-            @on("event")
-            async def event_handler(self, *args, **kwargs):
-                await self.some_async_action(*args, **kwargs)
+        @on("event")
+        async def event_handler(self, *args, **kwargs):
+            await self.some_async_action(*args, **kwargs)
+    ```
     """
     handlers: List[Handler] = list(_handlers)
     _handlers.reset()

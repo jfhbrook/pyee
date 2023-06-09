@@ -27,23 +27,25 @@ class EventEmitter:
     """The base event emitter class. All other event emitters inherit from
     this class.
 
-    Most events are registered with an emitter via the ``on`` and ``once``
-    methods, and fired with the ``emit`` method. However, pyee event emitters
+    Most events are registered with an emitter via the `on` and `once`
+    methods, and fired with the `emit` method. However, pyee event emitters
     have two *special* events:
 
-    - ``new_listener``: Fires whenever a new listener is created. Listeners for
+    - `new_listener`: Fires whenever a new listener is created. Listeners for
       this event do not fire upon their own creation.
 
-    - ``error``: When emitted raises an Exception by default, behavior can be
+    - `error`: When emitted raises an Exception by default, behavior can be
       overridden by attaching callback to the event.
 
-      For example::
+      For example:
 
-          @ee.on('error')
-          def on_error(message):
-              logging.err(message)
+    ```py
+    @ee.on('error')
+    def on_error(message):
+        logging.err(message)
 
-          ee.emit('error', Exception('something blew up'))
+    ee.emit('error', Exception('something blew up'))
+    ```
 
     All callbacks are handled in a synchronous, blocking manner. As in node.js,
     raised exceptions are not automatically handled for you---you must catch
@@ -69,19 +71,23 @@ class EventEmitter:
     def on(
         self, event: str, f: Optional[Handler] = None
     ) -> Union[Handler, Callable[[Handler], Handler]]:
-        """Registers the function ``f`` to the event name ``event``, if provided.
+        """Registers the function `f` to the event name `event`, if provided.
 
-        If ``f`` isn't provided, this method calls ``EventEmitter#listens_to`, and
-        otherwise calls ``EventEmitter#add_listener``. In other words, you may either
-        use it as a decorator::
+        If `f` isn't provided, this method calls `EventEmitter#listens_to`, and
+        otherwise calls `EventEmitter#add_listener`. In other words, you may either
+        use it as a decorator:
 
-            @ee.on('data')
-            def data_handler(data):
-                print(data)
+        ```py
+        @ee.on('data')
+        def data_handler(data):
+            print(data)
+        ```
 
-        Or directly::
+        Or directly:
 
-            ee.on('data', data_handler)
+        ```py
+        ee.on('data', data_handler)
+        ```
 
         In both the decorated and undecorated forms, the event handler is
         returned. The upshot of this is that you can call decorated handlers
@@ -89,7 +95,7 @@ class EventEmitter:
 
         Note that this method's return type is a union type. If you are using
         mypy or pyright, you will probably want to use either
-        ``EventEmitter#listens_to`` or ``EventEmitter#add_listener``.
+        `EventEmitter#listens_to` or `EventEmitter#add_listener`.
         """
         if f is None:
             return self.listens_to(event)
@@ -98,14 +104,16 @@ class EventEmitter:
 
     def listens_to(self, event: str) -> Callable[[Handler], Handler]:
         """Returns a decorator which will register the decorated function to
-        the event name ``event``::
+        the event name `event`:
 
-            @ee.listens_to("event")
-            def data_handler(data):
-                print(data)
+        ```py
+        @ee.listens_to("event")
+        def data_handler(data):
+            print(data)
+        ```
 
         By only supporting the decorator use case, this method has improved
-        type safety over ``EventEmitter#on``.
+        type safety over `EventEmitter#on`.
         """
 
         def on(f: Handler) -> Handler:
@@ -115,15 +123,17 @@ class EventEmitter:
         return on
 
     def add_listener(self, event: str, f: Handler) -> Handler:
-        """Register the function ``f`` to the event name ``event``::
+        """Register the function `f` to the event name `event`:
 
-            def data_handler(data):
-                print(data)
+        ```
+        def data_handler(data):
+            print(data)
 
-            h = ee.add_listener("event", data_handler)
+        h = ee.add_listener("event", data_handler)
+        ```
 
         By not supporting the decorator use case, this method has improved
-        type safety over ``EventEmitter#on``.
+        type safety over `EventEmitter#on`.
         """
         self._add_event_handler(event, f, f)
         return f
@@ -182,16 +192,18 @@ class EventEmitter:
         *args: Any,
         **kwargs: Any,
     ) -> bool:
-        """Emit ``event``, passing ``*args`` and ``**kwargs`` to each attached
-        function. Returns ``True`` if any functions are attached to ``event``;
-        otherwise returns ``False``.
+        """Emit `event`, passing `*args` and `**kwargs` to each attached
+        function. Returns `True` if any functions are attached to `event`;
+        otherwise returns `False`.
 
-        Example::
+        Example:
 
-            ee.emit('data', '00101001')
+        ```py
+        ee.emit('data', '00101001')
+        ```
 
-        Assuming ``data`` is an attached function, this will call
-        ``data('00101001')'``.
+        Assuming `data` is an attached function, this will call
+        `data('00101001')'`.
         """
         handled = self._call_handlers(event, args, kwargs)
 
@@ -205,7 +217,7 @@ class EventEmitter:
         event: str,
         f: Callable = None,
     ) -> Callable:
-        """The same as ``ee.on``, except that the listener is automatically
+        """The same as `ee.on`, except that the listener is automatically
         removed after being called.
         """
 
@@ -240,13 +252,13 @@ class EventEmitter:
             del self._events[event]
 
     def remove_listener(self, event: str, f: Callable) -> None:
-        """Removes the function ``f`` from ``event``."""
+        """Removes the function `f` from `event`."""
         with self._lock:
             self._remove_listener(event, f)
 
     def remove_all_listeners(self, event: Optional[str] = None) -> None:
-        """Remove all listeners attached to ``event``.
-        If ``event`` is ``None``, remove all listeners on all events.
+        """Remove all listeners attached to `event`.
+        If `event` is `None`, remove all listeners on all events.
         """
         with self._lock:
             if event is not None:
@@ -255,5 +267,5 @@ class EventEmitter:
                 self._events = dict()
 
     def listeners(self, event: str) -> List[Callable]:
-        """Returns a list of all listeners registered to the ``event``."""
+        """Returns a list of all listeners registered to the `event`."""
         return list(self._events.get(event, OrderedDict()).keys())
