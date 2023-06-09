@@ -281,6 +281,8 @@ sortedcontainers==2.4.0
     # via trio
 stack-data==0.6.2
     # via ipython
+toml==0.10.2
+    # via pyee (pyproject.toml)
 tomli==2.0.1
     # via
     #   black

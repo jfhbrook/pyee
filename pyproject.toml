@@ -44,6 +44,7 @@ dev = [
   "mkdocs",
   "mkdocs-include-markdown-plugin",
   "mkdocstrings[python]",
+  "toml",
   "tox",
   "trio",
   "trio; python_version > '3.6'",

@@ -1,5 +1,7 @@
 # Changelog
 
+- Add just task to tag releases in git
+
 ## 2023/06/08 Version 10.0.1
 
 - Remove package.json/package-lock.json

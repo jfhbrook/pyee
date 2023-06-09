@@ -120,6 +120,10 @@ build:
 _clean-build:
   rm -rf dist
 
+# Tag the release in git
+tag:
+  . ./venv/bin/activate && git tag -a "$(python3 -c 'import toml; print(toml.load(open("pyproject.toml", "r"))["project"]["version"])')" -m "Release $(python3 -c 'import toml; print(toml.load(open("pyproject.toml", "r"))["project"]["version"])')"
+
 # Upload built packages
 upload:
   . ./venv/bin/activate && twine upload dist/*
