@@ -169,15 +169,11 @@ I do my best to follow [semver](https://semver.org) when updating versions.
 
 ### Add a Git Tag
 
-I try to use git tags to tag versions - run something like this:
+I try to use git tags to tag versions - there's a just task:
 
 ```bash
-git tag -a {version} -m 'Release {version}'
+just tag
 ```
-
-You don't need to prefix the version with a `v`.
-
-It would be great if I could do this automatically with a just task.
 
 ### Build and Publish
 
