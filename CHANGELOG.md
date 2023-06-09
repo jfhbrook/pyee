@@ -2,6 +2,7 @@
 
 - Add just task to tag releases in git
 - Update RTD badge in README.md
+- Copy fixes to changelog
 
 ## 2023/06/08 Version 10.0.1
 
@@ -13,14 +14,12 @@
 
 Development Environment Updates:
 
-Development Tooling Updates
-
 - Switch from `make` to `just`
 - Switch from vanilla `pip` to `pip-tools`
 - `environment.yml` updated
 - `environment.yml` not currently supported
 
-Packaging Updates
+Packaging Updates:
 
 - Switch from `setup.py` to `pyproject.toml` (still using setuptools)
 
