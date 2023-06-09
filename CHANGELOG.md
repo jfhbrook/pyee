@@ -1,7 +1,10 @@
 # Changelog
 
+## 2023/06/08 Version 10.0.1
+
 - Remove package.json/package-lock.json
 - Use Python 3.8 on Read the Docs
+- Various bugfixes for `.readthedocs.yml`
 
 ## 2023/06/08 Version 10.0.0
 
