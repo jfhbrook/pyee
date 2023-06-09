@@ -1,6 +1,8 @@
 # Changelog
 
-## 2023/06/08 Version 9.2.0
+## 2023/06/08 Version 10.0.0
+
+Development Environment Updates:
 
 Development Tooling Updates
 
@@ -16,7 +18,7 @@ Packaging Updates
 Documentation updates:
 
 - Switch documentation generator from Sphinx to mkdocs (including on ReadTheDocs)
-- Use Python 3.11 on ReadTheDocs
+- Use Python 3.10 on ReadTheDocs
 - Change documentation them to `readthedocs` (old theme not available in mkdocs)
 - Switch documentation format from RST to markdown (Including in docstrings)
 
