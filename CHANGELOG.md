@@ -1,5 +1,7 @@
 # Changelog
 
+- Remove package.json/package-lock.json
+
 ## 2023/06/08 Version 10.0.0
 
 Development Environment Updates:
