@@ -64,6 +64,7 @@ format:
 # Lint with flake8
 lint:
   . ./venv/bin/activate && flake8 './pyee' ./tests
+  . ./venv/bin/activate && validate-pyproject ./pyproject.toml
 
 # Check type annotations with pyright
 check:

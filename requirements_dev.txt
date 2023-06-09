@@ -62,6 +62,8 @@ exceptiongroup==1.1.1
     #   trio
 executing==1.2.0
     # via stack-data
+fastjsonschema==2.17.1
+    # via validate-pyproject
 filelock==3.12.0
     # via
     #   tox
@@ -181,6 +183,7 @@ packaging==23.1
     #   pyproject-api
     #   pytest
     #   tox
+    #   validate-pyproject
 parso==0.8.3
     # via jedi
 pathspec==0.11.1
@@ -285,6 +288,7 @@ tomli==2.0.1
     #   pyproject-api
     #   pytest
     #   tox
+    #   validate-pyproject
 tornado==6.3.2
     # via
     #   ipykernel
@@ -307,6 +311,8 @@ trio==0.22.0 ; python_version > "3.6"
     #   trio-typing
 trio-typing==0.8.0 ; python_version > "3.6"
     # via pyee (pyproject.toml)
+trove-classifiers==2023.5.24
+    # via validate-pyproject
 twine==4.0.2
     # via pyee (pyproject.toml)
 twisted==22.10.0
@@ -320,6 +326,8 @@ urllib3==2.0.3
     # via
     #   requests
     #   twine
+validate-pyproject[all]==0.13
+    # via pyee (pyproject.toml)
 virtualenv==20.23.0
     # via tox
 watchdog==3.0.0
