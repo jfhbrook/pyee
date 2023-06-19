@@ -1,5 +1,9 @@
 # Changelog
 
+## 2023/06/19 Version 10.0.2
+
+- Remove mention of Python 3.5 from documentation
+- Update classifiers in `pyproject.toml`
 - Add just task to tag releases in git
 - Update RTD badge in README.md
 - Copy fixes to changelog
