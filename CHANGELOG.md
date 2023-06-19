@@ -1,5 +1,9 @@
 # Changelog
 
+## 2023/06/19 Version 11.0.0
+
+- Require Python >= 3.8
+
 ## 2023/06/19 Version 10.0.2
 
 - Remove mention of Python 3.5 from documentation
