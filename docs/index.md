@@ -3,7 +3,7 @@
 pyee is a rough port of
 [node.js's EventEmitter](https://nodejs.org/api/events.html). Unlike its
 namesake, it includes a number of subclasses useful for implementing async
-and threaded programming in python, such as async/await as seen in python 3.5+.
+and threaded programming in python, such as async/await.
 
 ## Install
 
