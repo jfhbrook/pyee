@@ -291,7 +291,7 @@ tomli==2.0.1
     #   pytest
     #   tox
     #   validate-pyproject
-tornado==6.3.2
+tornado==6.3.3
     # via
     #   ipykernel
     #   jupyter-client
