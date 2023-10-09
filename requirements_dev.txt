@@ -324,7 +324,7 @@ typing-extensions==4.6.3
     #   pyee (pyproject.toml)
     #   trio-typing
     #   twisted
-urllib3==2.0.3
+urllib3==2.0.6
     # via
     #   requests
     #   twine
