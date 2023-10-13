@@ -20,7 +20,7 @@ class PyeeException(Exception):
     """An exception internal to pyee."""
 
 
-Handler = TypeVar(name="Handler", bound=Callable)
+Handler = TypeVar("Handler", bound=Callable)
 
 
 class EventEmitter:

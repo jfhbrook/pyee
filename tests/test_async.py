@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from asyncio import Future, wait_for
+import asyncio
 
 import pytest
 import pytest_asyncio.plugin  # noqa
@@ -41,6 +42,8 @@ async def test_asyncio_emit(event_loop):
     result = await wait_for(should_call, 0.1)
 
     assert result is True
+
+    await asyncio.sleep(0)
     assert len(ee._waiting) == 0
 
 
