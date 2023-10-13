@@ -49,7 +49,7 @@ def _bind(self, method):
     return bound
 
 
-Cls = TypeVar(name="Cls", bound=Type)
+Cls = TypeVar("Cls", bound=Type)
 
 
 def evented(cls: Cls) -> Cls:

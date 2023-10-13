@@ -8,7 +8,7 @@ from typing_extensions import Literal
 
 from pyee.base import EventEmitter
 
-UpliftingEventEmitter = TypeVar(name="UpliftingEventEmitter", bound=EventEmitter)
+UpliftingEventEmitter = TypeVar("UpliftingEventEmitter", bound=EventEmitter)
 
 
 EMIT_WRAPPERS: Dict[EventEmitter, Callable[[], None]] = dict()
