@@ -94,7 +94,7 @@ def uplift(
     error_handling: ErrorStrategy = "new",
     proxy_new_listener: ProxyStrategy = "forward",
     *args: Any,
-    **kwargs: Any
+    **kwargs: Any,
 ) -> UpliftingEventEmitter:
     """A helper to create instances of an event emitter `cls` that inherits
     event behavior from an `underlying` event emitter instance.

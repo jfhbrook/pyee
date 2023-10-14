@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from asyncio import Future, wait_for
 import asyncio
+from asyncio import Future, wait_for
 
 import pytest
 import pytest_asyncio.plugin  # noqa
