@@ -14,3 +14,4 @@ Listed in no particular order:
 - Åke Forslund @forslund <ake.forslund@gmail.com>
 - Ivan Gretchka @leirons
 - Max Schmitt @mxschmitt
+- Masaya Suzuki @massongit
