@@ -1,5 +1,12 @@
 # Changelog
 
+## 2023/10/14 Version 11.0.1
+
+- Bump development dependencies, thanks to dependabot
+- Support Python 3.12
+- Use node.js LTS in GitHub Actions
+- Read support Python versions from `pyproject.toml` in GitHub Actions
+
 ## 2023/06/19 Version 11.0.0
 
 - Require Python >= 3.8
