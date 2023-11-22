@@ -1,5 +1,10 @@
 set dotenv-load := true
 
+sphinx-sphinxbuild := "sphinx-build"
+sphinx-sphinxopts := ""
+sphinx-sourcedir := "."
+sphinx-builddir := "_build"
+
 # By default, run checks and tests, then format and lint
 default:
   if [ ! -d venv ]; then just install; fi
@@ -109,7 +114,20 @@ docs:
 
 # Build the documentation
 build-docs:
+  @just mkdocs
+  @just sphinx man
+
+# Run mkdocs
+mkdocs:
   . ./venv/bin/activate && mkdocs build
+
+# Run sphinx
+sphinx TARGET:
+	. ./venv/bin/activate && {{ sphinx-sphinxbuild }} -M "{{ TARGET }}" "{{ sphinx-sourcedir }}" "{{ sphinx-builddir }}" {{ sphinx-sphinxopts }}
+
+_clean-docs:
+  rm -rf site
+  rm -rf _build
 
 #
 # Package publishing
@@ -120,6 +138,7 @@ build:
   . ./venv/bin/activate && python -m build
 
 _clean-build:
+  rm -rf dist
   rm -rf dist
 
 # Tag the release in git
@@ -134,7 +153,7 @@ upload:
 publish: build upload
 
 # Clean up loose files
-clean: _clean-venv _clean-compile _clean-test _clean-tox
+clean: _clean-venv _clean-compile _clean-test _clean-tox _clean-docs
   rm -rf pyee.egg-info
   rm -f pyee/*.pyc
   rm -rf pyee/__pycache__
