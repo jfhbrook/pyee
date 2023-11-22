@@ -59,7 +59,6 @@ distlib==0.3.7
     # via virtualenv
 docutils==0.20.1
     # via
-    #   myst-parser
     #   readme-renderer
     #   sphinx
 executing==2.0.1
@@ -118,7 +117,6 @@ jinja2==3.1.2
     # via
     #   mkdocs
     #   mkdocstrings
-    #   myst-parser
     #   sphinx
 jupyter-client==8.6.0
     # via
@@ -140,10 +138,7 @@ markdown==3.5.1
     #   mkdocstrings
     #   pymdown-extensions
 markdown-it-py==3.0.0
-    # via
-    #   mdit-py-plugins
-    #   myst-parser
-    #   rich
+    # via rich
 markupsafe==2.1.3
     # via
     #   jinja2
@@ -155,8 +150,6 @@ matplotlib-inline==0.1.6
     #   ipython
 mccabe==0.7.0
     # via flake8
-mdit-py-plugins==0.4.0
-    # via myst-parser
 mdurl==0.1.2
     # via markdown-it-py
 mergedeep==1.3.4
@@ -183,8 +176,6 @@ mypy-extensions==1.0.0
     # via
     #   black
     #   trio-typing
-myst-parser==2.0.0
-    # via pyee (pyproject.toml)
 nest-asyncio==1.5.8
     # via ipykernel
 nh3==0.2.14
@@ -269,7 +260,6 @@ python-dateutil==2.8.2
 pyyaml==6.0.1
     # via
     #   mkdocs
-    #   myst-parser
     #   pymdown-extensions
     #   pyyaml-env-tag
 pyyaml-env-tag==0.1
@@ -307,7 +297,6 @@ sortedcontainers==2.4.0
     # via trio
 sphinx==7.2.6
     # via
-    #   myst-parser
     #   pyee (pyproject.toml)
     #   sphinxcontrib-applehelp
     #   sphinxcontrib-devhelp
