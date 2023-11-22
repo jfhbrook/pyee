@@ -17,10 +17,9 @@ Usage
 -----
 
 pyee supplies a ``EventEmitter`` class that is similar to the
-``EventEmitter`` class from Node.js. In addition, it supplies the subclasses
-``AsyncIOEventEmitter``, ``TwistedEventEmitter`` and ``ExecutorEventEmitter``
-for supporting async and threaded execution with asyncio, twisted, and
-concurrent.futures Executors respectively, as supported by the environment.
+``EventEmitter`` class from Node.js. In addition, it supplies subclasses for
+``asyncio``, ``twisted``, ``concurrent.futures`` and ``trio``, as supported
+by the environment.
 
 
 Example
