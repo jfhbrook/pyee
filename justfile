@@ -2,7 +2,7 @@ set dotenv-load := true
 
 sphinx-sphinxbuild := "sphinx-build"
 sphinx-sphinxopts := ""
-sphinx-sourcedir := "."
+sphinx-sourcedir := "docs"
 sphinx-builddir := "_build"
 
 # By default, run checks and tests, then format and lint
@@ -63,12 +63,12 @@ _clean-compile:
 
 # Format with black and isort
 format:
-  . ./venv/bin/activate &&  black './pyee' ./tests
-  . ./venv/bin/activate &&  isort --settings-file . './pyee' ./tests
+  . ./venv/bin/activate &&  black ./docs './pyee' ./tests
+  . ./venv/bin/activate &&  isort --settings-file . ./docs './pyee' ./tests
 
 # Lint with flake8
 lint:
-  . ./venv/bin/activate && flake8 './pyee' ./tests
+  . ./venv/bin/activate && flake8 ./docs './pyee' ./tests
   . ./venv/bin/activate && validate-pyproject ./pyproject.toml
 
 # Check type annotations with pyright
@@ -112,6 +112,10 @@ console:
 docs:
   . ./venv/bin/activate && mkdocs serve
 
+# Generate man page and open for preview
+man: (sphinx 'man')
+  . ./venv/bin/activate && man -l _build/man/pyee.1
+
 # Build the documentation
 build-docs:
   @just mkdocs
@@ -138,7 +142,6 @@ build:
   . ./venv/bin/activate && python -m build
 
 _clean-build:
-  rm -rf dist
   rm -rf dist
 
 # Tag the release in git
