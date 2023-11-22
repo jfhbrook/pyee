@@ -1,5 +1,10 @@
 set dotenv-load := true
 
+sphinx-sphinxbuild := "sphinx-build"
+sphinx-sphinxopts := ""
+sphinx-sourcedir := "docs"
+sphinx-builddir := "_build"
+
 # By default, run checks and tests, then format and lint
 default:
   if [ ! -d venv ]; then just install; fi
@@ -58,12 +63,12 @@ _clean-compile:
 
 # Format with black and isort
 format:
-  . ./venv/bin/activate &&  black './pyee' ./tests
-  . ./venv/bin/activate &&  isort --settings-file . './pyee' ./tests
+  . ./venv/bin/activate &&  black ./docs './pyee' ./tests
+  . ./venv/bin/activate &&  isort --settings-file . ./docs './pyee' ./tests
 
 # Lint with flake8
 lint:
-  . ./venv/bin/activate && flake8 './pyee' ./tests
+  . ./venv/bin/activate && flake8 ./docs './pyee' ./tests
   . ./venv/bin/activate && validate-pyproject ./pyproject.toml
 
 # Check type annotations with pyright
@@ -91,9 +96,11 @@ _clean-tox:
 # Shell and console
 #
 
+# Open a bash shell with the venv activated
 shell:
   . ./venv/bin/activate && bash
 
+# Open a Jupyter console
 console:
   . ./venv/bin/activate && jupyter console
 
@@ -105,9 +112,26 @@ console:
 docs:
   . ./venv/bin/activate && mkdocs serve
 
+# Generate man page and open for preview
+man: (sphinx 'man')
+  . ./venv/bin/activate && man -l _build/man/pyee.1
+
 # Build the documentation
 build-docs:
+  @just mkdocs
+  @just sphinx man
+
+# Run mkdocs
+mkdocs:
   . ./venv/bin/activate && mkdocs build
+
+# Run sphinx
+sphinx TARGET:
+	. ./venv/bin/activate && {{ sphinx-sphinxbuild }} -M "{{ TARGET }}" "{{ sphinx-sourcedir }}" "{{ sphinx-builddir }}" {{ sphinx-sphinxopts }}
+
+_clean-docs:
+  rm -rf site
+  rm -rf _build
 
 #
 # Package publishing
@@ -132,7 +156,7 @@ upload:
 publish: build upload
 
 # Clean up loose files
-clean: _clean-venv _clean-compile _clean-test _clean-tox
+clean: _clean-venv _clean-compile _clean-test _clean-tox _clean-docs
   rm -rf pyee.egg-info
   rm -f pyee/*.pyc
   rm -rf pyee/__pycache__

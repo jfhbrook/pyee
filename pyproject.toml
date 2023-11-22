@@ -46,6 +46,7 @@ dev = [
   "mkdocs",
   "mkdocs-include-markdown-plugin",
   "mkdocstrings[python]",
+  "sphinx",
   "toml",
   "tox",
   "trio",

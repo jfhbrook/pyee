@@ -13,3 +13,5 @@ scratchpad.ipynb
 .tox/
 node_modules
 venv
+site
+_build
