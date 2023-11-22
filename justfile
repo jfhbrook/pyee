@@ -91,9 +91,11 @@ _clean-tox:
 # Shell and console
 #
 
+# Open a bash shell with the venv activated
 shell:
   . ./venv/bin/activate && bash
 
+# Open a Jupyter console
 console:
   . ./venv/bin/activate && jupyter console
 
