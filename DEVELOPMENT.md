@@ -175,9 +175,33 @@ I try to use git tags to tag versions - there's a just task:
 just tag
 ```
 
-### Build and Publish
+### Push the Tag to GitHub
 
-To publish the package, run:
+```bash
+git push origin main --tags
+```
+
+### Check on GitHub Actions
+
+This should trigger a GitHub Action which publishes to PyPI and creates a
+GitHub Release. Go to GitHub and make sure it worked.
+
+### Check on RTD
+
+RTD should build automatically but I find there's a delay so I like to kick it
+off manually. Log into [RTD](https://readthedocs.org), log in, then go
+to [the pyee project page](https://readthedocs.org/projects/pyee/) and build
+latest and stable.
+
+
+### (Optional) Announce on Twitter
+
+It's not official, but I like to announce the release on Twitter.
+
+
+### (Optional) Build and Publish Manually
+
+If you want to publish the package manually, run:
 
 ```bash
 just publish
@@ -187,19 +211,4 @@ This should automatically build the package and upload with twine. However,
 you can also build the package manually with `just build`, or upload the
 existing build with `just upload`.
 
-## Push the Tag to GitHub
 
-```bash
-git push origin main --tags
-```
-
-## Check on RTD
-
-RTD should build automatically but I find there's a delay so I like to kick it
-off manually. Log into [RTD](https://readthedocs.org), log in, then go
-to [the pyee project page](https://readthedocs.org/projects/pyee/) and build
-latest and stable.
-
-## (Optional) Announce on Twitter
-
-It's not official, but I like to announce the release on Twitter.
