@@ -27,6 +27,22 @@ class PyeeError(PyeeException):
 Handler = TypeVar("Handler", bound=Callable)
 
 
+class UnhandledError(PyeeError):
+    """An unhandled error raised by an EventEmitter."""
+
+    def __init__(
+        self,
+        message: str,
+        f: Optional[Handler],
+        args: Optional[Tuple[Any]],
+        kwargs: Optional[Dict[str, Any]],
+    ):
+        super(UnhandledError, self).__init__(message)
+        self.__f__ = f
+        self.__args__ = args
+        self.__kwargs__ = kwargs
+
+
 class EventEmitter:
     """The base event emitter class. All other event emitters inherit from
     this class.
