@@ -1,5 +1,12 @@
 # Changelog
 
+- Remove deprecated imports:
+  - `pyee.BaseEventEmitter`
+  - `pyee.AsyncIOEventEmitter`
+  - `pyee.TwistedEventEmitter`
+  - `pyee.ExecutorEventEmitter`
+  - `pyee.TrioEventEmitter`
+
 ## 2023/11/23 Version 11.1.0
 
 - Generate a man page with Sphinx (in addition to mkdocs HTML)
