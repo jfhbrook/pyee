@@ -5,7 +5,7 @@ from unittest.mock import Mock
 
 from pytest import raises
 
-from pyee import EventEmitter
+from pyee import EventEmitter, PyeeError
 
 
 class PyeeTestException(Exception):
@@ -39,7 +39,7 @@ def test_emit_error():
 
     test_exception = PyeeTestException("lololol")
 
-    with raises(PyeeTestException):
+    with raises(PyeeError):
         ee.emit("error", test_exception)
 
     @ee.on("error")

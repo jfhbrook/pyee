@@ -20,6 +20,10 @@ class PyeeException(Exception):
     """An exception internal to pyee."""
 
 
+class PyeeError(PyeeException):
+    """An error raised by pyee."""
+
+
 Handler = TypeVar("Handler", bound=Callable)
 
 
@@ -166,9 +170,9 @@ class EventEmitter:
     def _emit_handle_potential_error(self, event: str, error: Any) -> None:
         if event == "error":
             if isinstance(error, Exception):
-                raise error
+                raise PyeeError(f"Uncaught 'error' event: {error}") from error
             else:
-                raise PyeeException(f"Uncaught, unspecified 'error' event: {error}")
+                raise PyeeError(f"Uncaught, unspecified 'error' event: {error}")
 
     def _call_handlers(
         self,

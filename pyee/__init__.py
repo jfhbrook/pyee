@@ -30,7 +30,7 @@ In [5]:
 from warnings import warn
 
 from pyee.base import EventEmitter as EventEmitter
-from pyee.base import PyeeException
+from pyee.base import PyeeError, PyeeException
 
 
 class BaseEventEmitter(EventEmitter):
