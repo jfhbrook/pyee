@@ -1,5 +1,10 @@
 # Changelog
 
+## 2023/11/23 Version 11.1.0
+
+- Generate a man page with Sphinx (in addition to mkdocs HTML)
+- Use GitHub Actions to cut releases
+
 ## 2023/10/14 Version 11.0.1
 
 - Bump development dependencies, thanks to dependabot
