@@ -7,19 +7,22 @@ jobs:
   versions:
     runs-on: ubuntu-latest
     outputs:
-      python_version: ${{ steps.versions.outputs.python_version }}
-      release_version: ${{ steps.versions.outputs.release_version }}
+      python_version: ${{ steps.python-version.outputs.python_version }}
+      release_version: ${{ steps.release-version.outputs.release_version }}
     steps:
       - uses: actions/checkout@v4
       - name: Get latest supported Python version
-        id: versions
+        id: python-version
         run: |
           CLASSIFIERS="$(yq -p toml -o toml '.project.classifiers[]' pyproject.toml | grep "Programming Language :: Python :: " | grep "\.")"
           VERSION="$(echo "${CLASSIFIERS}" | sed -e 's/Programming Language :: Python :: \([0-9.]*\)$/"\1"/g' | tail -n 1)"
           echo "python_version=[${VERSION}]" > "${GITHUB_OUTPUT}"
       # See: https://stackoverflow.com/questions/58177786/get-the-current-pushed-tag-in-github-actions
       - name: Get release version
-        run: echo "release_version=${GITHUB_REF#refs/*/}" >> "${GITHUB_OUTPUT}"
+        id: release-version
+          run: |
+            VERSION="$(yq -p toml -o toml -r '.project.version' pyproject.toml)"
+            echo "release_version=${VERSION}" >> "${GITHUB_OUTPUT}"
 
   build:
     runs-on: ubuntu-latest
@@ -91,7 +94,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
-          title: Release ${{ needs.versions.outputs.release_version }}
+          title: Release v${{ needs.versions.outputs.release_version }}
           files: |
             dist/*
             man
