@@ -50,11 +50,10 @@ jobs:
           name: man-page
           path: _build/man
 
-
   pypi-release:
     runs-on: ubuntu-latest
     needs:
-      - build-package
+      - build
     environment:
       name: pypi
       url: https://pypi.org/p/pypi
@@ -73,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - versions
-      - build-package
+      - build
     steps:
       - uses: actions/checkout@v4
       - name: Download distributions
