@@ -48,5 +48,10 @@ jobs:
           npx pyright@latest
       - name: Run tests
         run: pytest ./tests
+
+  actionlint:
+    name: Run actionlint
+    runs-on: ubuntu-latest
+    steps:
       - name: Run actionlint
         uses: raven-actions/actionlint@v1
