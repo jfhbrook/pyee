@@ -1,5 +1,11 @@
 # Changelog
 
+- Add `PyeeError` which inherits from `PyeeException`
+- Raise `PyeeError` instead of `PyeeException` throughout
+- Raise `PyeeError` with emitted error as context in `EventEmitter` - this
+  ensures that there's a stack trace pointing at the code path inside the
+  `EventEmitter` which raises the error
+
 ## 2023/11/23 Version 11.1.0
 
 - Generate a man page with Sphinx (in addition to mkdocs HTML)
