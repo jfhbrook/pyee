@@ -38,8 +38,9 @@ class EventEmitter:
     - `new_listener`: Fires whenever a new listener is created. Listeners for
       this event do not fire upon their own creation.
 
-    - `error`: When emitted raises an Exception by default, behavior can be
-      overridden by attaching callback to the event.
+    - `error`: When emitted raises a PyeeError with the supplied error as
+      context by default, behavior can be overridden by attaching callback to
+      the event.
 
       For example:
 
