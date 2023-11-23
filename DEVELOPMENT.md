@@ -22,25 +22,29 @@ pip-tools.
 To list all Just tasks, run `just --list`:
 
 ```
-iAvailable recipes:
-    build      # Build the package
-    build-docs # Build the documentation
-    check      # Check type annotations with pyright
-    clean      # Clean up loose files
-    compile    # Generate locked requirements files based on dependencies in pyproject.toml
-    console
-    default    # By default, run checks and tests, then format and lint
-    docs       # Live generate docs and host on a development webserver
-    format     # Format with black and isort
-    install    # Install all dependencies
-    lint       # Lint with flake8
-    publish    # Build the package and publish it to PyPI
-    shell
-    test       # Run tests with pytest
-    tox        # Run tests using tox
-    update     # Update all dependencies
-    upgrade    # Update all dependencies and rebuild the environment
-    upload     # Upload built packages
+Available recipes:
+    build         # Build the package
+    build-docs    # Build the documentation
+    check         # Check type annotations with pyright
+    clean         # Clean up loose files
+    compile       # Generate locked requirements files based on dependencies in pyproject.toml
+    console       # Open a Jupyter console
+    default       # By default, run checks and tests, then format and lint
+    docs          # Live generate docs and host on a development webserver
+    format        # Format with black and isort
+    install       # Install all dependencies
+    lint          # Lint with flake8
+    man           # Generate man page and open for preview
+    mkdocs        # Run mkdocs
+    publish       # Build the package and publish it to PyPI
+    shell         # Open a bash shell with the venv activated
+    sphinx TARGET # Run sphinx
+    tag           # Tag the release in git
+    test          # Run tests with pytest
+    tox           # Run tests using tox
+    update        # Update all dependencies
+    upgrade       # Update all dependencies and rebuild the environment
+    upload        # Upload built packages
 ```
 
 ### Updating Modules
