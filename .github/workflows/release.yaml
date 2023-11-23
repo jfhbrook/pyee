@@ -77,7 +77,6 @@ jobs:
       - versions
       - build
     steps:
-      - uses: actions/checkout@v4
       - name: Download distributions
         uses: actions/download-artifact@v3
         with:
