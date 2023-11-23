@@ -20,9 +20,9 @@ jobs:
       # See: https://stackoverflow.com/questions/58177786/get-the-current-pushed-tag-in-github-actions
       - name: Get release version
         id: release-version
-          run: |
-            VERSION="$(yq -p toml -o toml -r '.project.version' pyproject.toml)"
-            echo "release_version=${VERSION}" >> "${GITHUB_OUTPUT}"
+        run: |
+          VERSION="$(yq -p toml -o toml -r '.project.version' pyproject.toml)"
+          echo "release_version=${VERSION}" >> "${GITHUB_OUTPUT}"
 
   build:
     runs-on: ubuntu-latest
