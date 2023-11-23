@@ -30,7 +30,7 @@ In [5]:
 from warnings import warn
 
 from pyee.base import EventEmitter as EventEmitter
-from pyee.base import PyeeError, PyeeException
+from pyee.base import PyeeError, PyeeException, UnhandledError
 
 
 class BaseEventEmitter(EventEmitter):
@@ -49,7 +49,13 @@ class BaseEventEmitter(EventEmitter):
         super(BaseEventEmitter, self).__init__()
 
 
-__all__ = ["BaseEventEmitter", "EventEmitter", "PyeeException"]
+__all__ = [
+    "BaseEventEmitter",
+    "EventEmitter",
+    "PyeeException",
+    "PyeeError",
+    "UnhandledError",
+]
 
 try:
     from pyee.asyncio import AsyncIOEventEmitter as _AsyncIOEventEmitter  # noqa

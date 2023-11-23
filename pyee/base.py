@@ -27,14 +27,22 @@ class PyeeError(PyeeException):
 Handler = TypeVar("Handler", bound=Callable)
 
 
+# In certain situations, an unhandled error may have access to the context in
+# which it was thrown. This is generally NOT the case with base EventEmitters.
 class UnhandledError(PyeeError):
-    """An unhandled error raised by an EventEmitter."""
+    """An unhandled error raised by an EventEmitter. This error optionally
+    contains additional context on the raised error:
+
+    - `__f__` - the handler called when the error was raised
+    - `__args__` - the args the handler was called with when the error was raised
+    - `__kwargs__` - the kwargs the handler was called with when the error was raised
+    """
 
     def __init__(
         self,
         message: str,
         f: Optional[Handler],
-        args: Optional[Tuple[Any]],
+        args: Optional[Tuple[Any, ...]],
         kwargs: Optional[Dict[str, Any]],
     ):
         super(UnhandledError, self).__init__(message)
@@ -55,7 +63,7 @@ class EventEmitter:
       this event do not fire upon their own creation.
 
     - `error`: When emitted raises a PyeeError with the supplied error as
-      context by default, behavior can be overridden by attaching callback to
+      context by default. Behavior can be overridden by attaching a callback to
       the event.
 
       For example:
@@ -68,7 +76,7 @@ class EventEmitter:
     ee.emit('error', Exception('something blew up'))
     ```
 
-    All callbacks are handled in a synchronous, blocking manner. As in node.js,
+    All callbacks are handled in a synchronous, blocking manner. As in Node.js,
     raised exceptions are not automatically handled for you---you must catch
     your own exceptions, and treat them accordingly.
     """
@@ -186,10 +194,25 @@ class EventEmitter:
 
     def _emit_handle_potential_error(self, event: str, error: Any) -> None:
         if event == "error":
-            if isinstance(error, Exception):
-                raise PyeeError(f"Uncaught 'error' event: {error}") from error
-            else:
-                raise PyeeError(f"Uncaught, unspecified 'error' event: {error}")
+            self._handle_error(error, None, None, None)
+
+    # This method may be called by subclasses to supply additional context
+    # to handled errors.
+    def _handle_error(
+        self,
+        error: Any,
+        f: Optional[Handler],
+        args: Optional[Tuple[Any, ...]],
+        kwargs: Optional[Dict[str, Any]],
+    ) -> None:
+        if isinstance(error, Exception):
+            raise UnhandledError(
+                f"Uncaught 'error' event: {error}", f, args, kwargs
+            ) from error
+        else:
+            raise UnhandledError(
+                f"Uncaught, unspecified 'error' event: {error}", f, args, kwargs
+            )
 
     def _call_handlers(
         self,

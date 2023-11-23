@@ -60,8 +60,8 @@ class ExecutorEventEmitter(EventEmitter):
         future: Future = self._executor.submit(f, *args, **kwargs)
 
         @future.add_done_callback
-        def _callback(f: Future) -> None:
-            exc: Optional[BaseException] = f.exception()
+        def _callback(fut: Future) -> None:
+            exc: Optional[BaseException] = fut.exception()
             if isinstance(exc, Exception):
                 self.emit("error", exc)
             elif exc is not None:
