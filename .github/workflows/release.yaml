@@ -36,7 +36,7 @@ jobs:
           python-version: "${{ needs.versions.outputs.python_version }}"
       - name: Install the world
         run: |
-          python -m pip install --upgrade build pip setuptools wheel
+          python -m pip install --upgrade pip setuptools wheel
           pip install -e .[dev]
       - name: Build Package Distributions
         run: python -m build
