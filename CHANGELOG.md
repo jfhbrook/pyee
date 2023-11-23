@@ -6,6 +6,8 @@
   - `pyee.TwistedEventEmitter`
   - `pyee.ExecutorEventEmitter`
   - `pyee.TrioEventEmitter`
+- Add `PyeeError` which inherits from `PyeeException`, and use throughout
+- Deprecate direct use of `PyeeException`
 
 ## 2023/11/23 Version 11.1.0
 
