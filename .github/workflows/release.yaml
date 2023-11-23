@@ -19,7 +19,7 @@ jobs:
           echo "python_version=[${VERSION}]" > "${GITHUB_OUTPUT}"
       # See: https://stackoverflow.com/questions/58177786/get-the-current-pushed-tag-in-github-actions
       - name: Get release version
-        run: echo "release_version=$(GITHUB_REF#refs/*/}" >> "${GITHUB_OUTPUT}"
+        run: echo "release_version=${GITHUB_REF#refs/*/}" >> "${GITHUB_OUTPUT}"
 
   build:
     runs-on: ubuntu-latest
