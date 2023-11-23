@@ -4,7 +4,7 @@ from concurrent.futures import Executor, Future, ThreadPoolExecutor
 from types import TracebackType
 from typing import Any, Callable, Dict, Optional, Tuple, Type
 
-from pyee.base import EventEmitter
+from pyee.base import EventEmitter, UnhandledError
 
 __all__ = ["ExecutorEventEmitter"]
 
@@ -63,7 +63,12 @@ class ExecutorEventEmitter(EventEmitter):
         def _callback(fut: Future) -> None:
             exc: Optional[BaseException] = fut.exception()
             if isinstance(exc, Exception):
-                self.emit("error", exc)
+                try:
+                    raise UnhandledError(
+                        f"Uncaught 'error' event: {exc}", f, args, kwargs
+                    ) from exc
+                except UnhandledError as exc:
+                    self.emit("error", exc)
             elif exc is not None:
                 raise exc
 

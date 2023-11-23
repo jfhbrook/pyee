@@ -6,7 +6,7 @@ from typing import Any, AsyncGenerator, Awaitable, Callable, Dict, Optional, Tup
 
 import trio
 
-from pyee.base import EventEmitter, PyeeError
+from pyee.base import EventEmitter, PyeeError, UnhandledError
 
 __all__ = ["TrioEventEmitter"]
 
@@ -78,7 +78,12 @@ class TrioEventEmitter(EventEmitter):
             try:
                 await f(*args, **kwargs)
             except Exception as exc:
-                self.emit("error", exc)
+                try:
+                    raise UnhandledError(
+                        f"Uncaught 'error' event: {exc}", f, args, kwargs
+                    ) from exc
+                except UnhandledError as exc:
+                    self.emit("error", exc)
 
         return runner
 

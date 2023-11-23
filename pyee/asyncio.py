@@ -3,7 +3,7 @@
 from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine
 from typing import Any, Callable, cast, Dict, Optional, Set, Tuple
 
-from pyee.base import EventEmitter
+from pyee.base import EventEmitter, UnhandledError
 
 __all__ = ["AsyncIOEventEmitter"]
 
@@ -50,7 +50,12 @@ class AsyncIOEventEmitter(EventEmitter):
         try:
             coro: Any = f(*args, **kwargs)
         except Exception as exc:
-            self.emit("error", exc)
+            try:
+                raise UnhandledError(
+                    f"Uncaught 'error' event: {exc}", f, args, kwargs
+                ) from exc
+            except UnhandledError as exc:
+                self.emit("error", exc)
         else:
             if iscoroutine(coro):
                 if self._loop:
@@ -66,15 +71,20 @@ class AsyncIOEventEmitter(EventEmitter):
             else:
                 return
 
-            def callback(f):
-                self._waiting.remove(f)
+            def callback(fut):
+                self._waiting.remove(fut)
 
-                if f.cancelled():
+                if fut.cancelled():
                     return
 
-                exc: Exception = f.exception()
+                exc: Exception = fut.exception()
                 if exc:
-                    self.emit("error", exc)
+                    try:
+                        raise UnhandledError(
+                            f"Uncaught 'error' event: {exc}", f, args, kwargs
+                        ) from exc
+                    except UnhandledError as exc:
+                        self.emit("error", exc)
 
             fut.add_done_callback(callback)
             self._waiting.add(fut)

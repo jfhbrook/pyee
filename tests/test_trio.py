@@ -4,6 +4,7 @@ import pytest
 import pytest_trio.plugin  # noqa
 import trio
 
+from pyee import UnhandledError
 from pyee.trio import TrioEventEmitter
 
 
@@ -82,7 +83,11 @@ async def test_trio_error():
             async with rcv:
                 result = await rcv.__anext__()
 
-        assert isinstance(result, PyeeTestError)
+        assert isinstance(result, UnhandledError)
+        assert isinstance(result.__context__, PyeeTestError)
+        assert result.__f__ == event_handler
+        assert result.__args__ == tuple()
+        assert result.__kwargs__ == dict()
 
 
 @pytest.mark.trio
@@ -108,4 +113,8 @@ async def test_sync_error(event_loop):
             async with rcv:
                 result = await rcv.__anext__()
 
-        assert isinstance(result, PyeeTestError)
+        assert isinstance(result, UnhandledError)
+        assert isinstance(result.__context__, PyeeTestError)
+        assert result.__f__ == sync_handler
+        assert result.__args__ == tuple()
+        assert result.__kwargs__ == dict()

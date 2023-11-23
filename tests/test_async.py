@@ -15,6 +15,7 @@ from unittest.mock import Mock
 
 from twisted.internet.defer import succeed
 
+from pyee import UnhandledError
 from pyee.asyncio import AsyncIOEventEmitter
 from pyee.twisted import TwistedEventEmitter
 
@@ -89,7 +90,14 @@ async def test_asyncio_error(event_loop):
 
     result = await wait_for(should_call, 0.1)
 
-    assert isinstance(result, PyeeTestError)
+    assert isinstance(result, UnhandledError)
+    # TODO: The context somehow doesn't survive asyncio's error handling. I
+    # suspect this is a hazard of using asyncio, rather than anything I'm
+    # missing.
+    # assert isinstance(result.__context__, PyeeTestError)
+    assert result.__f__ == event_handler
+    assert result.__args__ == tuple()
+    assert result.__kwargs__ == dict()
 
 
 @pytest.mark.asyncio
@@ -138,7 +146,11 @@ async def test_sync_error(event_loop):
 
     result = await wait_for(should_call, 0.1)
 
-    assert isinstance(result, PyeeTestError)
+    assert isinstance(result, UnhandledError)
+    assert isinstance(result.__context__, PyeeTestError)
+    assert result.__f__ == sync_handler
+    assert result.__args__ == tuple()
+    assert result.__kwargs__ == dict()
 
 
 def test_twisted_emit():

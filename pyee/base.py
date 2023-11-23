@@ -62,7 +62,7 @@ class EventEmitter:
     - `new_listener`: Fires whenever a new listener is created. Listeners for
       this event do not fire upon their own creation.
 
-    - `error`: When emitted raises a PyeeError with the supplied error as
+    - `error`: When emitted raises an UnhandledError with the supplied error as
       context by default. Behavior can be overridden by attaching a callback to
       the event.
 
@@ -194,25 +194,16 @@ class EventEmitter:
 
     def _emit_handle_potential_error(self, event: str, error: Any) -> None:
         if event == "error":
-            self._handle_error(error, None, None, None)
-
-    # This method may be called by subclasses to supply additional context
-    # to handled errors.
-    def _handle_error(
-        self,
-        error: Any,
-        f: Optional[Handler],
-        args: Optional[Tuple[Any, ...]],
-        kwargs: Optional[Dict[str, Any]],
-    ) -> None:
-        if isinstance(error, Exception):
-            raise UnhandledError(
-                f"Uncaught 'error' event: {error}", f, args, kwargs
-            ) from error
-        else:
-            raise UnhandledError(
-                f"Uncaught, unspecified 'error' event: {error}", f, args, kwargs
-            )
+            if isinstance(error, UnhandledError):
+                raise error
+            elif isinstance(error, Exception):
+                raise UnhandledError(
+                    f"Uncaught 'error' event: {error}", None, None, None
+                ) from error
+            else:
+                raise UnhandledError(
+                    f"Uncaught, unspecified 'error' event: {error}", None, None, None
+                )
 
     def _call_handlers(
         self,
