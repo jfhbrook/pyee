@@ -15,8 +15,8 @@ jobs:
         id: python-version
         run: |
           CLASSIFIERS="$(yq -p toml -o toml '.project.classifiers[]' pyproject.toml | grep "Programming Language :: Python :: " | grep "\.")"
-          VERSION="$(echo "${CLASSIFIERS}" | sed -e 's/Programming Language :: Python :: \([0-9.]*\)$/"\1"/g' | tail -n 1)"
-          echo "python_version=[${VERSION}]" > "${GITHUB_OUTPUT}"
+          VERSION="$(echo "${CLASSIFIERS}" | sed -e 's/Programming Language :: Python :: \([0-9.]*\)$/\1/g' | tail -n 1)"
+          echo "python_version=${VERSION}" > "${GITHUB_OUTPUT}"
       # See: https://stackoverflow.com/questions/58177786/get-the-current-pushed-tag-in-github-actions
       - name: Get release version
         id: release-version
