@@ -7,8 +7,8 @@ jobs:
   versions:
     runs-on: ubuntu-latest
     outputs:
-      python_version: ${{ steps.python-version.outputs.python_version }}
-      release_version: ${{ steps.release-version.outputs.release_version }}
+      python-version: ${{ steps.python-version.outputs.python_version }}
+      release-version: ${{ steps.release-version.outputs.release_version }}
     steps:
       - uses: actions/checkout@v4
       - name: Get latest supported Python version
@@ -30,10 +30,10 @@ jobs:
       - versions
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python ${{ needs.versions.outputs.python_version }}
+      - name: Set up Python ${{ needs.versions.outputs.python-version }}
         uses: actions/setup-python@v4
         with:
-          python-version: "${{ needs.versions.outputs.python_version }}"
+          python-version: "${{ needs.versions.outputs.python-version }}"
       - name: Install the world
         run: |
           python -m pip install --upgrade pip setuptools wheel
@@ -93,7 +93,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
-          title: Release v${{ needs.versions.outputs.release_version }}
+          title: Release v${{ needs.versions.outputs.release-version }}
           files: |
             dist/*
             man/pyee.1
