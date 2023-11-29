@@ -7,8 +7,6 @@
     options:
       members:
         - EventEmitter
-        - BaseEventEmitter
-        - AsyncIOEventEmitter
         - PyeeException
       show_root_heading: false
 

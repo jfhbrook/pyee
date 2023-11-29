@@ -5,7 +5,7 @@ from typing import Any, Callable, Dict, Optional, Tuple
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
 
-from pyee.base import EventEmitter, PyeeException
+from pyee.base import EventEmitter, PyeeError
 
 try:
     from asyncio import iscoroutine
@@ -90,7 +90,7 @@ class TwistedEventEmitter(EventEmitter):
             elif isinstance(error, Exception):
                 self.emit("error", error)
             else:
-                self.emit("error", PyeeException(f"Unexpected failure object: {error}"))
+                self.emit("error", PyeeError(f"Unexpected failure object: {error}"))
         else:
             (super(TwistedEventEmitter, self))._emit_handle_potential_error(
                 event, error
