@@ -20,7 +20,7 @@ automat==22.10.0
     # via twisted
 babel==2.13.1
     # via sphinx
-black==23.11.0
+black==24.3.0
     # via
     #   flake8-black
     #   pyee (pyproject.toml)
