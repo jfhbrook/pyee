@@ -81,7 +81,7 @@ griffe==0.38.0
     # via mkdocstrings-python
 hyperlink==21.0.0
     # via twisted
-idna==3.4
+idna==3.7
     # via
     #   hyperlink
     #   requests
