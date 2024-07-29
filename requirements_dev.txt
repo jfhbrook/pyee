@@ -366,7 +366,7 @@ wcmatch==8.5
     # via mkdocs-include-markdown-plugin
 wcwidth==0.2.12
     # via prompt-toolkit
-zipp==3.17.0
+zipp==3.19.1
     # via importlib-metadata
 zope-interface==6.1
     # via twisted
