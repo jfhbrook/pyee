@@ -17,7 +17,11 @@ from typing import (
 
 
 class PyeeException(Exception):
-    """An exception internal to pyee."""
+    """An exception internal to pyee. Deprecated in favor of PyeeError."""
+
+
+class PyeeError(PyeeException):
+    """An error internal to pyee."""
 
 
 Handler = TypeVar("Handler", bound=Callable)
@@ -168,7 +172,7 @@ class EventEmitter:
             if isinstance(error, Exception):
                 raise error
             else:
-                raise PyeeException(f"Uncaught, unspecified 'error' event: {error}")
+                raise PyeeError(f"Uncaught, unspecified 'error' event: {error}")
 
     def _call_handlers(
         self,
