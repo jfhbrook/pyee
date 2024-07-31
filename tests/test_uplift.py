@@ -92,7 +92,7 @@ def test_uplift_emit():
             call("shared event on uplifted emitter"),
             call("uplifted event on uplifted emitter"),
             call("base event on base emitter"),
-            call("shared event on base emitter")
+            call("shared event on base emitter"),
             # No listener for uplifted event on uplifted
         ]
     )
