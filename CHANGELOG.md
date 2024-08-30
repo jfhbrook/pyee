@@ -1,5 +1,7 @@
 # Changelog
 
+## 2024/08/30 Version 12.0.0
+
 - Remove deprecated imports:
   - `pyee.BaseEventEmitter`
   - `pyee.AsyncIOEventEmitter`
