@@ -1,5 +1,14 @@
 # Changelog
 
+- Remove deprecated imports:
+  - `pyee.BaseEventEmitter`
+  - `pyee.AsyncIOEventEmitter`
+  - `pyee.TwistedEventEmitter`
+  - `pyee.ExecutorEventEmitter`
+  - `pyee.TrioEventEmitter`
+- Add `PyeeError` which inherits from `PyeeException`, and use throughout
+- Deprecate direct use of `PyeeException`
+
 ## 2024/08/30 Version 11.1.1
 
 - Add project URLs to pyproject.toml and PyPI
