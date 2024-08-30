@@ -339,7 +339,7 @@ trove-classifiers==2024.2.22
     # via validate-pyproject
 twine==5.0.0
     # via pyee (pyproject.toml)
-twisted==23.10.0
+twisted==24.7.0
     # via pyee (pyproject.toml)
 typing-extensions==4.9.0
     # via
