@@ -55,4 +55,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run actionlint
-        uses: raven-actions/actionlint@v1
+        uses: raven-actions/actionlint@v2

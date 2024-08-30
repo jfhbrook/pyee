@@ -1,5 +1,11 @@
 # Changelog
 
+## 2024/08/30 Version 11.1.1
+
+- Add project URLs to pyproject.toml and PyPI
+- Use ActionLint v2
+- Fix GitHub release action
+
 ## 2023/11/23 Version 11.1.0
 
 - Generate a man page with Sphinx (in addition to mkdocs HTML)
