@@ -52,6 +52,14 @@ jobs:
         with:
           name: man-page
           path: _build/man
+      - name: Build Release Notes
+        # thanks to https://gist.github.com/Integralist/57accaf446cf3e7974cd01d57158532c
+        run: awk '/^##/ {block++} {if (block == 1) { print }}' CHANGELOG.md > RELEASE_NOTES.md
+      - name: Store Release Notes
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-notes
+          path: RELEASE_NOTES.md
 
   pypi-release:
     runs-on: ubuntu-latest
@@ -87,19 +95,14 @@ jobs:
         with:
           name: man-page
           path: man
-      - name: Create a GitHub release
-        uses: comnoco/create-release-action@v2
-        env:
-          GITHUB_TOKEN: ${{ github.TOKEN }}
+      - name: Download release notes
+        uses: actions/download-artifact@v3
         with:
-          draft: false
-          prerelease: false
-          tag_name: ${{ github.ref }}
-          release_name: Release v${{ needs.versions.outputs.release-version }}
-      - name: Upload files to GitHub release
+          name: release-notes
+          path: RELEASE_NOTES.md
+      - name: Create a GitHub release
         env:
           GITHUB_TOKEN: ${{ github.TOKEN }}
         shell: bash
         run: |
-          cd '${{ github.workspace }}'
-          gh release upload '${{ github.ref }}' dist/* man/pyee.1
+          gh release create '${{ github.ref }}' --title 'Release v${{ needs.versions.outputs.release-version }}' --notes "$(cat RELEASE_NOTES.md)" dist/* man/pyee.1
