@@ -88,12 +88,18 @@ jobs:
           name: man-page
           path: man
       - name: Create a GitHub release
-        uses: marvinpinto/action-automatic-releases@latest
+        uses: comnoco/create-release-action@v2
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
-          title: Release v${{ needs.versions.outputs.release-version }}
-          files: |
-            dist/*
-            man/pyee.1
+          tag_name: ${{ github.ref }}
+          release_name: Release v${{ needs.versions.outputs.release-version }}
+      - name: Upload files to GitHub release
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
+        shell: bash
+        run: |
+          cd '${{ github.workspace }}'
+          gh release upload '${{ github.ref }}' dist/* man/pyee.1
