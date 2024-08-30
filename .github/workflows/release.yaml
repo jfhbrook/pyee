@@ -105,4 +105,4 @@ jobs:
           GITHUB_TOKEN: ${{ github.TOKEN }}
         shell: bash
         run: |
-          gh release create '${{ github.ref }}' --title 'Release v${{ needs.versions.outputs.release-version }}' --notes "$(cat notes/RELEASE_NOTES.md)" dist/* man/pyee.1
+          gh release create 'v${{ needs.versions.outputs.release-version }}' --title 'Release v${{ needs.versions.outputs.release-version }}' --notes "$(cat notes/RELEASE_NOTES.md)" dist/* man/pyee.1
