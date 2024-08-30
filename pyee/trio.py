@@ -111,9 +111,9 @@ class TrioEventEmitter(EventEmitter):
             raise PyeeError("Uninitialized nursery or nursery manager")
 
     async def __aenter__(self) -> "TrioEventEmitter":
-        self._context: Optional[
-            AbstractAsyncContextManager["TrioEventEmitter"]
-        ] = self.context()
+        self._context: Optional[AbstractAsyncContextManager["TrioEventEmitter"]] = (
+            self.context()
+        )
         return await self._context.__aenter__()
 
     async def __aexit__(

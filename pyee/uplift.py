@@ -136,10 +136,10 @@ def uplift(
     `new_listener` events are treated:
 
     - 'forward': `new_listener` events are propagated from the underlying
+      event emitter to the new event emitter but not vice versa.
     - 'both': `new_listener` events are propagated as with other events.
     - 'neither': `new_listener` events are only fired on their respective
       event emitters.
-      event emitter to the new event emitter but not vice versa.
     - 'backward': `new_listener` events are propagated from the new event
       emitter to the underlying event emitter, but not vice versa.
 

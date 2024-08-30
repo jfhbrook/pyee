@@ -4,10 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyee"
-version = "11.1.0"
+version = "11.1.1"
 authors = [
   {name = "Josh Holbrook", email = "josh.holbrook@gmail.com"}
 ]
+urls = {Repository = "https://github.com/jfhbrook/pyee", Documentation = "https://pyee.readthedocs.io"}
 description = "A rough port of Node.js's EventEmitter to Python with a few tricks of its own"
 readme = "README.md"
 keywords = ["events", "emitter", "node.js", "node", "eventemitter", "event_emitter"]
