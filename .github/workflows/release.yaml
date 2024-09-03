@@ -72,7 +72,7 @@ jobs:
       id-token: write
     steps:
       - name: Download distributions
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: package-distributions
           path: dist/
@@ -87,17 +87,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download distributions
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: package-distributions
           path: dist/
       - name: Download man page
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: man-page
           path: man
       - name: Download release notes
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: release-notes
           path: notes
