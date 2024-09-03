@@ -51,7 +51,7 @@ comm==0.2.1
     # via ipykernel
 constantly==23.10.4
     # via twisted
-cryptography==42.0.4
+cryptography==43.0.1
     # via secretstorage
 debugpy==1.8.0
     # via ipykernel
