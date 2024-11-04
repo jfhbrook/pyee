@@ -67,7 +67,7 @@ class AsyncIOEventEmitter(EventEmitter):
                 return
 
             def callback(f):
-                self._waiting.remove(f)
+                self._waiting.discard(f)
 
                 if f.cancelled():
                     return
@@ -78,3 +78,15 @@ class AsyncIOEventEmitter(EventEmitter):
 
             fut.add_done_callback(callback)
             self._waiting.add(fut)
+
+    async def wait_for_all(self):
+        if self._waiting:
+            await asyncio.wait(self._waiting)
+
+    def cancel_all(self):
+        for fut in self._waiting:
+            fut.cancel()
+        self._waiting.clear()
+
+    def has_pending_tasks(self) -> bool:
+        return bool(self._waiting)
