@@ -80,13 +80,22 @@ class AsyncIOEventEmitter(EventEmitter):
             self._waiting.add(fut)
 
     async def wait_for_all(self):
+        """
+        Wait for all pending futures to complete
+        """
         if self._waiting:
             await asyncio.wait(self._waiting)
 
     def cancel_all(self):
+        """
+        Cancel all pending tasks
+        """
         for fut in self._waiting:
             fut.cancel()
         self._waiting.clear()
 
     def has_pending_tasks(self) -> bool:
+        """
+        Check if there are any pending tasks
+        """
         return bool(self._waiting)
