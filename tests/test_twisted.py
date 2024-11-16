@@ -3,7 +3,7 @@
 from typing import Generator
 from unittest.mock import Mock
 
-from twisted.internet.defer import Deferred, inlineCallbacks
+from twisted.internet.defer import Deferred, inlineCallbacks, succeed
 from twisted.python.failure import Failure
 
 from pyee.twisted import TwistedEventEmitter
@@ -12,6 +12,59 @@ from pyee.twisted import TwistedEventEmitter
 class PyeeTestError(Exception):
     pass
 
+def test_emit() -> None:
+    """Test that TwistedEventEmitter can handle wrapping
+    coroutines
+    """
+    ee = TwistedEventEmitter()
+
+    should_call = Mock()
+
+    @ee.on("event")
+    async def event_handler():
+        _ = await succeed("yes!")
+        should_call(True)
+
+    ee.emit("event")
+
+    should_call.assert_called_once()
+
+
+def test_once() -> None:
+    """Test that TwistedEventEmitter also wraps coroutines for
+    once
+    """
+    ee = TwistedEventEmitter()
+
+    should_call = Mock()
+
+    @ee.once("event")
+    async def event_handler():
+        _ = await succeed("yes!")
+        should_call(True)
+
+    ee.emit("event")
+
+    should_call.assert_called_once()
+
+
+def test_error() -> None:
+    """Test that TwistedEventEmitters handle Failures when wrapping coroutines."""
+    ee = TwistedEventEmitter()
+
+    should_call = Mock()
+
+    @ee.on("event")
+    async def event_handler():
+        raise PyeeTestError()
+
+    @ee.on("failure")
+    def handle_error(e):
+        should_call(e)
+
+    ee.emit("event")
+
+    should_call.assert_called_once()
 
 def test_propagates_failure():
     """Test that TwistedEventEmitters can propagate failures
