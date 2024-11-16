@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import asyncio
-from asyncio import Future, sleep, wait_for
+from asyncio import Future, get_running_loop, sleep, wait_for
 
 import pytest
 import pytest_asyncio.plugin  # noqa
@@ -19,14 +19,14 @@ class PyeeTestError(Exception):
 
 
 @pytest.mark.asyncio
-async def test_emit(event_loop) -> None:
+async def test_emit() -> None:
     """Test that AsyncIOEventEmitter can handle wrapping
     coroutines
     """
 
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = AsyncIOEventEmitter(loop=get_running_loop())
 
-    should_call = Future(loop=event_loop)
+    should_call = Future(loop=get_running_loop())
 
     @ee.on("event")
     async def event_handler():
@@ -43,14 +43,14 @@ async def test_emit(event_loop) -> None:
 
 
 @pytest.mark.asyncio
-async def test_once_emit(event_loop) -> None:
+async def test_once_emit() -> None:
     """Test that AsyncIOEventEmitter also wrap coroutines when
     using once
     """
 
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = AsyncIOEventEmitter(loop=get_running_loop())
 
-    should_call = Future(loop=event_loop)
+    should_call = Future(loop=get_running_loop())
 
     @ee.once("event")
     async def event_handler():
@@ -64,13 +64,13 @@ async def test_once_emit(event_loop) -> None:
 
 
 @pytest.mark.asyncio
-async def test_error(event_loop) -> None:
+async def test_error() -> None:
     """Test that AsyncIOEventEmitter can handle errors when
     wrapping coroutines
     """
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = AsyncIOEventEmitter(loop=get_running_loop())
 
-    should_call = Future(loop=event_loop)
+    should_call = Future(loop=get_running_loop())
 
     @ee.on("event")
     async def event_handler():
@@ -88,13 +88,13 @@ async def test_error(event_loop) -> None:
 
 
 @pytest.mark.asyncio
-async def test_future_canceled(event_loop) -> None:
+async def test_future_canceled() -> None:
     """Test that AsyncIOEventEmitter can handle canceled Futures"""
 
-    cancel_me = Future(loop=event_loop)
-    should_not_call = Future(loop=event_loop)
+    cancel_me = Future(loop=get_running_loop())
+    should_not_call = Future(loop=get_running_loop())
 
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = AsyncIOEventEmitter(loop=get_running_loop())
 
     @ee.on("event")
     async def event_handler():
@@ -115,12 +115,12 @@ async def test_future_canceled(event_loop) -> None:
 
 
 @pytest.mark.asyncio
-async def test_event_emitter_canceled(event_loop) -> None:
+async def test_event_emitter_canceled() -> None:
     """Test that all running handlers in AsyncIOEventEmitter can be canceled"""
 
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = AsyncIOEventEmitter(loop=get_running_loop())
 
-    should_not_call = Future(loop=event_loop)
+    should_not_call = Future(loop=get_running_loop())
 
     @ee.on("event")
     async def event_handler():
@@ -144,12 +144,12 @@ async def test_event_emitter_canceled(event_loop) -> None:
 
 
 @pytest.mark.asyncio
-async def test_wait_for_complete(event_loop) -> None:
+async def test_wait_for_complete() -> None:
     """Test waiting for all pending tasks in an AsyncIOEventEmitter to
     complete
     """
 
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = AsyncIOEventEmitter(loop=get_running_loop())
 
     @ee.on("event")
     async def event_handler():
@@ -170,11 +170,11 @@ async def test_wait_for_complete(event_loop) -> None:
 
 
 @pytest.mark.asyncio
-async def test_sync_error(event_loop) -> None:
+async def test_sync_error() -> None:
     """Test that regular functions have the same error handling as coroutines"""
-    ee = AsyncIOEventEmitter(loop=event_loop)
+    ee = AsyncIOEventEmitter(loop=get_running_loop())
 
-    should_call = Future(loop=event_loop)
+    should_call = Future(loop=get_running_loop())
 
     @ee.on("event")
     def sync_handler():
