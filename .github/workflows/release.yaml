@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ needs.versions.outputs.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "${{ needs.versions.outputs.python-version }}"
       - name: Install the world
@@ -41,14 +41,14 @@ jobs:
       - name: Build Package Distributions
         run: python -m build
       - name: Store Package Distributions
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: package-distributions
           path: dist/
       - name: Build Man Page
         run: sphinx-build -M man docs _build
       - name: Store Man Page
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: man-page
           path: _build/man
@@ -56,7 +56,7 @@ jobs:
         # thanks to https://gist.github.com/Integralist/57accaf446cf3e7974cd01d57158532c
         run: mkdir notes && awk '/^##/ {block++} {if (block == 1) { print }}' CHANGELOG.md > notes/RELEASE.md
       - name: Store Release Notes
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-notes
           path: notes
