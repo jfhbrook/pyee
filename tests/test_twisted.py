@@ -12,6 +12,7 @@ from pyee.twisted import TwistedEventEmitter
 class PyeeTestError(Exception):
     pass
 
+
 def test_emit() -> None:
     """Test that TwistedEventEmitter can handle wrapping
     coroutines
@@ -65,6 +66,7 @@ def test_error() -> None:
     ee.emit("event")
 
     should_call.assert_called_once()
+
 
 def test_propagates_failure():
     """Test that TwistedEventEmitters can propagate failures
