@@ -22,7 +22,7 @@ See [CHANGELOG.md](./CHANGELOG.md).
 
 ## Contributors
 
-See [ONTRIBUTORS.,md](./CONTRIBUTORS.md).
+See [CONTRIBUTORS.md](./CONTRIBUTORS.md).
 
 ## License
 
