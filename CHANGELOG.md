@@ -9,6 +9,10 @@
   - `complete` property that's `True` when no handlers are currently running
 - Updated changelog for v12 release to describe where to find alternatives
   to deprecated and removed imports
+- Upgrade GitHub Actions
+ - Upgrade `actions/setup-python` to v5
+ - Upgrade `actions/setup-node` to v4
+ - Upgrade `actions/upload-artifact` to v4
 
 ## 2024/08/30 Version 12.0.0
 
