@@ -1,5 +1,11 @@
 # Changelog
 
+## 2024/11/16 Version 12.1.1
+
+- Fixed ReadTheDocs build
+  - `build.os` is [now a required parameter](https://blog.readthedocs.com/use-build-os-config/)
+  - `python.version` is replaced by `build.tools`
+
 ## 2024/11/16 Version 12.1.0
 
 - New features in `pyee.asyncio.AsyncIOEventEmitter`:
