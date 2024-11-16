@@ -4,7 +4,7 @@ build:
   os: ubuntu-lts-latest
   tools:
     python: "3.12"
-    nodejs: "22"
+    nodejs: "20"
 
 mkdocs:
   configuration: mkdocs.yml
