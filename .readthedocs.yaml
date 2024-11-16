@@ -1,5 +1,11 @@
 version: 2
 
+build:
+  os: ubuntu-lts-latest
+  tools:
+    python: latest
+    nodejs: latest
+
 mkdocs:
   configuration: mkdocs.yml
   fail_on_warning: false
