@@ -51,8 +51,6 @@ comm==0.2.1
     # via ipykernel
 constantly==23.10.4
     # via twisted
-cryptography==42.0.4
-    # via secretstorage
 debugpy==1.8.0
     # via ipykernel
 decorator==5.1.1
@@ -94,7 +92,7 @@ importlib-metadata==7.0.1
     # via
     #   trio-typing
     #   twine
-incremental==22.10.0
+incremental==24.7.2
     # via twisted
 iniconfig==2.0.0
     # via pytest
@@ -110,10 +108,6 @@ jaraco-classes==3.3.1
     # via keyring
 jedi==0.19.1
     # via ipython
-jeepney==0.8.0
-    # via
-    #   keyring
-    #   secretstorage
 jinja2==3.1.4
     # via
     #   mkdocs

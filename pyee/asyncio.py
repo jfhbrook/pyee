@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine
+from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine, wait
 from typing import Any, Callable, cast, Dict, Optional, Set, Tuple
 
 from pyee.base import EventEmitter
@@ -41,6 +41,32 @@ class AsyncIOEventEmitter(EventEmitter):
         self._loop: Optional[AbstractEventLoop] = loop
         self._waiting: Set[Future] = set()
 
+    def emit(
+        self,
+        event: str,
+        *args: Any,
+        **kwargs: Any,
+    ) -> bool:
+        """Emit `event`, passing `*args` and `**kwargs` to each attached
+        function or coroutine. Returns `True` if any functions are attached to
+        `event`; otherwise returns `False`.
+
+        Example:
+
+        ```py
+        ee.emit('data', '00101001')
+        ```
+
+        Assuming `data` is an attached function, this will call
+        `data('00101001')'`.
+
+        When executing coroutine handlers, their respective futures will be
+        stored in a "waiting" state. These futures may be waited on or
+        canceled with `wait_for_complete` and `cancel`, respectively; and
+        their status may be checked via the `complete` property.
+        """
+        return super().emit(event, *args, **kwargs)
+
     def _emit_run(
         self,
         f: Callable,
@@ -79,24 +105,73 @@ class AsyncIOEventEmitter(EventEmitter):
             fut.add_done_callback(callback)
             self._waiting.add(fut)
 
-    async def wait_for_all(self):
-        """
-        Wait for all pending tasks to complete
+    async def wait_for_complete(self):
+        """Waits for all pending tasks to complete. For example:
+
+        ```py
+        @ee.on('event')
+        async def async_handler(*args, **kwargs):
+            await returns_a_future()
+
+        # Triggers execution of async_handler
+        ee.emit('data', '00101001')
+
+        await ee.wait_for_complete()
+
+        # async_handler has completed execution
+        ```
+
+        This is useful if you're attempting a graceful shutdown of your
+        application and want to ensure all coroutines have completed execution
+        beforehand.
         """
         if self._waiting:
-            await asyncio.wait(self._waiting)
+            await wait(self._waiting)
 
-    def cancel_all(self):
-        """
-        Cancel all pending tasks
+    def cancel(self):
+        """Cancel all pending tasks. For example:
+
+        ```py
+        @ee.on('event')
+        async def async_handler(*args, **kwargs):
+            await returns_a_future()
+
+        # Triggers execution of async_handler
+        ee.emit('data', '00101001')
+
+        ee.cancel()
+
+        # async_handler execution has been canceled
+        ```
+
+        This is useful if you're attempting to shut down your application and
+        attempts at a graceful shutdown via `wait_for_complete` have failed.
         """
         for fut in self._waiting:
             if not fut.done() and not fut.cancelled():
                 fut.cancel()
         self._waiting.clear()
 
-    def has_pending_tasks(self) -> bool:
+    @property
+    def complete(self) -> bool:
+        """When true, there are no pending tasks, and execution is complete.
+        For example:
+
+        ```py
+        @ee.on('event')
+        async def async_handler(*args, **kwargs):
+            await returns_a_future()
+
+        # Triggers execution of async_handler
+        ee.emit('data', '00101001')
+
+        # async_handler is still running, so this prints False
+        print(ee.complete)
+
+        await ee.wait_for_complete()
+
+        # async_handler has completed execution, so this prints True
+        print(ee.complete)
+        ```
         """
-        Check if there are any pending tasks
-        """
-        return bool(self._waiting)
+        return not self._waiting
