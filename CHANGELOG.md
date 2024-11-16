@@ -1,15 +1,31 @@
 # Changelog
 
+## Next
+
+- New features in `pyee.asyncio.AsyncIOEventEmitter`:
+  - `wait_for_complete` method to wait for all running handlers to complete
+    execution
+  - `cancel` method to cancel execution of all running handlers
+  - `complete` property that's `True` when no handlers are currently running
+- Updated changelog for v12 release to describe where to find alternatives
+  to deprecated and removed imports
+
 ## 2024/08/30 Version 12.0.0
 
 - Remove deprecated imports:
   - `pyee.BaseEventEmitter`
+    - Use `pyee.base.EventEmitter` or `pyee.EventEmitter` instead
   - `pyee.AsyncIOEventEmitter`
+    - Use `pyee.asyncio.AsyncIOEventEmitter` instead
   - `pyee.TwistedEventEmitter`
+    - Use `pyee.twisted.TwistedEventEmitter` instead
   - `pyee.ExecutorEventEmitter`
+    - Use `pyee.executor.ExecutorEventEmitter` instead
   - `pyee.TrioEventEmitter`
+    - Use `pyee.trio.TrioEventEmitter` instead
 - Add `PyeeError` which inherits from `PyeeException`, and use throughout
 - Deprecate direct use of `PyeeException`
+  - Use `PyeeError` instead
 
 ## 2024/08/30 Version 11.1.1
 
