@@ -1,6 +1,6 @@
 # Changelog
 
-## Next
+## 2024/11/16 Version 12.1.0
 
 - New features in `pyee.asyncio.AsyncIOEventEmitter`:
   - `wait_for_complete` method to wait for all running handlers to complete
