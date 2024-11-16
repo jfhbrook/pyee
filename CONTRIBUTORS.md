@@ -15,3 +15,4 @@ Listed in no particular order:
 - Ivan Gretchka @leirons
 - Max Schmitt @mxschmitt
 - Masaya Suzuki @massongit
+- Xiao Shuai @xiaoshuai
