@@ -11,12 +11,7 @@ try:
 except ImportError:
     from concurrent.futures import TimeoutError  # type: ignore
 
-from unittest.mock import Mock
-
-from twisted.internet.defer import succeed
-
 from pyee.asyncio import AsyncIOEventEmitter
-from pyee.twisted import TwistedEventEmitter
 
 
 class PyeeTestError(Exception):
@@ -24,7 +19,7 @@ class PyeeTestError(Exception):
 
 
 @pytest.mark.asyncio
-async def test_asyncio_emit(event_loop) -> None:
+async def test_emit(event_loop) -> None:
     """Test that AsyncIOEventEmitter can handle wrapping
     coroutines
     """
@@ -48,7 +43,7 @@ async def test_asyncio_emit(event_loop) -> None:
 
 
 @pytest.mark.asyncio
-async def test_asyncio_once_emit(event_loop) -> None:
+async def test_once_emit(event_loop) -> None:
     """Test that AsyncIOEventEmitter also wrap coroutines when
     using once
     """
@@ -69,7 +64,7 @@ async def test_asyncio_once_emit(event_loop) -> None:
 
 
 @pytest.mark.asyncio
-async def test_asyncio_error(event_loop) -> None:
+async def test_error(event_loop) -> None:
     """Test that AsyncIOEventEmitter can handle errors when
     wrapping coroutines
     """
@@ -93,7 +88,7 @@ async def test_asyncio_error(event_loop) -> None:
 
 
 @pytest.mark.asyncio
-async def test_asyncio_future_canceled(event_loop) -> None:
+async def test_future_canceled(event_loop) -> None:
     """Test that AsyncIOEventEmitter can handle canceled Futures"""
 
     cancel_me = Future(loop=event_loop)
@@ -120,7 +115,7 @@ async def test_asyncio_future_canceled(event_loop) -> None:
 
 
 @pytest.mark.asyncio
-async def test_asyncio_event_emitter_canceled(event_loop) -> None:
+async def test_event_emitter_canceled(event_loop) -> None:
     """Test that all running handlers in AsyncIOEventEmitter can be canceled"""
 
     ee = AsyncIOEventEmitter(loop=event_loop)
@@ -149,7 +144,7 @@ async def test_asyncio_event_emitter_canceled(event_loop) -> None:
 
 
 @pytest.mark.asyncio
-async def test_asyncio_wait_for_complete(event_loop) -> None:
+async def test_wait_for_complete(event_loop) -> None:
     """Test waiting for all pending tasks in an AsyncIOEventEmitter to
     complete
     """
@@ -194,58 +189,3 @@ async def test_sync_error(event_loop) -> None:
     result = await wait_for(should_call, 0.1)
 
     assert isinstance(result, PyeeTestError)
-
-
-def test_twisted_emit() -> None:
-    """Test that TwistedEventEmitter can handle wrapping
-    coroutines
-    """
-    ee = TwistedEventEmitter()
-
-    should_call = Mock()
-
-    @ee.on("event")
-    async def event_handler():
-        _ = await succeed("yes!")
-        should_call(True)
-
-    ee.emit("event")
-
-    should_call.assert_called_once()
-
-
-def test_twisted_once() -> None:
-    """Test that TwistedEventEmitter also wraps coroutines for
-    once
-    """
-    ee = TwistedEventEmitter()
-
-    should_call = Mock()
-
-    @ee.once("event")
-    async def event_handler():
-        _ = await succeed("yes!")
-        should_call(True)
-
-    ee.emit("event")
-
-    should_call.assert_called_once()
-
-
-def test_twisted_error() -> None:
-    """Test that TwistedEventEmitters handle Failures when wrapping coroutines."""
-    ee = TwistedEventEmitter()
-
-    should_call = Mock()
-
-    @ee.on("event")
-    async def event_handler():
-        raise PyeeTestError()
-
-    @ee.on("failure")
-    def handle_error(e):
-        should_call(e)
-
-    ee.emit("event")
-
-    should_call.assert_called_once()
