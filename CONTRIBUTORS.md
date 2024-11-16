@@ -16,3 +16,11 @@ Listed in no particular order:
 - Max Schmitt @mxschmitt
 - Masaya Suzuki @massongit
 - Xiao Shuai @xiaoshuai
+- Emil Loer <emil@koffietijd.net>
+- Huan Do <doboy0@gmail.com>
+- Niklas Fiekas <niklas.fiekas@tu-clausthal.de>
+- Olivia Appleton <liv@OliviaAppleton.com>
+- Ryan Matthews <ryan@matws.org>
+- Tim Gates <tim.gates@iress.com>
+- @asellappen
+- @ddelange

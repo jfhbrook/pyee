@@ -14,6 +14,7 @@
  - Upgrade `actions/setup-python` to v5
  - Upgrade `actions/setup-node` to v4
  - Upgrade `actions/upload-artifact` to v4
+- Updated `CONTRIBUTORS.md` to include missing contributors
 
 ## 2024/08/30 Version 12.0.0
 
