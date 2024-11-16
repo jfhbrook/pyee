@@ -9,6 +9,7 @@
   - `complete` property that's `True` when no handlers are currently running
 - Updated changelog for v12 release to describe where to find alternatives
   to deprecated and removed imports
+- Add support for Python 3.13
 - Upgrade GitHub Actions
  - Upgrade `actions/setup-python` to v5
  - Upgrade `actions/setup-node` to v4
