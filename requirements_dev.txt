@@ -307,7 +307,7 @@ stack-data==0.6.3
     # via ipython
 toml==0.10.2
     # via pyee (pyproject.toml)
-tornado==6.4.1
+tornado==6.4.2
     # via
     #   ipykernel
     #   jupyter-client
