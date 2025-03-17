@@ -4,6 +4,7 @@
 
 - Fixed type checking with `mypy` and `pyright`
 - Dropped support for Python 3.8, 3.9 and 3.10
+- Export `Handler` in `pyee/__init__.py`
 
 ## 2024/11/16 Version 12.1.1
 
