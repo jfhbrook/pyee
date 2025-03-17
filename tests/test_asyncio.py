@@ -2,6 +2,7 @@
 
 import asyncio
 from asyncio import Future, get_running_loop, sleep, wait_for
+from typing import NoReturn
 
 import pytest
 import pytest_asyncio.plugin  # noqa
@@ -26,10 +27,10 @@ async def test_emit() -> None:
 
     ee = AsyncIOEventEmitter(loop=get_running_loop())
 
-    should_call = Future(loop=get_running_loop())
+    should_call: Future[bool] = Future(loop=get_running_loop())
 
     @ee.on("event")
-    async def event_handler():
+    async def event_handler() -> None:
         should_call.set_result(True)
 
     ee.emit("event")
@@ -50,7 +51,7 @@ async def test_once_emit() -> None:
 
     ee = AsyncIOEventEmitter(loop=get_running_loop())
 
-    should_call = Future(loop=get_running_loop())
+    should_call: Future[bool] = Future(loop=get_running_loop())
 
     @ee.once("event")
     async def event_handler():
@@ -70,10 +71,10 @@ async def test_error() -> None:
     """
     ee = AsyncIOEventEmitter(loop=get_running_loop())
 
-    should_call = Future(loop=get_running_loop())
+    should_call: Future[bool] = Future(loop=get_running_loop())
 
     @ee.on("event")
-    async def event_handler():
+    async def event_handler() -> NoReturn:
         raise PyeeTestError()
 
     @ee.on("error")
@@ -91,17 +92,17 @@ async def test_error() -> None:
 async def test_future_canceled() -> None:
     """Test that AsyncIOEventEmitter can handle canceled Futures"""
 
-    cancel_me = Future(loop=get_running_loop())
-    should_not_call = Future(loop=get_running_loop())
+    cancel_me: Future[bool] = Future(loop=get_running_loop())
+    should_not_call: Future[None] = Future(loop=get_running_loop())
 
     ee = AsyncIOEventEmitter(loop=get_running_loop())
 
     @ee.on("event")
-    async def event_handler():
+    async def event_handler() -> None:
         cancel_me.cancel()
 
     @ee.on("error")
-    def handle_error(exc):
+    def handle_error(exc) -> None:
         should_not_call.set_result(None)
 
     ee.emit("event")
@@ -120,7 +121,7 @@ async def test_event_emitter_canceled() -> None:
 
     ee = AsyncIOEventEmitter(loop=get_running_loop())
 
-    should_not_call = Future(loop=get_running_loop())
+    should_not_call: Future[bool] = Future(loop=get_running_loop())
 
     @ee.on("event")
     async def event_handler():
@@ -174,7 +175,7 @@ async def test_sync_error() -> None:
     """Test that regular functions have the same error handling as coroutines"""
     ee = AsyncIOEventEmitter(loop=get_running_loop())
 
-    should_call = Future(loop=get_running_loop())
+    should_call: Future[Exception] = Future(loop=get_running_loop())
 
     @ee.on("event")
     def sync_handler():

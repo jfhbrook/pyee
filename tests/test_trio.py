@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-import pytest_trio.plugin  # noqa
+import pytest_trio.plugin  # type: ignore # noqa
 import trio
 
 from pyee.trio import TrioEventEmitter

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Generator
+from typing import Any, Generator
 from unittest.mock import Mock
 
 from twisted.internet.defer import Deferred, inlineCallbacks, succeed
@@ -22,7 +22,7 @@ def test_emit() -> None:
     should_call = Mock()
 
     @ee.on("event")
-    async def event_handler():
+    async def event_handler() -> None:
         _ = await succeed("yes!")
         should_call(True)
 
@@ -79,12 +79,12 @@ def test_propagates_failure():
     @ee.on("event")
     @inlineCallbacks
     def event_handler() -> Generator[Deferred[object], object, None]:
-        d = Deferred()
+        d: Deferred[Any] = Deferred()
         d.callback(Failure(PyeeTestError()))
         yield d
 
     @ee.on("failure")
-    def handle_failure(f):
+    def handle_failure(f: Any) -> None:
         assert isinstance(f, Failure)
         should_call(f)
 
@@ -127,7 +127,7 @@ def test_propagates_exception():
     @ee.on("event")
     @inlineCallbacks
     def event_handler() -> Generator[Deferred[object], object, None]:
-        d = Deferred()
+        d: Deferred[Any] = Deferred()
         d.callback(Failure(PyeeTestError()))
         yield d
 

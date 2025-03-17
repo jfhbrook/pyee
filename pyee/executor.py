@@ -79,3 +79,4 @@ class ExecutorEventEmitter(EventEmitter):
         self: Self, type: Type[Exception], value: Exception, traceback: TracebackType
     ) -> Optional[bool]:
         self.shutdown()
+        return None

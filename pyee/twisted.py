@@ -8,9 +8,9 @@ from twisted.python.failure import Failure
 from pyee.base import EventEmitter, PyeeError
 
 try:
-    from asyncio import iscoroutine
+    from asyncio import iscoroutine  # type: ignore
 except ImportError:
-    iscoroutine = None
+    iscoroutine = None  # type: ignore
 
 
 __all__ = ["TwistedEventEmitter"]
@@ -67,7 +67,7 @@ class TwistedEventEmitter(EventEmitter):
         except Exception:
             self.emit("failure", Failure())
         else:
-            if iscoroutine and iscoroutine(result):
+            if iscoroutine and iscoroutine(result):  # type: ignore
                 d = ensureDeferred(result)
             elif isinstance(result, Deferred):
                 d = result
