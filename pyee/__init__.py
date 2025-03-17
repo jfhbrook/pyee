@@ -27,6 +27,6 @@ In [5]:
 
 """
 
-from pyee.base import EventEmitter, PyeeError, PyeeException
+from pyee.base import EventEmitter, Handler, PyeeError, PyeeException
 
-__all__ = ["EventEmitter", "PyeeError", "PyeeException"]
+__all__ = ["EventEmitter", "Handler", "PyeeError", "PyeeException"]

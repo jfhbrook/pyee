@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from functools import wraps
-from typing import Callable, List, Type, TypeVar
+from typing import Any, Callable, Iterator, List, Type, TypeVar
 
 from pyee import EventEmitter
 
@@ -12,13 +12,13 @@ class Handler:
 
 
 class Handlers:
-    def __init__(self):
+    def __init__(self) -> None:
         self._handlers: List[Handler] = []
 
-    def append(self, handler):
+    def append(self, handler) -> None:
         self._handlers.append(handler)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Handler]:
         return iter(self._handlers)
 
     def reset(self):
@@ -41,9 +41,9 @@ def on(event: str) -> Callable[[Callable], Callable]:
     return decorator
 
 
-def _bind(self, method):
+def _bind(self: Any, method: Any) -> Any:
     @wraps(method)
-    def bound(*args, **kwargs):
+    def bound(*args, **kwargs) -> Any:
         return method(self, *args, **kwargs)
 
     return bound
@@ -103,7 +103,7 @@ def evented(cls: Cls) -> Cls:
     og_init: Callable = cls.__init__
 
     @wraps(cls.__init__)
-    def init(self, *args, **kwargs):
+    def init(self: Any, *args: Any, **kwargs: Any) -> None:
         og_init(self, *args, **kwargs)
         if not hasattr(self, "event_emitter"):
             self.event_emitter = EventEmitter()

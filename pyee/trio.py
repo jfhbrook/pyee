@@ -2,7 +2,17 @@
 
 from contextlib import AbstractAsyncContextManager, asynccontextmanager
 from types import TracebackType
-from typing import Any, AsyncGenerator, Awaitable, Callable, Dict, Optional, Tuple, Type
+from typing import (
+    Any,
+    AsyncGenerator,
+    Awaitable,
+    Callable,
+    Dict,
+    Optional,
+    Self,
+    Tuple,
+    Type,
+)
 
 import trio
 
@@ -50,7 +60,7 @@ class TrioEventEmitter(EventEmitter):
     """
 
     def __init__(
-        self,
+        self: Self,
         nursery: Optional[Nursery] = None,
         manager: Optional["AbstractAsyncContextManager[trio.Nursery]"] = None,
     ):
@@ -69,7 +79,7 @@ class TrioEventEmitter(EventEmitter):
             self._manager = trio.open_nursery()
 
     def _async_runner(
-        self,
+        self: Self,
         f: Callable,
         args: Tuple[Any, ...],
         kwargs: Dict[str, Any],
@@ -83,7 +93,7 @@ class TrioEventEmitter(EventEmitter):
         return runner
 
     def _emit_run(
-        self,
+        self: Self,
         f: Callable,
         args: Tuple[Any, ...],
         kwargs: Dict[str, Any],
@@ -94,7 +104,7 @@ class TrioEventEmitter(EventEmitter):
 
     @asynccontextmanager
     async def context(
-        self,
+        self: Self,
     ) -> AsyncGenerator["TrioEventEmitter", None]:
         """Returns an async contextmanager which manages the underlying
         nursery to the EventEmitter. The `TrioEventEmitter`'s
@@ -110,14 +120,14 @@ class TrioEventEmitter(EventEmitter):
         else:
             raise PyeeError("Uninitialized nursery or nursery manager")
 
-    async def __aenter__(self) -> "TrioEventEmitter":
+    async def __aenter__(self: Self) -> "TrioEventEmitter":
         self._context: Optional[AbstractAsyncContextManager["TrioEventEmitter"]] = (
             self.context()
         )
         return await self._context.__aenter__()
 
     async def __aexit__(
-        self,
+        self: Self,
         type: Optional[Type[BaseException]],
         value: Optional[BaseException],
         traceback: Optional[TracebackType],
