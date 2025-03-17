@@ -43,10 +43,10 @@ jobs:
         run: |
           flake8 ./pyee ./tests
           validate-pyproject ./pyproject.toml
-      - name: Run type checking
-        run: |
-          npx pyright@latest
-          mypy .
+      - name: Run pyright
+        run: npx pyright@latest
+      - name: Run mypy
+        run: mypy .
       - name: Run tests
         run: pytest ./tests
 
