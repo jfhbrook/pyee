@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any, Callable, cast, Dict, Optional, Self, Tuple
+from typing import Any, Callable, Dict, Optional, Self, Tuple
 
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
@@ -84,7 +84,7 @@ class TwistedEventEmitter(EventEmitter):
         if event == "failure":
             if isinstance(error, Failure):
                 try:
-                    cast(Any, error).raiseException()
+                    error.raiseException()
                 except Exception as exc:
                     self.emit("error", exc)
             elif isinstance(error, Exception):

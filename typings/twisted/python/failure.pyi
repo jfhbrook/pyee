@@ -1,5 +1,8 @@
+from typing import Self
+
+
 class Failure(BaseException):
     value: Exception
 
-    def raiseException() -> None:
+    def raiseException(self: Self) -> None:
         ...
