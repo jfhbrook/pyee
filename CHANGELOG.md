@@ -9,6 +9,7 @@
   - Local and CI tasks for type checking with `mypy`
   - `mypy` type checking passes
   - `pyright` type checking passes
+- Addition of `mypy` to development dependencies
 - Removed conditional import of `iscoroutine`
   - This was implemented to support Python 3.3, which was dropped long ago
 - Removed type stub for `twisted.python.Failure`
