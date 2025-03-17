@@ -1,10 +1,19 @@
 # Changelog
 
-## 2025/03/xx Version 13.0.0
+## 2025/03/17 Version 13.0.0
 
-- Fixed type checking with `mypy` and `pyright`
-- Dropped support for Python 3.8, 3.9 and 3.10
-- Export `Handler` in `pyee/__init__.py`
+- Type checking improvements
+  - Introduce overloads for `ee.on`
+  - Add `None` return type for functions as appropriate
+  - Type `self` as `Any` in all methods
+  - Local and CI tasks for type checking with `mypy`
+  - `mypy` type checking passes
+  - `pyright` type checking passes
+- Removed conditional import of `iscoroutine`
+  - This was implemented to support Python 3.3, which was dropped long ago
+- Removed type stub for `twisted.python.Failure`
+  - This was to address a typing issue in unsupported versions of Twisted
+- Export `Handler` type in `pyee/__init__.py`
 
 ## 2024/11/16 Version 12.1.1
 
