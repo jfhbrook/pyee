@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine, wait
-from typing import Any, Callable, cast, Dict, Optional, Set, Tuple
+from typing import Any, Callable, cast, Dict, Optional, Self, Set, Tuple
 
 from pyee.base import EventEmitter
-
-Self = Any
 
 __all__ = ["AsyncIOEventEmitter"]
 
