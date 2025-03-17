@@ -5,6 +5,7 @@
 - 🤖 Avoid logging callback failures when queued executor handlers are canceled
 - 🤖 Add `Args`, `Returns` and `Raises` sections to public docstrings (#221)
 - 🤖 `AGENTS.md` file for AI coding assistant guidance
+- Use the `Self` type introduced in Python 3.11
 - Type check with both `pyright` and `mypy` by default
 - Remove `tox` test matrix, leaning on Github Actions
 
