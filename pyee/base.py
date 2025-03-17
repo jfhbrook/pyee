@@ -9,13 +9,14 @@ from typing import (
     List,
     Mapping,
     Optional,
-    Self,
     overload,
     Set,
     Tuple,
     TypeVar,
     Union,
 )
+
+Self = Any
 
 
 class PyeeException(Exception):

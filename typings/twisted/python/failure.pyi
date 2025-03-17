@@ -1,8 +1,8 @@
-from typing import Self
+from typing import Any
 
 
 class Failure(BaseException):
     value: Exception
 
-    def raiseException(self: Self) -> None:
+    def raiseException(self: Any) -> None:
         ...

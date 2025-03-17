@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any, Callable, Dict, Optional, Self, Tuple
+from typing import Any, Callable, cast, Dict, Optional, Tuple
 
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
@@ -11,6 +11,9 @@ try:
     from asyncio import iscoroutine  # type: ignore
 except ImportError:
     iscoroutine = None  # type: ignore
+
+
+Self = Any
 
 
 __all__ = ["TwistedEventEmitter"]
@@ -92,6 +95,6 @@ class TwistedEventEmitter(EventEmitter):
             else:
                 self.emit("error", PyeeError(f"Unexpected failure object: {error}"))
         else:
-            (super(TwistedEventEmitter, self))._emit_handle_potential_error(
+            cast(Any, super(TwistedEventEmitter, self))._emit_handle_potential_error(
                 event, error
             )

@@ -2,9 +2,11 @@
 
 from concurrent.futures import Executor, Future, ThreadPoolExecutor
 from types import TracebackType
-from typing import Any, Callable, Dict, Optional, Self, Tuple, Type
+from typing import Any, Callable, Dict, Optional, Tuple, Type
 
 from pyee.base import EventEmitter
+
+Self = Any
 
 __all__ = ["ExecutorEventEmitter"]
 
