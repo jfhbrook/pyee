@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
-from typing import Any, Callable, Dict, Optional, Tuple, Type, TypeVar, Union
+from typing import Any, Callable, cast, Dict, Optional, Tuple, Type, TypeVar, Union
 import warnings
 
 from typing_extensions import Literal
@@ -58,17 +58,17 @@ def _wrap(
         unwrap(left)
 
     def unwrap_hook() -> None:
-        left.emit = left_emit
+        cast(Any, left).emit = left_emit
         if left_unwrap:
             EMIT_WRAPPERS[left] = left_unwrap
         else:
             del EMIT_WRAPPERS[left]
             del left.unwrap  # type: ignore
-        left.emit = left_emit
+        cast(Any, left).emit = left_emit
 
         unwrap(right)
 
-    left.emit = wrapped_emit
+    cast(Any, left).emit = wrapped_emit
 
     EMIT_WRAPPERS[left] = unwrap_hook
     left.unwrap = _unwrap  # type: ignore

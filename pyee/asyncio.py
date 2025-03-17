@@ -92,13 +92,13 @@ class AsyncIOEventEmitter(EventEmitter):
             else:
                 return
 
-            def callback(f):
+            def callback(f: Future) -> None:
                 self._waiting.discard(f)
 
                 if f.cancelled():
                     return
 
-                exc: Exception = f.exception()
+                exc: Optional[BaseException] = f.exception()
                 if exc:
                     self.emit("error", exc)
 
