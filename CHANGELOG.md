@@ -1,5 +1,10 @@
 # Changelog
 
+## 2025/03/xx Version 13.0.0
+
+- Fixed type checking with `mypy` and `pyright`
+- Dropped support for Python 3.8, 3.9 and 3.10
+
 ## 2024/11/16 Version 12.1.1
 
 - Fixed ReadTheDocs build
