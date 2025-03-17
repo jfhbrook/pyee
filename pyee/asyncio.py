@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine, wait
-from typing import Any, Callable, cast, Dict, Optional, Set, Tuple
+from typing import Any, Callable, cast, Dict, Optional, Self, Set, Tuple
 
 from pyee.base import EventEmitter
 
@@ -36,13 +36,13 @@ class AsyncIOEventEmitter(EventEmitter):
     coroutine is scheduled in a fire-and-forget fashion.
     """
 
-    def __init__(self, loop: Optional[AbstractEventLoop] = None):
+    def __init__(self: Self, loop: Optional[AbstractEventLoop] = None) -> None:
         super(AsyncIOEventEmitter, self).__init__()
         self._loop: Optional[AbstractEventLoop] = loop
         self._waiting: Set[Future] = set()
 
     def emit(
-        self,
+        self: Self,
         event: str,
         *args: Any,
         **kwargs: Any,
@@ -68,11 +68,11 @@ class AsyncIOEventEmitter(EventEmitter):
         return super().emit(event, *args, **kwargs)
 
     def _emit_run(
-        self,
+        self: Self,
         f: Callable,
         args: Tuple[Any, ...],
         kwargs: Dict[str, Any],
-    ):
+    ) -> None:
         try:
             coro: Any = f(*args, **kwargs)
         except Exception as exc:
@@ -105,7 +105,7 @@ class AsyncIOEventEmitter(EventEmitter):
             fut.add_done_callback(callback)
             self._waiting.add(fut)
 
-    async def wait_for_complete(self):
+    async def wait_for_complete(self: Self) -> None:
         """Waits for all pending tasks to complete. For example:
 
         ```py
@@ -128,7 +128,7 @@ class AsyncIOEventEmitter(EventEmitter):
         if self._waiting:
             await wait(self._waiting)
 
-    def cancel(self):
+    def cancel(self: Self) -> None:
         """Cancel all pending tasks. For example:
 
         ```py
@@ -153,7 +153,7 @@ class AsyncIOEventEmitter(EventEmitter):
         self._waiting.clear()
 
     @property
-    def complete(self) -> bool:
+    def complete(self: Self) -> bool:
         """When true, there are no pending tasks, and execution is complete.
         For example:
 

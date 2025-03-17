@@ -9,6 +9,7 @@ from typing import (
     List,
     Mapping,
     Optional,
+    Self,
     Set,
     Tuple,
     TypeVar,
@@ -56,24 +57,24 @@ class EventEmitter:
     your own exceptions, and treat them accordingly.
     """
 
-    def __init__(self) -> None:
+    def __init__(self: Self) -> None:
         self._events: Dict[
             str,
             "OrderedDict[Callable, Callable]",
         ] = dict()
         self._lock: Lock = Lock()
 
-    def __getstate__(self) -> Mapping[str, Any]:
+    def __getstate__(self: Self) -> Mapping[str, Any]:
         state = self.__dict__.copy()
         del state["_lock"]
         return state
 
-    def __setstate__(self, state: Mapping[str, Any]) -> None:
+    def __setstate__(self: Self, state: Mapping[str, Any]) -> None:
         self.__dict__.update(state)
         self._lock = Lock()
 
     def on(
-        self, event: str, f: Optional[Handler] = None
+        self: Self, event: str, f: Optional[Handler] = None
     ) -> Union[Handler, Callable[[Handler], Handler]]:
         """Registers the function `f` to the event name `event`, if provided.
 
@@ -106,7 +107,7 @@ class EventEmitter:
         else:
             return self.add_listener(event, f)
 
-    def listens_to(self, event: str) -> Callable[[Handler], Handler]:
+    def listens_to(self: Self, event: str) -> Callable[[Handler], Handler]:
         """Returns a decorator which will register the decorated function to
         the event name `event`:
 
@@ -126,7 +127,7 @@ class EventEmitter:
 
         return on
 
-    def add_listener(self, event: str, f: Handler) -> Handler:
+    def add_listener(self: Self, event: str, f: Handler) -> Handler:
         """Register the function `f` to the event name `event`:
 
         ```
@@ -142,7 +143,7 @@ class EventEmitter:
         self._add_event_handler(event, f, f)
         return f
 
-    def _add_event_handler(self, event: str, k: Callable, v: Callable):
+    def _add_event_handler(self: Self, event: str, k: Callable, v: Callable):
         # Fire 'new_listener' *before* adding the new listener!
         self.emit("new_listener", event, k)
 
@@ -156,18 +157,18 @@ class EventEmitter:
             self._events[event][k] = v
 
     def _emit_run(
-        self,
+        self: Self,
         f: Callable,
         args: Tuple[Any, ...],
         kwargs: Dict[str, Any],
     ) -> None:
         f(*args, **kwargs)
 
-    def event_names(self) -> Set[str]:
+    def event_names(self: Self) -> Set[str]:
         """Get a set of events that this emitter is listening to."""
         return set(self._events.keys())
 
-    def _emit_handle_potential_error(self, event: str, error: Any) -> None:
+    def _emit_handle_potential_error(self: Self, event: str, error: Any) -> None:
         if event == "error":
             if isinstance(error, Exception):
                 raise error
@@ -175,7 +176,7 @@ class EventEmitter:
                 raise PyeeError(f"Uncaught, unspecified 'error' event: {error}")
 
     def _call_handlers(
-        self,
+        self: Self,
         event: str,
         args: Tuple[Any, ...],
         kwargs: Dict[str, Any],
@@ -191,7 +192,7 @@ class EventEmitter:
         return handled
 
     def emit(
-        self,
+        self: Self,
         event: str,
         *args: Any,
         **kwargs: Any,
@@ -217,7 +218,7 @@ class EventEmitter:
         return handled
 
     def once(
-        self,
+        self: Self,
         event: str,
         f: Optional[Callable] = None,
     ) -> Callable:
@@ -249,18 +250,18 @@ class EventEmitter:
         else:
             return _wrapper(f)
 
-    def _remove_listener(self, event: str, f: Callable) -> None:
+    def _remove_listener(self: Self, event: str, f: Callable) -> None:
         """Naked unprotected removal."""
         self._events[event].pop(f)
         if not len(self._events[event]):
             del self._events[event]
 
-    def remove_listener(self, event: str, f: Callable) -> None:
+    def remove_listener(self: Self, event: str, f: Callable) -> None:
         """Removes the function `f` from `event`."""
         with self._lock:
             self._remove_listener(event, f)
 
-    def remove_all_listeners(self, event: Optional[str] = None) -> None:
+    def remove_all_listeners(self: Self, event: Optional[str] = None) -> None:
         """Remove all listeners attached to `event`.
         If `event` is `None`, remove all listeners on all events.
         """
@@ -270,6 +271,6 @@ class EventEmitter:
             else:
                 self._events = dict()
 
-    def listeners(self, event: str) -> List[Callable]:
+    def listeners(self: Self, event: str) -> List[Callable]:
         """Returns a list of all listeners registered to the `event`."""
         return list(self._events.get(event, OrderedDict()).keys())

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any, Callable, Dict, Optional, Tuple
+from typing import Any, Callable, cast, Dict, Optional, Self, Tuple
 
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
@@ -52,11 +52,11 @@ class TwistedEventEmitter(EventEmitter):
     Similar behavior occurs for "sync" functions which return Deferreds.
     """
 
-    def __init__(self):
+    def __init__(self: Self) -> None:
         super(TwistedEventEmitter, self).__init__()
 
     def _emit_run(
-        self,
+        self: Self,
         f: Callable,
         args: Tuple[Any, ...],
         kwargs: Dict[str, Any],
@@ -80,11 +80,11 @@ class TwistedEventEmitter(EventEmitter):
 
             d.addErrback(errback)
 
-    def _emit_handle_potential_error(self, event: str, error: Any) -> None:
+    def _emit_handle_potential_error(self: Self, event: str, error: Any) -> None:
         if event == "failure":
             if isinstance(error, Failure):
                 try:
-                    error.raiseException()
+                    cast(Any, error).raiseException()
                 except Exception as exc:
                     self.emit("error", exc)
             elif isinstance(error, Exception):
