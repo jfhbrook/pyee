@@ -24,3 +24,4 @@ Listed in no particular order:
 - Tim Gates <tim.gates@iress.com>
 - @asellappen
 - @ddelange
+- Yuichiro Tachibana @whitphx
