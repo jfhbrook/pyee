@@ -167,9 +167,12 @@ mkdocstrings-python==1.8.0
     # via mkdocstrings
 more-itertools==10.2.0
     # via jaraco-classes
+mypy==1.15.0
+    # via pyee (pyproject.toml)
 mypy-extensions==1.0.0
     # via
     #   black
+    #   mypy
     #   trio-typing
 nest-asyncio==1.6.0
     # via ipykernel
@@ -337,6 +340,7 @@ twisted==24.7.0
     # via pyee (pyproject.toml)
 typing-extensions==4.9.0
     # via
+    #   mypy
     #   pyee (pyproject.toml)
     #   trio-typing
     #   twisted

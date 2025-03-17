@@ -75,6 +75,10 @@ lint:
 check:
   . ./venv/bin/activate && npx pyright@latest
 
+# Check type annotations with mypy
+mypy:
+  . ./venv/bin/activate && mypy .
+
 # Run tests with pytest
 test:
   . ./venv/bin/activate && pytest ./tests
