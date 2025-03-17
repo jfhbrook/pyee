@@ -65,7 +65,7 @@ class TwistedEventEmitter(EventEmitter):
         except Exception:
             self.emit("failure", Failure())
         else:
-            if iscoroutine(result):  # type: ignore
+            if iscoroutine(result):
                 d = ensureDeferred(result)
             elif isinstance(result, Deferred):
                 d = result
