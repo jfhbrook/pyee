@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from asyncio import iscoroutine
 from typing import Any, Callable, cast, Dict, Optional, Tuple
 
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
 
 from pyee.base import EventEmitter, PyeeError
-
-try:
-    from asyncio import iscoroutine  # type: ignore
-except ImportError:
-    iscoroutine = None  # type: ignore
-
 
 Self = Any
 
@@ -70,7 +65,7 @@ class TwistedEventEmitter(EventEmitter):
         except Exception:
             self.emit("failure", Failure())
         else:
-            if iscoroutine and iscoroutine(result):  # type: ignore
+            if iscoroutine(result):  # type: ignore
                 d = ensureDeferred(result)
             elif isinstance(result, Deferred):
                 d = result
