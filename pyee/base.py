@@ -10,6 +10,7 @@ from typing import (
     Mapping,
     Optional,
     Self,
+    overload,
     Set,
     Tuple,
     TypeVar,
@@ -73,6 +74,10 @@ class EventEmitter:
         self.__dict__.update(state)
         self._lock = Lock()
 
+    @overload
+    def on(self, event: str) -> Callable[[Handler], Handler]: ...
+    @overload
+    def on(self, event: str, f: Handler) -> Handler: ...
     def on(
         self: Self, event: str, f: Optional[Handler] = None
     ) -> Union[Handler, Callable[[Handler], Handler]]:
