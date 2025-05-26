@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing import NoReturn
+
 import pytest
 import pytest_trio.plugin  # type: ignore # noqa
 import trio
@@ -64,7 +66,7 @@ async def test_trio_error() -> None:
     """
 
     async with TrioEventEmitter() as ee:
-        send, rcv = trio.open_memory_channel(1)
+        send, rcv = trio.open_memory_channel[PyeeTestError](1)
 
         @ee.on("event")
         async def event_handler():
@@ -90,14 +92,14 @@ async def test_sync_error() -> None:
     """Test that regular functions have the same error handling as coroutines"""
 
     async with TrioEventEmitter() as ee:
-        send, rcv = trio.open_memory_channel(1)
+        send, rcv = trio.open_memory_channel[PyeeTestError](1)
 
         @ee.on("event")
-        def sync_handler():
+        def sync_handler() -> NoReturn:
             raise PyeeTestError()
 
         @ee.on("error")
-        async def handle_error(exc):
+        async def handle_error(exc) -> None:
             async with send:
                 await send.send(exc)
 
