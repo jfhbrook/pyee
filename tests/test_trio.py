@@ -12,7 +12,7 @@ class PyeeTestError(Exception):
 
 
 @pytest.mark.trio
-async def test_trio_emit():
+async def test_trio_emit() -> None:
     """Test that the trio event emitter can handle wrapping
     coroutines
     """
@@ -35,7 +35,7 @@ async def test_trio_emit():
 
 
 @pytest.mark.trio
-async def test_trio_once_emit():
+async def test_trio_once_emit() -> None:
     """Test that trio event emitters also wrap coroutines when
     using once
     """
@@ -58,7 +58,7 @@ async def test_trio_once_emit():
 
 
 @pytest.mark.trio
-async def test_trio_error():
+async def test_trio_error() -> None:
     """Test that trio event emitters can handle errors when
     wrapping coroutines
     """
@@ -86,7 +86,7 @@ async def test_trio_error():
 
 
 @pytest.mark.trio
-async def test_sync_error(event_loop):
+async def test_sync_error() -> None:
     """Test that regular functions have the same error handling as coroutines"""
 
     async with TrioEventEmitter() as ee:
