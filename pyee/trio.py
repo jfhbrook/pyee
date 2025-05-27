@@ -7,9 +7,9 @@ from typing import (
     AsyncGenerator,
     Awaitable,
     Callable,
-    cast,
     Dict,
     Optional,
+    Self,
     Tuple,
     Type,
 )
@@ -17,8 +17,6 @@ from typing import (
 import trio
 
 from pyee.base import EventEmitter, PyeeError
-
-Self = Any
 
 __all__ = ["TrioEventEmitter"]
 
@@ -126,7 +124,7 @@ class TrioEventEmitter(EventEmitter):
         self._context: Optional[AbstractAsyncContextManager["TrioEventEmitter"]] = (
             self.context()
         )
-        return await cast(Any, self._context).__aenter__()
+        return await self._context.__aenter__()
 
     async def __aexit__(
         self: Self,
