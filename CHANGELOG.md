@@ -1,5 +1,12 @@
 # Changelog
 
+## yyyy/mm/dd Version 14.0.0
+
+- Remove private members from `pyee.cls` exports
+  - `pyee.cls.Handler`
+  - `pyee.cls.Handlers`
+  - `pyee.cls._bind`
+
 ## 2025/03/17 Version 13.0.0
 
 - Type checking improvements
