@@ -68,7 +68,7 @@ known_application = "pyee"
 [tool.pyright]
 include = ["pyee", "tests"]
 
-[tool.pytest]
+[tool.pytest.ini_options]
 addopts = "--verbose -s"
 testpaths = [ "tests" ]
 
