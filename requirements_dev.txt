@@ -350,7 +350,7 @@ urllib3==2.5.0
     #   twine
 validate-pyproject[all]==0.16
     # via pyee (pyproject.toml)
-virtualenv==20.26.6
+virtualenv==20.36.1
     # via tox
 watchdog==4.0.0
     # via mkdocs
