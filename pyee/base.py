@@ -259,7 +259,7 @@ class EventEmitter:
 
     def _remove_listener(self: Self, event: str, f: Callable) -> None:
         """Naked unprotected removal."""
-        if f in self._events[event]:
+        if event in self._events:
             self._events[event].pop(f)
             if not self._events[event]:
                 del self._events[event]
