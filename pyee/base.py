@@ -259,9 +259,10 @@ class EventEmitter:
 
     def _remove_listener(self: Self, event: str, f: Callable) -> None:
         """Naked unprotected removal."""
-        self._events[event].pop(f)
-        if not len(self._events[event]):
-            del self._events[event]
+        if f in self._events[event]:
+            self._events[event].pop(f)
+            if not self._events[event]:
+                del self._events[event]
 
     def remove_listener(self: Self, event: str, f: Callable) -> None:
         """Removes the function `f` from `event`."""
