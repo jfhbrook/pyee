@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026/02/14 Version 13.0.1
+
+- Check for listener's existence before attempting to remove it
+- Update pytest configuration to support pytest 9
+
 ## 2025/03/17 Version 13.0.0
 
 - Type checking improvements
