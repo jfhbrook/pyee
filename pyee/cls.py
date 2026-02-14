@@ -4,6 +4,8 @@ from typing import Any, Callable, Iterator, List, Type, TypeVar
 
 from pyee import EventEmitter
 
+__all__ = ["on", "Cls", "evented"]
+
 
 @dataclass
 class Handler:
