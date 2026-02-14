@@ -25,3 +25,5 @@ Listed in no particular order:
 - @asellappen
 - @ddelange
 - Yuichiro Tachibana @whitphx
+- Joe Rickwalder @rickwalder
+- Colin Watson @cjwatson
