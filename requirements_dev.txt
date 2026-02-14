@@ -237,7 +237,7 @@ pygments==2.17.2
     #   readme-renderer
     #   rich
     #   sphinx
-pymdown-extensions==10.16.1
+pymdown-extensions==10.7
     # via mkdocstrings
 pyproject-api==1.6.1
     # via tox
