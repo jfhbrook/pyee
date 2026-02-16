@@ -10,13 +10,12 @@ from typing import (
     Mapping,
     Optional,
     overload,
+    Self,
     Set,
     Tuple,
     TypeVar,
     Union,
 )
-
-Self = Any
 
 
 class PyeeException(Exception):
