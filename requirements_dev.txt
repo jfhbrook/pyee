@@ -132,7 +132,7 @@ jupyter-core==5.7.1
     #   jupyter-console
 keyring==24.3.0
     # via twine
-markdown==3.5.2
+markdown==3.8.1
     # via
     #   mkdocs
     #   mkdocs-autorefs
