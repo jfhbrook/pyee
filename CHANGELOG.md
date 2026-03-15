@@ -1,5 +1,9 @@
 # Changelog
 
+- Use `uv` instead of `pip-tools`
+- Move `dev` extras to `dev` dependency group
+- Drop support for Python 3.8, 3.9, 3.10 and 3.11
+
 ## 2026/02/14 Version 13.0.1
 
 - Check for listener's existence before attempting to remove it
