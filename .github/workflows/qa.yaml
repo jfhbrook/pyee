@@ -38,7 +38,8 @@ jobs:
       - name: Install the world
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          pip install -e .[dev]
+          python -m pip install -r requirements_dev.txt
+          pip install -e .
       - name: Run linting
         run: |
           flake8 ./pyee ./tests
