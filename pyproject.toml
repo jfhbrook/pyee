@@ -27,6 +27,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Other/Nonlisted Topic",
 ]
 requires-python = ">=3.8"
@@ -35,7 +36,7 @@ dependencies = [
     "typing-extensions"
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
   "build",
   "flake8",
@@ -51,12 +52,9 @@ dev = [
   "mkdocstrings[python]",
   "mypy",
   "sphinx",
-  "toml",
   "tox",
-  "trio",
   "trio; python_version > '3.6'",
   "trio-typing; python_version > '3.6'",
-  "twine",
   "twisted",
   "validate-pyproject[all]",
 ]
@@ -74,7 +72,3 @@ testpaths = [ "tests" ]
 
 [tool.setuptools]
 packages = ["pyee"]
-
-[tool.setuptools.dynamic]
-dependencies = { file = ["requirements.txt"] }
-optional-dependencies.dev = { file = ["requirements_dev.txt"] }

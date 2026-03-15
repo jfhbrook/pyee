@@ -5,7 +5,6 @@ channels:
 dependencies:
   - python=3.10.11
   - pip
-  - pip-tools
   - wheel
   - pip:
     - -r requirements_dev.txt

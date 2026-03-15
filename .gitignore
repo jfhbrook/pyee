@@ -12,6 +12,6 @@ version.txt
 scratchpad.ipynb
 .tox/
 node_modules
-venv
+.venv
 site
 _build
