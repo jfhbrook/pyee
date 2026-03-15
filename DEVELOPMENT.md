@@ -2,20 +2,19 @@
 
 ## Prerequisites
 
-- Python 3.10+ - either system python3 or conda
-- npm - namely `npx`
+- [uv](https://docs.astral.sh/uv/)
+- `npm` - namely `npx`
 - [just](https://github.com/casey/just)
 
 ## Environment Setup
 
-To set everything up, run:
+This project uses `uv` to manage dependencies. `uv` is pretty good at automatically sync-ing. But if you need to explicitly set everything up, try:
 
 ```bash
 just install
 ```
 
-This will create a virtualenv at `./venv` and install dependencies with pip and
-pip-tools.
+This will create a virtualenv at `./.venv` and install dependencies with `uv`.
 
 ## Just Tasks
 
@@ -28,7 +27,6 @@ Available recipes:
     check         # Check type annotations with pyright
     clean         # Clean up loose files
     compile       # Generate locked requirements files based on dependencies in pyproject.toml
-    console       # Open a Jupyter console
     default       # By default, run checks and tests, then format and lint
     docs          # Live generate docs and host on a development webserver
     format        # Format with black and isort
@@ -54,57 +52,6 @@ To update the modules being used, run:
 ```bash
 just update
 ```
-
-Alternately, run everything with the just tasks, which source the activate
-script before running commands. You can get a full list with `just --list`.
-
-### conda
-
-The author doesn't currently use Conda on any machines, and is unsupported.
-Howeer, an `environment.yml` *is* provided, and is intended to manage a Conda
-environment named `pyee`. These notes are a guide to how Conda *could* be
-used, and for anybody who wants to add Conda support to the `justfile`.
-
-In general, `conda env create`, `conda activate pyee` and `conda env update`
-should work as far as Conda is concerned. However, you'll need to use lower
-level commands to update the requirements files with pip-tools.
-
-Instead of running `just install`, run:
-
-```bash
-just compile  # generate requirements files
-conda env install  # or conda env update
-```
-
-Instead of running `just update`, run:
-
-```bash
-just clean  # removes existing requirements files
-just compile
-conda env update
-```
-
-Note that the other just tasks assume an activate script at `./venv/bin/activate`.
-For now, you could probably stub it so that it calls `conda activate pyee`.
-Supporting it would probably look like generating that script in the
-venv setup task.
-
-Finally, be cautioned that, in the past, dependencies with compiled components
-were installed with Conda, such that pip left them alone after finding they
-were the same version. The reason for this is that source builds will have
-issues linking to non-Conda libraries. Now that it's a few years later,
-however, those modules may install binary wheels and be just fine.
-
-Either way, there's a decent shot a module with compiled components will have issues
-and need to be added to `environment.yml`. In the past, I manually kept the
-version matching `requirements_dev.txt`, but now that this is being generated
-by pip-tools - with locks for transient dependencies - this
-sort of bookkeeping is a lot harder. One option is to write a script that
-will naively grep versions from the requirements file, though keep in mind
-that pip versions aren't fully compatible with Conda versions. Another is
-to find the conda package for the binary dependency, and install that so the
-linter works. A final option is to punch Conda's linker - I've done this in
-the past, but it's pretty fragile and hopefully unnecessary.
 
 ## Interactive Environments
 
@@ -197,10 +144,9 @@ off manually. Log into [RTD](https://readthedocs.org), log in, then go
 to [the pyee project page](https://readthedocs.org/projects/pyee/) and build
 latest and stable.
 
+### (Optional) Announce on Social Media
 
-### (Optional) Announce on Twitter
-
-It's not official, but I like to announce the release on Twitter.
+It's not official, but I like to announce the release on Bluesky and Mastodon.
 
 
 ### (Optional) Build and Publish Manually
@@ -211,8 +157,4 @@ If you want to publish the package manually, run:
 just publish
 ```
 
-This should automatically build the package and upload with twine. However,
-you can also build the package manually with `just build`, or upload the
-existing build with `just upload`.
-
-
+This should automatically build the package and upload with `uv`.
