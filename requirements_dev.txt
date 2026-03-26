@@ -257,7 +257,7 @@ pyzmq==27.1.0
     #   ipykernel
     #   jupyter-client
     #   jupyter-console
-requests==2.32.5
+requests==2.33.0
     # via sphinx
 roman-numerals==4.1.0
     # via sphinx
