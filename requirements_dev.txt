@@ -221,7 +221,7 @@ pygments==2.19.2
     #   jupyter-console
     #   pytest
     #   sphinx
-pymdown-extensions==10.21
+pymdown-extensions==10.21.3
     # via mkdocstrings
 pyproject-api==1.10.0
     # via tox
