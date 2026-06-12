@@ -287,7 +287,7 @@ stack-data==0.6.3
     # via ipython
 tomli-w==1.2.0
     # via tox
-tornado==6.5.5
+tornado==6.5.6
     # via
     #   ipykernel
     #   jupyter-client
