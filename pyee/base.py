@@ -275,7 +275,8 @@ class EventEmitter:
         """
         with self._lock:
             if event is not None:
-                self._events[event] = OrderedDict()
+                if event in self._events:
+                    del self._events[event]
             else:
                 self._events = dict()
 
