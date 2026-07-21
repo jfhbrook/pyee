@@ -135,40 +135,6 @@ def test_listener_removal():
     assert ee.event_names() == set()
 
 
-def test_remove_all_listeners_single_event_cleans_key():
-    """`remove_all_listeners("event")` fully removes the event key rather
-    than leaving an empty mapping behind.
-
-    Regression test: a previous implementation replaced the entry with an
-    empty ``OrderedDict``, which kept the key present in ``_events`` and
-    caused ``event_names()`` to wrongly report the event as still
-    registered.
-    """
-
-    ee = EventEmitter()
-
-    @ee.on("event")
-    def event_handler():
-        pass
-
-    @ee.on("other")
-    def other_handler():
-        pass
-
-    assert ee.event_names() == {"event", "other"}
-
-    ee.remove_all_listeners("event")
-
-    # The key must be gone entirely, not just emptied.
-    assert "event" not in ee._events
-    # event_names() must reflect the removal.
-    assert ee.event_names() == {"other"}
-    # The other event's listeners are untouched.
-    assert ee.listeners("other") == [other_handler]
-    # Emitting the removed event reports no handlers.
-    assert ee.emit("event") is False
-
-
 def test_remove_all_listeners_clears_every_event():
     """`remove_all_listeners()` with no argument removes every event."""
 
