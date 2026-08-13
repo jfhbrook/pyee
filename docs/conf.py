@@ -6,10 +6,10 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-import toml
+import tomllib
 
-with open("../pyproject.toml", "r") as f:
-    pyproject_toml = toml.load(f)
+with open("../pyproject.toml", "rb") as f:
+    pyproject_toml = tomllib.load(f)
 
 project = "pyee"
 copyright = "2023, Josh Holbrook"
