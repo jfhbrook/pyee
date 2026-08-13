@@ -1,8 +1,11 @@
 # Changelog
 
+## 2026/08/12 Version 14.0.0
+
 - Use `uv` instead of `pip-tools`
 - Move `dev` extras to `dev` dependency group
 - Drop support for Python 3.8, 3.9, 3.10 and 3.11
+- BUGFIX: Remove all listeners only for specified event
 
 ## 2026/02/14 Version 13.0.1
 

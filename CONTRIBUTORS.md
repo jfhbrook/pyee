@@ -27,3 +27,4 @@ Listed in no particular order:
 - Yuichiro Tachibana @whitphx
 - Joe Rickwalder @rickwalder
 - Colin Watson @cjwatson
+- Vincent Huang @vincent178
