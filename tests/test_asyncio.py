@@ -171,6 +171,84 @@ async def test_wait_for_complete() -> None:
 
 
 @pytest.mark.asyncio
+async def test_wait_for_complete_drains_cascading_handlers() -> None:
+    """Handlers emitted by a running handler are included in the barrier."""
+    ee = AsyncIOEventEmitter(loop=get_running_loop())
+    child_started = asyncio.Event()
+    release_child = asyncio.Event()
+    child_done: Future[bool] = Future(loop=get_running_loop())
+
+    @ee.on("event")
+    async def event_handler() -> None:
+        ee.emit("child")
+
+    @ee.on("child")
+    async def child_handler() -> None:
+        child_started.set()
+        await release_child.wait()
+        child_done.set_result(True)
+
+    waiter = asyncio.create_task(ee.wait_for_complete())
+    try:
+        ee.emit("event")
+        await child_started.wait()
+        await sleep(0)
+
+        assert not waiter.done()
+
+        release_child.set()
+        await waiter
+    finally:
+        release_child.set()
+        ee.cancel()
+        await asyncio.gather(waiter, return_exceptions=True)
+        await sleep(0)
+
+    assert child_done.done()
+    assert child_done.result() is True
+    assert ee.complete
+
+
+@pytest.mark.asyncio
+async def test_wait_for_complete_drains_async_error_handlers() -> None:
+    """Async error handlers emitted from completion callbacks are awaited."""
+    ee = AsyncIOEventEmitter(loop=get_running_loop())
+    error_started = asyncio.Event()
+    release_error = asyncio.Event()
+    error_done: Future[Exception] = Future(loop=get_running_loop())
+
+    @ee.on("event")
+    async def event_handler() -> NoReturn:
+        raise PyeeTestError()
+
+    @ee.on("error")
+    async def handle_error(exc: Exception) -> None:
+        error_started.set()
+        await release_error.wait()
+        error_done.set_result(exc)
+
+    waiter = asyncio.create_task(ee.wait_for_complete())
+    try:
+        ee.emit("event")
+        await error_started.wait()
+        await sleep(0)
+
+        assert not waiter.done()
+
+        release_error.set()
+        await waiter
+    finally:
+        release_error.set()
+        ee.cancel()
+        await asyncio.gather(waiter, return_exceptions=True)
+        await sleep(0)
+
+    assert error_done.done()
+    assert isinstance(error_done.result(), PyeeTestError)
+    assert ee.complete
+
+
+@pytest.mark.asyncio
 async def test_sync_error() -> None:
     """Test that regular functions have the same error handling as coroutines"""
     ee = AsyncIOEventEmitter(loop=get_running_loop())

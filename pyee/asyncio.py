@@ -125,9 +125,10 @@ class AsyncIOEventEmitter(EventEmitter):
 
         This is useful if you're attempting a graceful shutdown of your
         application and want to ensure all coroutines have completed execution
-        beforehand.
+        beforehand. Handlers scheduled by a running handler are also awaited
+        before this method returns.
         """
-        if self._waiting:
+        while self._waiting:
             await wait(self._waiting)
 
     def cancel(self: Self) -> None:

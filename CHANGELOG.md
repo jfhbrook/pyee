@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Ensure `AsyncIOEventEmitter.wait_for_complete` waits for handlers emitted by
+  running handlers, including asynchronous error handlers.
+
 ## 2026/08/12 Version 14.0.0
 
 - Use `uv` instead of `pip-tools`
