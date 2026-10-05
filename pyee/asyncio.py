@@ -127,11 +127,12 @@ class AsyncIOEventEmitter(EventEmitter):
         application and want to ensure all coroutines have completed execution
         beforehand.
         """
-        if self._waiting:
+        while self._waiting:
             await wait(self._waiting)
 
     def cancel(self: Self) -> None:
-        """Cancel all pending tasks. For example:
+        """
+        Cancel all pending tasks. For example:
 
         ```py
         @ee.on('event')
@@ -156,7 +157,8 @@ class AsyncIOEventEmitter(EventEmitter):
 
     @property
     def complete(self: Self) -> bool:
-        """When true, there are no pending tasks, and execution is complete.
+        """
+        When true, there are no pending tasks, and execution is complete.
         For example:
 
         ```py

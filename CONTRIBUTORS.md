@@ -28,3 +28,6 @@ Listed in no particular order:
 - Joe Rickwalder @rickwalder
 - Colin Watson @cjwatson
 - Vincent Huang @vincent178
+- 🤖 WU Leizhi @MbappeWU
+
+Contributors marked with a 🤖 emoji are known to have used AI coding assistants in their work.
