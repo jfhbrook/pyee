@@ -27,3 +27,4 @@ Listed in no particular order:
 - Colin Watson @cjwatson
 - Vincent Huang @vincent178
 - WU Leizhi @MbappeWU
+- Jimmy Lui Jia @JimmyLiuJia

@@ -192,6 +192,42 @@ def test_listener_removal_on_emit():
     call_me.assert_called_once()
 
 
+def test_listener_removal_on_repeated_emit():
+    """A cleanup handler can remove the same listener on subsequent emits."""
+
+    ee = EventEmitter()
+    call_me = Mock()
+
+    def cleanup():
+        ee.remove_listener("event", call_me)
+
+    ee.on("event", cleanup)
+    ee.on("event", call_me)
+
+    assert ee.emit("event") is True
+    assert ee.emit("event") is True
+
+    call_me.assert_called_once()
+    assert ee.listeners("event") == [cleanup]
+    assert ee.event_names() == {"event"}
+
+
+def test_removing_unknown_listener_preserves_other_listeners():
+    """Removing an unregistered handler does not affect registered handlers."""
+
+    ee = EventEmitter()
+    listener = Mock()
+    unknown_listener = Mock()
+    ee.on("event", listener)
+
+    ee.remove_listener("event", unknown_listener)
+
+    assert ee.listeners("event") == [listener]
+    assert ee.emit("event") is True
+    listener.assert_called_once()
+    unknown_listener.assert_not_called()
+
+
 def test_once():
     """Test that `once()` method works propers."""
 
