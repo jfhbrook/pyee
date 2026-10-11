@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from contextlib import AbstractAsyncContextManager, asynccontextmanager
+from inspect import isawaitable
 from types import TracebackType
 from typing import (
     Any,
@@ -88,7 +89,9 @@ class TrioEventEmitter(EventEmitter):
     ) -> Callable[[], Awaitable[None]]:
         async def runner() -> None:
             try:
-                await f(*args, **kwargs)
+                result = f(*args, **kwargs)
+                if isawaitable(result):
+                    await result
             except Exception as exc:
                 self.emit("error", exc)
 

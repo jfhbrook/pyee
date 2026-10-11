@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Fix spurious Trio errors for successful synchronous event handlers, including
+  error handlers and skipped duplicate `once` deliveries.
+
 ## 2026/08/12 Version 14.0.0
 
 - Use `uv` instead of `pip-tools`
