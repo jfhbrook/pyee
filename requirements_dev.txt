@@ -310,7 +310,7 @@ trio-typing==0.10.0
     # via pyee (pyproject.toml:dev)
 trove-classifiers==2026.1.14.14
     # via validate-pyproject
-twisted==25.5.0
+twisted==26.4.0rc2
     # via pyee (pyproject.toml:dev)
 typing-extensions==4.15.0
     # via
