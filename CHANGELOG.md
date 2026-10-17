@@ -2,8 +2,8 @@
 
 ## 2026/10/17 Version 15.0.0
 
-- Ensure `AsyncIOEventEmitter.wait_for_complete` waits for handlers emitted by
-  running handlers, including asynchronous error handlers
+- 🤖 Ensure `AsyncIOEventEmitter.wait_for_complete` waits for handlers emitted by running handlers, including asynchronous error handlers
+- New AI code assisted policies put in place
 
 ## 2026/08/12 Version 14.0.0
 

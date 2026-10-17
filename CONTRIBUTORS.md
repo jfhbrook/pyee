@@ -1,5 +1,3 @@
-General format is: contributor, github handle, email.
-
 Listed in no particular order:
 
 - Josh Holbrook @jfhbrook <josh.holbrook@gmail.com>
@@ -28,6 +26,4 @@ Listed in no particular order:
 - Joe Rickwalder @rickwalder
 - Colin Watson @cjwatson
 - Vincent Huang @vincent178
-- 🤖 WU Leizhi @MbappeWU
-
-Contributors marked with a 🤖 emoji are known to have used AI coding assistants in their work.
+- WU Leizhi @MbappeWU

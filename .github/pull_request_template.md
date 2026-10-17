@@ -12,6 +12,8 @@
 
 ## Questions
 
-- [ ] Was an AI code assistant was used in this PR?
+- [ ] Has the developer read `DEVELOPMENT.md`?
 - [ ] Have tests been updated accordingly?
-- [ ] Is the developer's name in the CONTRIBUTORS.md file?
+- [ ] Have AI assisted commits been marked with a 🤖 emoji?
+- [ ] Does the MR call out AI generated code?
+- [ ] Is the developer's name in the `CONTRIBUTORS.md` file?
