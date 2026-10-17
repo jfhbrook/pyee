@@ -9,6 +9,7 @@ sphinx-builddir := "_build"
 default:
   @just format
   @just check
+  @just mypy
   @just test
   @just lint
 
