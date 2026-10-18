@@ -1,6 +1,6 @@
 # Changelog
 
-## xxxx/yy/zz Version 15.0.0
+## 2026/10/17 Version 15.0.0
 
 - 🤖 Ensure `AsyncIOEventEmitter.wait_for_complete` waits for handlers emitted by running handlers, including asynchronous error handlers
 - 🤖 Make removing listeners idempotent
