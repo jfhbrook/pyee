@@ -44,6 +44,10 @@ class ExecutorEventEmitter(EventEmitter):
     non-blocking.
 
     No effort is made to ensure thread safety, beyond using an executor.
+
+    Args:
+        executor: Executor that runs handlers. `None` creates a
+            `ThreadPoolExecutor`.
     """
 
     def __init__(self: Self, executor: Optional[Executor] = None) -> None:
@@ -72,7 +76,12 @@ class ExecutorEventEmitter(EventEmitter):
                 raise exc
 
     def shutdown(self: Self, wait: bool = True) -> None:
-        """Call `shutdown` on the internal executor."""
+        """Call `shutdown` on the internal executor.
+
+        Args:
+            wait: Passed through to `Executor.shutdown`. `True` waits until
+                queued work finishes. Defaults to `True`.
+        """
 
         self._executor.shutdown(wait=wait)
 

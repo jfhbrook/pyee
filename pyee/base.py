@@ -108,6 +108,16 @@ class EventEmitter:
         Note that this method's return type is a union type. If you are using
         mypy or pyright, you will probably want to use either
         `EventEmitter#listens_to` or `EventEmitter#add_listener`.
+
+        Args:
+            event: Event name to listen for.
+            f: Handler to register. Omit `f` to use this method as a
+                decorator.
+
+        Returns:
+            The handler `f` when it is given. When `f` is omitted, a
+                decorator that registers the decorated function and returns
+                it.
         """
         if f is None:
             return self.listens_to(event)
@@ -126,6 +136,13 @@ class EventEmitter:
 
         By only supporting the decorator use case, this method has improved
         type safety over `EventEmitter#on`.
+
+        Args:
+            event: Event name the decorated function listens for.
+
+        Returns:
+            A decorator that registers the decorated function for `event`
+                and returns that function.
         """
 
         def on(f: Handler) -> Handler:
@@ -146,6 +163,13 @@ class EventEmitter:
 
         By not supporting the decorator use case, this method has improved
         type safety over `EventEmitter#on`.
+
+        Args:
+            event: Event name to listen for.
+            f: Handler to register.
+
+        Returns:
+            The handler `f`.
         """
         self._add_event_handler(event, f, f)
         return f
@@ -172,7 +196,11 @@ class EventEmitter:
         f(*args, **kwargs)
 
     def event_names(self: Self) -> Set[str]:
-        """Get a set of events that this emitter is listening to."""
+        """Get a set of events that this emitter is listening to.
+
+        Returns:
+            A set of event names that currently have listeners.
+        """
         return set(self._events.keys())
 
     def _emit_handle_potential_error(self: Self, event: str, error: Any) -> None:
@@ -216,6 +244,23 @@ class EventEmitter:
 
         Assuming `data` is an attached function, this will call
         `data('00101001')'`.
+
+        Args:
+            event: Event name to emit.
+            args: Positional arguments passed to each handler.
+            kwargs: Keyword arguments passed to each handler.
+
+        Returns:
+            `True` if any handlers are attached to `event`, otherwise
+                `False`.
+
+        Raises:
+            Exception: When `event` is `"error"` and no handlers are
+                attached, the first positional argument is raised if it is
+                an `Exception`.
+            PyeeError: When `event` is `"error"`, no handlers are attached,
+                and the first positional argument is missing or is not an
+                `Exception`.
         """
         handled = self._call_handlers(event, args, kwargs)
 
@@ -231,6 +276,16 @@ class EventEmitter:
     ) -> Callable:
         """The same as `ee.on`, except that the listener is automatically
         removed after being called.
+
+        Args:
+            event: Event name to listen for once.
+            f: Handler to register. Omit `f` to use this method as a
+                decorator.
+
+        Returns:
+            The handler `f` when it is given. When `f` is omitted, a
+                decorator that registers the decorated function and returns
+                it.
         """
 
         def _wrapper(f: Callable) -> Callable:
@@ -267,6 +322,11 @@ class EventEmitter:
     def remove_listener(self: Self, event: str, f: Callable) -> None:
         """Removes the function `f` from `event`.
         If `f` is not registered to `event`, this has no effect.
+
+        Args:
+            event: Event name to remove `f` from.
+            f: Handler to remove. Has no effect when `f` is not registered
+                for `event`.
         """
         with self._lock:
             self._remove_listener(event, f)
@@ -274,6 +334,10 @@ class EventEmitter:
     def remove_all_listeners(self: Self, event: Optional[str] = None) -> None:
         """Remove all listeners attached to `event`.
         If `event` is `None`, remove all listeners on all events.
+
+        Args:
+            event: Event whose listeners are removed. `None` removes
+                listeners for every event.
         """
         with self._lock:
             if event is not None:
@@ -283,5 +347,12 @@ class EventEmitter:
                 self._events = dict()
 
     def listeners(self: Self, event: str) -> List[Callable]:
-        """Returns a list of all listeners registered to the `event`."""
+        """Returns a list of all listeners registered to the `event`.
+
+        Args:
+            event: Event name.
+
+        Returns:
+            Handlers registered for `event`, in the order they were added.
+        """
         return list(self._events.get(event, OrderedDict()).keys())
