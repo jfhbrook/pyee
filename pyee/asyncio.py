@@ -36,6 +36,10 @@ class AsyncIOEventEmitter(EventEmitter):
     For asyncio coroutine event handlers, calling emit is non-blocking.
     In other words, you do not have to await any results from emit, and the
     coroutine is scheduled in a fire-and-forget fashion.
+
+    Args:
+        loop: Event loop passed to `asyncio.ensure_future` when scheduling
+            coroutine handlers. `None` uses `ensure_future` without a loop.
     """
 
     def __init__(self: Self, loop: Optional[AbstractEventLoop] = None) -> None:
@@ -66,6 +70,23 @@ class AsyncIOEventEmitter(EventEmitter):
         stored in a "waiting" state. These futures may be waited on or
         canceled with `wait_for_complete` and `cancel`, respectively; and
         their status may be checked via the `complete` property.
+
+        Args:
+            event: Event name to emit.
+            args: Positional arguments passed to each handler.
+            kwargs: Keyword arguments passed to each handler.
+
+        Returns:
+            `True` if any handlers are attached to `event`, otherwise
+                `False`.
+
+        Raises:
+            Exception: When `event` is `"error"` and no handlers are
+                attached, the first positional argument is raised if it is
+                an `Exception`.
+            PyeeError: When `event` is `"error"`, no handlers are attached,
+                and the first positional argument is missing or is not an
+                `Exception`.
         """
         return super().emit(event, *args, **kwargs)
 
@@ -177,5 +198,8 @@ class AsyncIOEventEmitter(EventEmitter):
         # async_handler has completed execution, so this prints True
         print(ee.complete)
         ```
+
+        Returns:
+            `True` when no handler futures are pending, otherwise `False`.
         """
         return not self._waiting
