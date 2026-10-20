@@ -69,7 +69,7 @@ No test file calls `pytest.importorskip`. `tests/conftest.py` ignores `test_asyn
 
 ## Conventions
 
-The public emitter classes, plus `uplift`, `unwrap`, `evented`, and `on`, use a triple-quoted docstring. The text is prose, and names sit in backticks. Examples, when present, are Markdown fences. The docstrings have no `Args`, `Returns`, or `Raises` sections. `pyee/__init__.py` holds the package docstring, including an IPython session. The other modules have no module docstring.
+The public emitter classes, plus `uplift`, `unwrap`, `evented`, and `on`, use a triple-quoted docstring. The text is prose, and names sit in backticks. Examples, when present, are Markdown fences. After the prose, the docstrings use Google-style `Args`, `Returns`, and `Raises` sections where they apply. mkdocstrings renders these sections as tables. The internal `Handler` and `Handlers` classes have no such sections. `pyee/__init__.py` holds the package docstring, including an IPython session. The other modules have no module docstring.
 
 `pyee/base.py`, `pyee/asyncio.py`, `pyee/twisted.py`, `pyee/executor.py`, and `pyee/trio.py` set `Self = Any` and annotate `self` as `Self`. Keep that. Pyright and mypy both have to pass.
 
