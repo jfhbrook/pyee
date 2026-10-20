@@ -2,7 +2,7 @@
 
 pyee supplies an `EventEmitter` similar to the Node.js `EventEmitter`. It also supplies subclasses for async and threaded programming in Python.
 
-Read [DEVELOPMENT.md](DEVELOPMENT.md) for contributor rules, the AI-assisted commit marker, and how the maintainer publishes. This file is the short loop for changing the code. Trust the justfile when it disagrees with the recipe list pasted in DEVELOPMENT.md. That list names `upload` and `upgrade`, which are not recipes, and it omits `mypy` and `console`, which are.
+Read [DEVELOPMENT.md](DEVELOPMENT.md) for contributor rules, the AI-assisted commit marker, and how the maintainer publishes. This file is the short loop for changing the code. Trust the justfile when it disagrees with the recipe list pasted in DEVELOPMENT.md, as that list is incomplete and may be out of date.
 
 ## Package layout
 
@@ -24,37 +24,32 @@ The library lives in `pyee/`.
 
 Install `uv`, `just`, and `npm`. `just check` calls `npx`. DEVELOPMENT.md names the same prerequisites.
 
-Create `.venv` and install dependencies with this command.
+Create `.venv` and install dependencies with this command:
 
 ```bash
-just install
+just setup
 ```
 
-The `install` recipe runs `uv sync --dev`.
+The `setup` recipe runs `uv sync --dev`.
 
-`just` with no arguments is the default recipe. It runs `just format`, then `just check`, then `just mypy`, then `just test`, then `just lint`.
+`just` with no arguments is the default recipe, `just qa`. It runs `just format`, then `just check`, then `just test`, then `just lint`.
 
 Run the pieces on their own while you work.
 
 ```bash
 just format
 just check
-just mypy
 just test
 just lint
 ```
 
-`just format` runs Black, then isort, on `docs`, `pyee`, and `tests`. Both tools rewrite files. The justfile has no check-only format recipe.
+`just format` runs Black, then isort, on `docs`, `pyee`, and `tests`. Both tools rewrite files. Formatting is checked in `just lint`.
 
-`just check` runs `uv run npx pyright@latest`. `[tool.pyright]` in `pyproject.toml` includes `pyee` and `tests`.
-
-`just mypy` runs `uv run mypy .`. `mypy.ini` sets `exclude` to `^venv/|^docs/`.
+`just check` runs `uv run npx pyright@latest`. and `uv run mypy .` `[tool.pyright]` in `pyproject.toml` includes `pyee` and `tests`. `mypy.ini` sets `exclude` to `^venv/|^docs/`.
 
 `just test` runs `uv run pytest ./tests`. It then removes `pytest_runner-*.egg` and `tests/__pycache__`.
 
-`just lint` runs flake8 on `docs`, `pyee`, and `tests`, then runs `validate-pyproject` on `pyproject.toml`.
-
-`just tox` runs `uv run tox`. `tox.ini` still sets `envlist` to `py38`, `py39`, and `py310`. The changelog records those versions as dropped. `requires-python` is `>=3.12`, and the classifiers list 3.12, 3.13, and 3.14. Use `just test` locally. `.github/workflows/qa.yaml` runs flake8, `validate-pyproject`, Pyright, mypy, and pytest on each classified version.
+`just lint` runs Black and isort in check mode, then runs flake8 on `docs`, `pyee`, and `tests`, then runs `validate-pyproject` on `pyproject.toml`.
 
 `just docs` runs `uv run mkdocs serve`. `just build-docs` runs `just mkdocs`, then `just sphinx man`.
 
@@ -82,7 +77,7 @@ The public emitter classes, plus `uplift`, `unwrap`, `evented`, and `on`, use a 
 
 MkDocs builds the site from docstrings. `mkdocs.yml` loads `mkdocstrings` and `include-markdown`. `docs/api.md` points mkdocstrings at `pyee`, `pyee.asyncio`, `pyee.twisted`, `pyee.executor`, `pyee.trio`, `pyee.uplift`, and `pyee.cls`. `docs/changelog.md` includes `CHANGELOG.md`. Sphinx only builds the man page. `docs/conf.py` says so, and sets `root_doc` to `man`, which is `docs/man.rst`. `.readthedocs.yaml` selects MkDocs.
 
-`CHANGELOG.md` headings look like `## 2026/10/17 Version 15.0.0`, then bullets. DEVELOPMENT.md requires a robot emoji at the start of the commit subject and the changelog bullet when an AI assistant wrote the change, and it requires you to tell the reviewer. New contributors go in `CONTRIBUTORS.md`. The line format is in DEVELOPMENT.md.
+`CHANGELOG.md` headings look like `## 2026/10/17 Version 15.0.0`, then bullets. DEVELOPMENT.md requires a robot emoji at the start of the commit subject and the changelog bullet when an AI assistant wrote the change, and it requires you to tell the reviewer. New contributors go in `CONTRIBUTORS.md`. The line format is in DEVELOPMENT.md. On commits, document new features in the CHANGELOG under an upcoming release, typically labeled `## xxxx.yy.zz Version x.y.z`. If no such label exists, create the label.
 
 ## Do not
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## xxx/yy/zz Version x.y.z
+
+- 🤖 `AGENTS.md` file for AI coding assistant guidance
+- Type check with both `pyright` and `mypy` by default
+- Remove `tox` test matrix, leaning on Github Actions
+
 ## 2026/10/17 Version 15.0.0
 
 - 🤖 Ensure `AsyncIOEventEmitter.wait_for_complete` waits for handlers emitted by running handlers, including asynchronous error handlers
