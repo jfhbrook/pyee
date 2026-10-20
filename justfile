@@ -5,11 +5,10 @@ sphinx-sphinxopts := ""
 sphinx-sourcedir := "docs"
 sphinx-builddir := "_build"
 
-# By default, run checks and tests, then format and lint
-default:
+# Format, type check, test and lint
+qa:
   @just format
   @just check
-  @just mypy
   @just test
   @just lint
 
@@ -17,10 +16,11 @@ default:
 # Installing, updating and upgrading dependencies
 #
 
-install:
+# Set up the environment
+setup:
   uv sync --dev
 
-# Update all dependencies
+# Update dependencies
 update:
   uv sync --dev --upgrade
   @just compile
@@ -38,18 +38,23 @@ _clean-compile:
 # Development tooling - linting, formatting, etc
 #
 
-# Format with black and isort
+# Format the project
 format:
   uv run black ./docs './pyee' ./tests
-  uv run isort --settings-file . ./docs './pyee' ./tests
+  uv run isort --settings-file . ./docs ./pyee ./tests
 
-# Lint with flake8
+# Lint the project
 lint:
+  uv run black --check ./docs './pyee' ./tests
+  uv run isort --settings-file . --check ./docs ./pyee ./tests
   uv run flake8 ./docs './pyee' ./tests
   uv run validate-pyproject ./pyproject.toml
 
+# Check type annotations
+check: pyright mypy
+
 # Check type annotations with pyright
-check:
+pyright:
   uv run npx pyright@latest
 
 # Check type annotations with mypy
@@ -64,14 +69,6 @@ test:
 _clean-test:
   rm -f pytest_runner-*.egg
   rm -rf tests/__pycache__
-
-# Run tests using tox
-tox:
-  uv run tox
-  @just _clean-tox
-
-_clean-tox:
-  rm -rf .tox
 
 #
 # Shell and console
@@ -134,7 +131,7 @@ publish:
   uv publish
 
 # Clean up loose files
-clean: _clean-compile _clean-test _clean-tox _clean-docs
+clean: _clean-compile _clean-test _clean-docs
   rm -rf .venv
   rm -rf pyee.egg-info
   rm -f pyee/*.pyc

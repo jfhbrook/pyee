@@ -1,8 +1,11 @@
 # Changelog
 
-## Unreleased
+## xxx/yy/zz Version x.y.z
 
+- 🤖 `AGENTS.md` file for AI coding assistant guidance
 - 🤖 Add `Args`, `Returns` and `Raises` sections to public docstrings (#221)
+- Type check with both `pyright` and `mypy` by default
+- Remove `tox` test matrix, leaning on Github Actions
 
 ## 2026/10/17 Version 15.0.0
 

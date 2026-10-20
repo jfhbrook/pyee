@@ -11,39 +11,28 @@
 This project uses `uv` to manage dependencies. `uv` is pretty good at automatically sync-ing. But if you need to explicitly set everything up, try:
 
 ```bash
-just install
+just setup
 ```
 
 This will create a virtualenv at `./.venv` and install dependencies with `uv`.
 
 ## Just Tasks
 
-To list all Just tasks, run `just --list`:
+To list all Just recipes, run `just --list`. Common ones include:
 
-```
-Available recipes:
-    build         # Build the package
-    build-docs    # Build the documentation
-    check         # Check type annotations with pyright
-    clean         # Clean up loose files
-    compile       # Generate locked requirements files based on dependencies in pyproject.toml
-    default       # By default, run checks and tests, then format and lint
-    docs          # Live generate docs and host on a development webserver
-    format        # Format with black and isort
-    install       # Install all dependencies
-    lint          # Lint with flake8
-    man           # Generate man page and open for preview
-    mkdocs        # Run mkdocs
-    publish       # Build the package and publish it to PyPI
-    shell         # Open a bash shell with the venv activated
-    sphinx TARGET # Run sphinx
-    tag           # Tag the release in git
-    test          # Run tests with pytest
-    tox           # Run tests using tox
-    update        # Update all dependencies
-    upgrade       # Update all dependencies and rebuild the environment
-    upload        # Upload built packages
-```
+| Command     | Description                                            |
+|-------------|--------------------------------------------------------|
+| just qa     | Format, type check, test and lint                      |
+| just setup  | Set up the environment                                 |
+| just update | Update dependencies                                    |
+| just format | Format the project                                     |
+| just check  | Check type annotations with both pyright and mypy      |
+| just test   | Run tests with pytest                                  |
+| just lint   | Lint the project                                       |
+| just docs   | Live generate docs and host on a development webserver |
+| just tag    | Tag the release in git                                 |
+
+Note that this list may be out of date. Reference `just --list` for a fully up-to-date list of recipes.
 
 ### Updating Modules
 
