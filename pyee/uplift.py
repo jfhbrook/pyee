@@ -15,7 +15,12 @@ EMIT_WRAPPERS: Dict[EventEmitter, Callable[[], None]] = dict()
 
 
 def unwrap(event_emitter: EventEmitter) -> None:
-    """Unwrap an uplifted EventEmitter, returning it to its prior state."""
+    """Unwrap an uplifted EventEmitter, returning it to its prior state.
+
+    Args:
+        event_emitter: Emitter to restore. No effect when this emitter is
+            not uplifted.
+    """
     if event_emitter in EMIT_WRAPPERS:
         EMIT_WRAPPERS[event_emitter]()
 
@@ -157,6 +162,26 @@ def uplift(
     underlying event emitter should inherit from `EventEmitter`, or at
     least implement the interface for the undocumented `_call_handlers` and
     `_emit_handle_potential_error` methods.
+
+    Args:
+        cls: Event emitter class to instantiate.
+        underlying: Emitter whose handlers and events are linked with the
+            new instance.
+        error_handling: Which side handles an event that nobody listened
+            for. `"new"`, `"underlying"`, or `"neither"`. Defaults to
+            `"new"`.
+        proxy_new_listener: How `new_listener` events are copied.
+            `"forward"`, `"backward"`, `"both"`, or `"neither"`. Defaults
+            to `"forward"`.
+        args: Extra positional arguments passed to `cls`.
+        kwargs: Extra keyword arguments passed to `cls`.
+
+    Returns:
+        The new instance of `cls`.
+
+    Raises:
+        KeyError: `error_handling` or `proxy_new_listener` is not one of
+            the values listed above.
     """
 
     (

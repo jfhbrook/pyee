@@ -32,6 +32,13 @@ def on(event: str) -> Callable[[Callable], Callable]:
     """
     Register an event handler on an evented class. See the `evented` class
     decorator for a full example.
+
+    Args:
+        event: Event name the decorated method handles.
+
+    Returns:
+        A decorator that records the method for `evented` and returns the
+            method unchanged.
     """
 
     def decorator(method: Callable) -> Callable:
@@ -96,6 +103,13 @@ def evented(cls: Cls) -> Cls:
         async def event_handler(self, *args, **kwargs):
             await self.some_async_action(*args, **kwargs)
     ```
+
+    Args:
+        cls: Class to configure. `__init__` is wrapped so each instance
+            registers the methods marked with `on`.
+
+    Returns:
+        The same class, after `__init__` is wrapped.
     """
     handlers: List[Handler] = list(_handlers)
     _handlers.reset()
