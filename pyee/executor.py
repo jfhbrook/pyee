@@ -63,6 +63,8 @@ class ExecutorEventEmitter(EventEmitter):
 
         @future.add_done_callback
         def _callback(f: Future) -> None:
+            if f.cancelled():
+                return
             exc: Optional[BaseException] = f.exception()
             if isinstance(exc, Exception):
                 self.emit("error", exc)

@@ -2,6 +2,7 @@
 
 ## xxx/yy/zz Version x.y.z
 
+- 🤖 Avoid logging callback failures when queued executor handlers are canceled
 - 🤖 `AGENTS.md` file for AI coding assistant guidance
 - Type check with both `pyright` and `mypy` by default
 - Remove `tox` test matrix, leaning on Github Actions
