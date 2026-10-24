@@ -1,13 +1,16 @@
 # Changelog
 
-## xxx/yy/zz Version x.y.z
+## 2026/10/24 Version 16.0.0
 
-- 🤖 Avoid logging callback failures when queued executor handlers are canceled
-- 🤖 Add `Args`, `Returns` and `Raises` sections to public docstrings (#221)
-- 🤖 `AGENTS.md` file for AI coding assistant guidance
-- Use the `Self` type introduced in Python 3.11
-- Type check with both `pyright` and `mypy` by default
-- Remove `tox` test matrix, leaning on Github Actions
+- **BREAKING:** Use the `Self` type introduced in Python 3.11
+- Error handling improvements
+  - 🤖 Avoid logging callback failures when queued executor handlers are canceled
+- Documentation improvements
+  - 🤖 Add `Args`, `Returns` and `Raises` sections to public docstrings (#221)
+  - 🤖 `AGENTS.md` file for AI coding assistant guidance
+- Local development changes
+  - Type check with both `pyright` and `mypy` by default
+  - Remove `tox` test matrix, leaning on Github Actions
 
 ## 2026/10/17 Version 15.0.0
 
