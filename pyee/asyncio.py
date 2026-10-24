@@ -38,8 +38,8 @@ class AsyncIOEventEmitter(EventEmitter):
     coroutine is scheduled in a fire-and-forget fashion.
 
     Args:
-        loop: Event loop passed to `asyncio.ensure_future` when scheduling
-            coroutine handlers. `None` uses `ensure_future` without a loop.
+        loop: Optional event loop passed to `asyncio.ensure_future` when scheduling
+            coroutine handlers.
     """
 
     def __init__(self: Self, loop: Optional[AbstractEventLoop] = None) -> None:
