@@ -29,3 +29,4 @@ Listed in no particular order:
 - WU Leizhi @MbappeWU
 - Jimmy Lui Jia @JimmyLiuJia
 - Xucheng Zhou @adenzhou1350
+- KennyMcSimpson @KennyMcSimpson
