@@ -39,3 +39,7 @@
 ## pyee.cls
 
 ### ::: pyee.cls
+    options:
+      members:
+        - on
+        - evented

@@ -31,3 +31,4 @@ Listed in no particular order:
 - Xucheng Zhou @adenzhou1350
 - KennyMcSimpson @KennyMcSimpson
 - AlexXuz @AlexXuz
+- Mayank Dhingra @mayankdhingra02 <mayankdhingra02@gmail.com>

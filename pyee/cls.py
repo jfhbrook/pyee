@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from functools import wraps
+from inspect import getattr_static
 from typing import Any, Callable, Iterator, List, Type, TypeVar
 
 from pyee import EventEmitter
@@ -7,11 +8,21 @@ from pyee import EventEmitter
 
 @dataclass
 class Handler:
+    """
+    An event name and its associated method.
+    """
+
     event: str
     method: Callable
 
 
 class Handlers:
+    """
+    A collection of handlers. Handlers from all evented classes are collected by the
+    `on` decorator, and are then taken in the `evented` decorator.
+
+    """
+
     def __init__(self) -> None:
         self._handlers: List[Handler] = []
 
@@ -24,8 +35,54 @@ class Handlers:
     def reset(self):
         self._handlers = []
 
+    def take(self, cls: Type) -> List[Handler]:
+        """
+        Collect pending handlers belonging to the specified class, remove them from
+        pending handlers, and return them.
+        """
 
-_handlers = Handlers()
+        # Get all the expected members of the class
+        members = list(vars(cls).values())
+        # Seen method IDs
+        method_ids = set()
+        while members:
+            # Grab a member
+            member = members.pop()
+            if id(member) in method_ids:
+                # If we've seen the member before, continue. This can happen if
+                # we encounter an alias or cyclic __wrapped__ link.
+                continue
+
+            method_ids.add(id(member))
+
+            # @on may have received the function beneath a descriptor or a
+            # functools.wraps wrapper. Inspect these links without binding
+            # descriptors or executing user-defined attribute access.
+            if isinstance(member, (staticmethod, classmethod)):
+                members.append(member.__func__)
+
+            # The method is expected to be wrapped, so grab that wrapped method
+            wrapped = getattr_static(member, "__wrapped__", None)
+            if wrapped is not None:
+                members.append(wrapped)
+
+        handlers = []
+        remaining = []
+
+        # Remove handlers for taken methods, respecting identity. Identity matters
+        # because methods on different classes may have the same name.
+        for handler in self._handlers:
+            if id(handler.method) in method_ids:
+                handlers.append(handler)
+            else:
+                remaining.append(handler)
+
+        self._handlers = remaining
+
+        return handlers
+
+
+HANDLERS = Handlers()
 
 
 def on(event: str) -> Callable[[Callable], Callable]:
@@ -42,7 +99,7 @@ def on(event: str) -> Callable[[Callable], Callable]:
     """
 
     def decorator(method: Callable) -> Callable:
-        _handlers.append(Handler(event=event, method=method))
+        HANDLERS.append(Handler(event=event, method=method))
         return method
 
     return decorator
@@ -111,8 +168,7 @@ def evented(cls: Cls) -> Cls:
     Returns:
         The same class, after `__init__` is wrapped.
     """
-    handlers: List[Handler] = list(_handlers)
-    _handlers.reset()
+    handlers = HANDLERS.take(cls)
 
     og_init: Callable = cls.__init__
 
