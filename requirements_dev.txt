@@ -326,7 +326,7 @@ urllib3==2.8.0
     # via requests
 validate-pyproject==0.26
     # via pyee (pyproject.toml:dev)
-virtualenv==21.14.10
+virtualenv==21.14.13
     # via tox
 watchdog==6.0.0
     # via mkdocs
