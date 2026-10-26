@@ -1,5 +1,9 @@
 # Changelog
 
+## xxxx.yy.zz Version x.y.z
+
+- 🤖 Keep nested evented classes' handlers bound to their own instances
+
 ## 2026/10/24 Version 16.0.0
 
 - **BREAKING:** Use the `Self` type introduced in Python 3.11

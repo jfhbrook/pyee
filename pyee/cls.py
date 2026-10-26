@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from functools import wraps
+from inspect import getattr_static
 from typing import Any, Callable, Iterator, List, Type, TypeVar
 
 from pyee import EventEmitter
@@ -23,6 +24,29 @@ class Handlers:
 
     def reset(self):
         self._handlers = []
+
+    def _take(self, cls: Type) -> List[Handler]:
+        members = list(vars(cls).values())
+        method_ids = set()
+        while members:
+            member = members.pop()
+            if id(member) in method_ids:
+                continue
+            method_ids.add(id(member))
+            if isinstance(member, (staticmethod, classmethod)):
+                members.append(member.__func__)
+            wrapped = getattr_static(member, "__wrapped__", None)
+            if wrapped is not None:
+                members.append(wrapped)
+        handlers = []
+        remaining = []
+        for handler in self._handlers:
+            if id(handler.method) in method_ids:
+                handlers.append(handler)
+            else:
+                remaining.append(handler)
+        self._handlers = remaining
+        return handlers
 
 
 _handlers = Handlers()
@@ -111,8 +135,7 @@ def evented(cls: Cls) -> Cls:
     Returns:
         The same class, after `__init__` is wrapped.
     """
-    handlers: List[Handler] = list(_handlers)
-    _handlers.reset()
+    handlers = _handlers._take(cls)
 
     og_init: Callable = cls.__init__
 
