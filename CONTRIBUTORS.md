@@ -30,3 +30,4 @@ Listed in no particular order:
 - Jimmy Lui Jia @JimmyLiuJia
 - Xucheng Zhou @adenzhou1350
 - KennyMcSimpson @KennyMcSimpson
+- Mayank Dhingra @mayankdhingra02 <mayankdhingra02@gmail.com>
