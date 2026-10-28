@@ -3,6 +3,7 @@
 ## xxxx/yy/zz Version x.y.z
 
 - Remove support for `conda` and `pip` in local development, favoring `uv`
+- 🤖 AsyncIOEventEmitter emits falsey errors
 
 ## 2026/10/24 Version 16.0.0
 
