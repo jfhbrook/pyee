@@ -23,16 +23,6 @@ setup:
 # Update dependencies
 update:
   uv sync --dev --upgrade
-  @just compile
-
-# Generate locked requirements files based on dependencies in pyproject.toml
-compile:
-  uv pip compile -o requirements.txt pyproject.toml
-  uv pip compile --group dev -o requirements_dev.txt pyproject.toml
-
-_clean-compile:
-  rm -f requirements.txt
-  rm -f requirements_dev.txt
 
 #
 # Development tooling - linting, formatting, etc
@@ -131,7 +121,7 @@ publish:
   uv publish
 
 # Clean up loose files
-clean: _clean-compile _clean-test _clean-docs
+clean: _clean-test _clean-docs
   rm -rf .venv
   rm -rf pyee.egg-info
   rm -f pyee/*.pyc

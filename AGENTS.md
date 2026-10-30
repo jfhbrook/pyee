@@ -83,4 +83,4 @@ MkDocs builds the site from docstrings. `mkdocs.yml` loads `mkdocstrings` and `i
 
 Do not publish, tag, or cut a release. Do not run `just tag`, `just publish`, `uv publish`, or `git tag`. The maintainer cuts releases manually. DEVELOPMENT.md records that process for the maintainer.
 
-Do not edit `uv.lock`, `requirements.txt`, or `requirements_dev.txt` unless the change needs a dependency change. `just compile` rewrites the two requirements files from `pyproject.toml`.
+Do not edit `uv.lock`, unless the change needs a dependency change.
