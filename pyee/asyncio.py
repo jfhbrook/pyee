@@ -120,7 +120,7 @@ class AsyncIOEventEmitter(EventEmitter):
                     return
 
                 exc: Optional[BaseException] = f.exception()
-                if exc:
+                if exc is not None:
                     self.emit("error", exc)
 
             fut.add_done_callback(callback)

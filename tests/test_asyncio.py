@@ -334,3 +334,38 @@ async def test_sync_error() -> None:
     result = await wait_for(should_call, 0.1)
 
     assert isinstance(result, PyeeTestError)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("raises_on_bool", [False, True])
+@pytest.mark.parametrize("returns_future", [False, True])
+async def test_error_does_not_check_exception_truthiness(
+    raises_on_bool: bool, returns_future: bool
+) -> None:
+    class UntruthfulError(Exception):
+        def __bool__(self) -> bool:
+            if raises_on_bool:
+                raise AssertionError("exception truthiness must not be evaluated")
+            return False
+
+    ee = AsyncIOEventEmitter()
+    error = UntruthfulError("handler failed")
+    received: list[Exception] = []
+    ee.on("error", received.append)
+
+    if returns_future:
+        failed: Future[None] = Future(loop=get_running_loop())
+        failed.set_exception(error)
+        ee.on("event", lambda: failed)
+    else:
+
+        @ee.on("event")
+        async def event_handler() -> NoReturn:
+            raise error
+
+    ee.emit("event")
+    await ee.wait_for_complete()
+
+    assert len(received) == 1
+    assert received[0] is error
+    assert ee.complete
