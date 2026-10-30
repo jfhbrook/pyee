@@ -27,30 +27,26 @@ jobs:
         python-version: ${{fromJson(needs.python-versions.outputs.versions)}}
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.3.2
       - name: Set up Node.js LTS
         uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
       - name: Install the world
         run: |
-          python -m pip install --upgrade pip setuptools wheel
-          python -m pip install -r requirements_dev.txt
-          pip install -e .
+          uv python install
+          uv sync
       - name: Run linting
         run: |
-          flake8 ./pyee ./tests
-          validate-pyproject ./pyproject.toml
+          uv run flake8 ./pyee ./tests
+          uv run validate-pyproject ./pyproject.toml
       - name: Run pyright
-        run: npx pyright@latest
+        run: uv run npx pyright@latest
       - name: Run mypy
-        run: mypy .
+        run: uv run mypy .
       - name: Run tests
-        run: pytest ./tests
-
+        run: uv run pytest ./tests
   actionlint:
     name: Run actionlint
     runs-on: ubuntu-latest
