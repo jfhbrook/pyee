@@ -1,10 +1,12 @@
 # Changelog
 
-## xxxx/yy/zz Version x.y.z
+## 2026/10/31 🎃 Version 16.0.1
 
-- Remove support for `conda` and `pip` in local development, favoring `uv`
-- 🤖 AsyncIOEventEmitter emits falsey errors
-- 🤖 `pyee.cls` decorators only use handlers belonging to its own class
+- Remove `requirements.txt` and `requirements_dev.txt` files
+  - Removes support for `conda` and `pip` in local development, favoring `uv`
+  - Updates workflows to use `uv`
+- 🤖 `AsyncIOEventEmitter` emits falsey errors
+- 🤖 `pyee.cls` decorators only use handlers belonging to the respective decotrated classes
 
 ## 2026/10/24 Version 16.0.0
 

@@ -7,17 +7,9 @@ jobs:
   versions:
     runs-on: ubuntu-latest
     outputs:
-      python-version: ${{ steps.python-version.outputs.python_version }}
       release-version: ${{ steps.release-version.outputs.release_version }}
     steps:
       - uses: actions/checkout@v4
-      - name: Get latest supported Python version
-        id: python-version
-        run: |
-          CLASSIFIERS="$(yq -p toml -o toml '.project.classifiers[]' pyproject.toml | grep "Programming Language :: Python :: " | grep "\.")"
-          VERSION="$(echo "${CLASSIFIERS}" | sed -e 's/Programming Language :: Python :: \([0-9.]*\)$/\1/g' | tail -n 1)"
-          echo "python_version=${VERSION}" > "${GITHUB_OUTPUT}"
-      # See: https://stackoverflow.com/questions/58177786/get-the-current-pushed-tag-in-github-actions
       - name: Get release version
         id: release-version
         run: |
@@ -30,24 +22,21 @@ jobs:
       - versions
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python ${{ needs.versions.outputs.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: "${{ needs.versions.outputs.python-version }}"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.3.2
       - name: Install the world
         run: |
-          python -m pip install --upgrade pip setuptools wheel
-          python -m pip install -r requirements_dev.txt
-          pip install -e .
+          uv python install
+          uv sync
       - name: Build Package Distributions
-        run: python -m build
+        run: uv build
       - name: Store Package Distributions
         uses: actions/upload-artifact@v4
         with:
           name: package-distributions
           path: dist/
       - name: Build Man Page
-        run: sphinx-build -M man docs _build
+        run: uv run sphinx-build -M man docs _build
       - name: Store Man Page
         uses: actions/upload-artifact@v4
         with:

@@ -35,7 +35,7 @@ jobs:
           node-version: "lts/*"
       - name: Install the world
         run: |
-          uv python install
+          uv python install "${{ matrix.python-version }}"
           uv sync
       - name: Run linting
         run: |
