@@ -1,5 +1,9 @@
 # Changelog
 
+## xxxx/yy/zz Version x.y.z
+
+- Add support for Python 3.15
+
 ## 2026/10/31 🎃 Version 16.0.1
 
 - Remove `requirements.txt` and `requirements_dev.txt` files
