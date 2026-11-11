@@ -3,6 +3,9 @@
 ## xxxx/yy/zz Version x.y.z
 
 - Add support for Python 3.15
+- Trio bugfixes
+  - 🤖 Clear owned nursery and context references after context exits
+  - 🤖 Clear preserve borrowed nurseries in `context()`.
 
 ## 2026/10/31 🎃 Version 16.0.1
 
