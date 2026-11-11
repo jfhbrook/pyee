@@ -128,7 +128,9 @@ class TrioEventEmitter(EventEmitter):
         Returns:
             This emitter, as an async context manager. Entering it yields
                 this emitter. A set nursery is used as-is. Otherwise the
-                manager is opened and its nursery is used.
+                manager is opened and its nursery is used. The managed nursery
+                is cleared when the context exits, even on failure. A supplied
+                nursery is borrowed and is not closed by this method.
 
         Raises:
             PyeeError: Neither a nursery nor a nursery manager is set.
@@ -136,9 +138,12 @@ class TrioEventEmitter(EventEmitter):
         if self._nursery is not None:
             yield self
         elif self._manager is not None:
-            async with self._manager as nursery:
-                self._nursery = nursery
-                yield self
+            try:
+                async with self._manager as nursery:
+                    self._nursery = nursery
+                    yield self
+            finally:
+                self._nursery = None
         else:
             raise PyeeError("Uninitialized nursery or nursery manager")
 
@@ -156,8 +161,9 @@ class TrioEventEmitter(EventEmitter):
     ) -> Optional[bool]:
         if self._context is None:
             raise PyeeError("Attempting to exit uninitialized context")
-        rv = await self._context.__aexit__(type, value, traceback)
-        self._context = None
-        self._nursery = None
-        self._manager = None
-        return rv
+        try:
+            return await self._context.__aexit__(type, value, traceback)
+        finally:
+            self._context = None
+            self._nursery = None
+            self._manager = None
