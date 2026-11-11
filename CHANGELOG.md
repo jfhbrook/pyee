@@ -1,6 +1,6 @@
 # Changelog
 
-## xxxx/yy/zz Version x.y.z
+## 2026/11/1 Version 16.0.2
 
 - Add support for Python 3.15
 - Trio bugfixes
