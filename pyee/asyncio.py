@@ -1,7 +1,6 @@
-
 from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine, wait
-from typing import Any, cast, Self
 from collections.abc import Callable
+from typing import Any, cast, Self
 
 from pyee.base import EventEmitter
 

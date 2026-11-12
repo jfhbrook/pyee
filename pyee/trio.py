@@ -1,4 +1,4 @@
-
+from collections.abc import AsyncGenerator, Awaitable, Callable
 from contextlib import AbstractAsyncContextManager, asynccontextmanager
 from inspect import isawaitable
 from types import TracebackType
@@ -7,7 +7,6 @@ from typing import (
     Optional,
     Self,
 )
-from collections.abc import AsyncGenerator, Awaitable, Callable
 
 import trio
 

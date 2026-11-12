@@ -1,12 +1,11 @@
-
 from collections import OrderedDict
+from collections.abc import Callable, Mapping
 from threading import Lock
 from typing import (
     Any,
-    Self,
     overload,
+    Self,
 )
-from collections.abc import Callable, Mapping
 
 
 class PyeeException(Exception):

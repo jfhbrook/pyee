@@ -1,8 +1,7 @@
-
+from collections.abc import Callable
 from concurrent.futures import Executor, Future, ThreadPoolExecutor
 from types import TracebackType
 from typing import Any, Self
-from collections.abc import Callable
 
 from pyee.base import EventEmitter
 

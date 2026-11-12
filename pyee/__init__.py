@@ -1,4 +1,3 @@
-
 """
 pyee supplies a `EventEmitter` class that is similar to the
 `EventEmitter` class from Node.js. In addition, it supplies the subclasses

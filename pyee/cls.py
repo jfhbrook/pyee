@@ -1,8 +1,8 @@
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from functools import wraps
 from inspect import getattr_static
 from typing import Any
-from collections.abc import Callable, Iterator
 
 from pyee import EventEmitter
 

@@ -1,4 +1,3 @@
-
 from unittest.mock import call, Mock
 
 import pytest
