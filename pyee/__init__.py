@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 """
 pyee supplies a `EventEmitter` class that is similar to the

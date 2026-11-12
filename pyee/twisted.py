@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
 
 from asyncio import iscoroutine
-from typing import Any, Callable, Dict, Optional, Self, Tuple
+from typing import Any, Self
+from collections.abc import Callable
 
 from twisted.internet.defer import Deferred, ensureDeferred
 from twisted.python.failure import Failure
@@ -48,15 +48,15 @@ class TwistedEventEmitter(EventEmitter):
     """
 
     def __init__(self: Self) -> None:
-        super(TwistedEventEmitter, self).__init__()
+        super().__init__()
 
     def _emit_run(
         self: Self,
         f: Callable,
-        args: Tuple[Any, ...],
-        kwargs: Dict[str, Any],
+        args: tuple[Any, ...],
+        kwargs: dict[str, Any],
     ) -> None:
-        d: Optional[Deferred[Any]] = None
+        d: Deferred[Any] | None = None
         try:
             result = f(*args, **kwargs)
         except Exception:
@@ -87,6 +87,6 @@ class TwistedEventEmitter(EventEmitter):
             else:
                 self.emit("error", PyeeError(f"Unexpected failure object: {error}"))
         else:
-            (super(TwistedEventEmitter, self))._emit_handle_potential_error(
+            (super())._emit_handle_potential_error(
                 event, error
             )

@@ -1,14 +1,14 @@
-# -*- coding: utf-8 -*-
 
 import warnings
 from functools import wraps
-from typing import Any, Callable, Dict, Optional, Tuple, Type, Union, cast
+from typing import Any, Union, cast
+from collections.abc import Callable
 
-from typing_extensions import Literal
+from typing import Literal
 
 from pyee.base import EventEmitter
 
-EMIT_WRAPPERS: Dict[EventEmitter, Callable[[], None]] = dict()
+EMIT_WRAPPERS: dict[EventEmitter, Callable[[], None]] = dict()
 
 
 def unwrap(event_emitter: EventEmitter) -> None:
@@ -29,7 +29,7 @@ def _wrap(
     proxy_new_listener: bool,
 ) -> None:
     left_emit = left.emit
-    left_unwrap: Optional[Callable[[], None]] = EMIT_WRAPPERS.get(left)
+    left_unwrap: Callable[[], None] | None = EMIT_WRAPPERS.get(left)
 
     @wraps(left_emit)
     def wrapped_emit(event: str, *args: Any, **kwargs: Any) -> bool:
@@ -75,7 +75,7 @@ def _wrap(
     left.unwrap = _unwrap  # type: ignore
 
 
-_PROXY_NEW_LISTENER_SETTINGS: Dict[str, Tuple[bool, bool]] = dict(
+_PROXY_NEW_LISTENER_SETTINGS: dict[str, tuple[bool, bool]] = dict(
     forward=(False, True),
     backward=(True, False),
     both=(True, True),
@@ -90,7 +90,7 @@ ProxyStrategy = Union[
 
 
 def uplift[UpliftingEventEmitter: EventEmitter](
-    cls: Type[UpliftingEventEmitter],
+    cls: type[UpliftingEventEmitter],
     underlying: EventEmitter,
     error_handling: ErrorStrategy = "new",
     proxy_new_listener: ProxyStrategy = "forward",
@@ -187,7 +187,7 @@ def uplift[UpliftingEventEmitter: EventEmitter](
 
     new: UpliftingEventEmitter = cls(*args, **kwargs)
 
-    uplift_error_handlers: Dict[str, Tuple[EventEmitter, EventEmitter]] = dict(
+    uplift_error_handlers: dict[str, tuple[EventEmitter, EventEmitter]] = dict(
         new=(new, new), underlying=(underlying, underlying), neither=(new, underlying)
     )
 

@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from functools import wraps
 from inspect import getattr_static
-from typing import Any, Callable, Iterator, List, Type
+from typing import Any
+from collections.abc import Callable, Iterator
 
 from pyee import EventEmitter
 
@@ -24,7 +25,7 @@ class Handlers:
     """
 
     def __init__(self) -> None:
-        self._handlers: List[Handler] = []
+        self._handlers: list[Handler] = []
 
     def append(self, handler) -> None:
         self._handlers.append(handler)
@@ -35,7 +36,7 @@ class Handlers:
     def reset(self):
         self._handlers = []
 
-    def take(self, cls: Type) -> List[Handler]:
+    def take(self, cls: type) -> list[Handler]:
         """
         Collect pending handlers belonging to the specified class, remove them from
         pending handlers, and return them.
@@ -113,7 +114,7 @@ def _bind(self: Any, method: Any) -> Any:
     return bound
 
 
-def evented[Cls: Type](cls: Cls) -> Cls:
+def evented[Cls: type](cls: Cls) -> Cls:
     """
     Configure an evented class.
 
