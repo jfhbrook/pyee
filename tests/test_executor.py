@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from concurrent.futures import ThreadPoolExecutor
 from threading import Event
 from time import sleep

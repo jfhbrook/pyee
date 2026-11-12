@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-
 from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine, wait
-from typing import Any, Callable, cast, Dict, Optional, Self, Set, Tuple
+from collections.abc import Callable
+from typing import Any, cast, Self
 
 from pyee.base import EventEmitter
 
@@ -40,10 +39,10 @@ class AsyncIOEventEmitter(EventEmitter):
             coroutine handlers.
     """
 
-    def __init__(self: Self, loop: Optional[AbstractEventLoop] = None) -> None:
-        super(AsyncIOEventEmitter, self).__init__()
-        self._loop: Optional[AbstractEventLoop] = loop
-        self._waiting: Set[Future] = set()
+    def __init__(self: Self, loop: AbstractEventLoop | None = None) -> None:
+        super().__init__()
+        self._loop: AbstractEventLoop | None = loop
+        self._waiting: set[Future] = set()
 
     def emit(
         self: Self,
@@ -91,8 +90,8 @@ class AsyncIOEventEmitter(EventEmitter):
     def _emit_run(
         self: Self,
         f: Callable,
-        args: Tuple[Any, ...],
-        kwargs: Dict[str, Any],
+        args: tuple[Any, ...],
+        kwargs: dict[str, Any],
     ) -> None:
         try:
             coro: Any = f(*args, **kwargs)
@@ -119,7 +118,7 @@ class AsyncIOEventEmitter(EventEmitter):
                 if f.cancelled():
                     return
 
-                exc: Optional[BaseException] = f.exception()
+                exc: BaseException | None = f.exception()
                 if exc is not None:
                     self.emit("error", exc)
 

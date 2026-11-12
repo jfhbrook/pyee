@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
-
+from collections.abc import Callable
 from concurrent.futures import Executor, Future, ThreadPoolExecutor
 from types import TracebackType
-from typing import Any, Callable, Dict, Optional, Self, Tuple, Type
+from typing import Any, Self
 
 from pyee.base import EventEmitter
 
@@ -48,8 +47,8 @@ class ExecutorEventEmitter(EventEmitter):
             `ThreadPoolExecutor`.
     """
 
-    def __init__(self: Self, executor: Optional[Executor] = None) -> None:
-        super(ExecutorEventEmitter, self).__init__()
+    def __init__(self: Self, executor: Executor | None = None) -> None:
+        super().__init__()
         if executor:
             self._executor: Executor = executor
         else:
@@ -58,8 +57,8 @@ class ExecutorEventEmitter(EventEmitter):
     def _emit_run(
         self: Self,
         f: Callable,
-        args: Tuple[Any, ...],
-        kwargs: Dict[str, Any],
+        args: tuple[Any, ...],
+        kwargs: dict[str, Any],
     ) -> None:
         future: Future = self._executor.submit(f, *args, **kwargs)
 
@@ -67,7 +66,7 @@ class ExecutorEventEmitter(EventEmitter):
         def _callback(f: Future) -> None:
             if f.cancelled():
                 return
-            exc: Optional[BaseException] = f.exception()
+            exc: BaseException | None = f.exception()
             if isinstance(exc, Exception):
                 self.emit("error", exc)
             elif exc is not None:
@@ -87,7 +86,7 @@ class ExecutorEventEmitter(EventEmitter):
         return self
 
     def __exit__(
-        self: Self, type: Type[Exception], value: Exception, traceback: TracebackType
-    ) -> Optional[bool]:
+        self: Self, type: type[Exception], value: Exception, traceback: TracebackType
+    ) -> bool | None:
         self.shutdown()
         return None

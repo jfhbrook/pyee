@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import asyncio
 from asyncio import Future, get_running_loop, sleep, wait_for
 from typing import NoReturn

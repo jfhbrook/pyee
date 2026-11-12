@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collections import OrderedDict
 from pickle import dumps, loads
 from unittest.mock import Mock
