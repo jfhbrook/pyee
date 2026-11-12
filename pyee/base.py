@@ -105,7 +105,7 @@ class EventEmitter:
         directly, as well as use them in remove_listener calls.
 
         Note that this method's return type is a union type. If you are using
-        mypy or pyright, you will probably want to use either
+        type checking, you will probably want to use either
         `EventEmitter#listens_to` or `EventEmitter#add_listener`.
 
         Args:

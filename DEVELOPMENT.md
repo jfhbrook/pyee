@@ -26,7 +26,7 @@ To list all Just recipes, run `just --list`. Common ones include:
 | just setup  | Set up the environment                                 |
 | just update | Update dependencies                                    |
 | just format | Format the project                                     |
-| just check  | Check type annotations with both pyright and mypy      |
+| just check  | Check type annotations with mypy                       |
 | just test   | Run tests with pytest                                  |
 | just lint   | Lint the project                                       |
 | just docs   | Live generate docs and host on a development webserver |
@@ -64,7 +64,7 @@ Note that I haven't figured out how to auto-exec code on load - you'll need to i
 There are four main just tasks:
 
 - `just format` - format with black and isort
-- `just check` - check type annotations with pyright
+- `just check` - check type annotations with mypy
 - `just test` - run tests with pytest
 - `just lint` - lint with flake8 and validate-pyproject
 

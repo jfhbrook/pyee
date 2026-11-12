@@ -29,10 +29,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install uv
         uses: astral-sh/setup-uv@v10.3.2
-      - name: Set up Node.js LTS
-        uses: actions/setup-node@v4
-        with:
-          node-version: "lts/*"
       - name: Install the world
         run: |
           uv python install "${{ matrix.python-version }}"
@@ -41,8 +37,6 @@ jobs:
         run: |
           uv run flake8 ./pyee ./tests
           uv run validate-pyproject ./pyproject.toml
-      - name: Run pyright
-        run: uv run npx pyright@latest
       - name: Run mypy
         run: uv run mypy .
       - name: Run tests

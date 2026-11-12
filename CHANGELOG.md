@@ -1,5 +1,10 @@
 # Changelog
 
+## xxxx/yy/zz Version 17.0.0
+
+- Modernize type annotation syntax
+- Remove `pyright` support
+
 ## 2026/11/1 Version 16.0.2
 
 - Add support for Python 3.15
