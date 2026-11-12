@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from functools import wraps
-from typing import Any, Callable, cast, Dict, Optional, Tuple, Type, TypeVar, Union
 import warnings
+from functools import wraps
+from typing import Any, Callable, Dict, Optional, Tuple, Type, Union, cast
 
 from typing_extensions import Literal
 
 from pyee.base import EventEmitter
-
-UpliftingEventEmitter = TypeVar("UpliftingEventEmitter", bound=EventEmitter)
-
 
 EMIT_WRAPPERS: Dict[EventEmitter, Callable[[], None]] = dict()
 
@@ -56,8 +53,7 @@ def _wrap(
     def _unwrap() -> None:
         warnings.warn(
             DeprecationWarning(
-                "Patched ee.unwrap() is deprecated and will be removed in a "
-                "future release. Use pyee.uplift.unwrap instead."
+                "Patched ee.unwrap() is deprecated and will be removed in a future release. Use pyee.uplift.unwrap instead."
             )
         )
         unwrap(left)
@@ -93,7 +89,7 @@ ProxyStrategy = Union[
 ]
 
 
-def uplift(
+def uplift[UpliftingEventEmitter: EventEmitter](
     cls: Type[UpliftingEventEmitter],
     underlying: EventEmitter,
     error_handling: ErrorStrategy = "new",

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from functools import wraps
 from inspect import getattr_static
-from typing import Any, Callable, Iterator, List, Type, TypeVar
+from typing import Any, Callable, Iterator, List, Type
 
 from pyee import EventEmitter
 
@@ -113,10 +113,7 @@ def _bind(self: Any, method: Any) -> Any:
     return bound
 
 
-Cls = TypeVar("Cls", bound=Type)
-
-
-def evented(cls: Cls) -> Cls:
+def evented[Cls: Type](cls: Cls) -> Cls:
     """
     Configure an evented class.
 

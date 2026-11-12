@@ -9,12 +9,11 @@ from typing import (
     List,
     Mapping,
     Optional,
-    overload,
     Self,
     Set,
     Tuple,
-    TypeVar,
     Union,
+    overload,
 )
 
 
@@ -24,9 +23,6 @@ class PyeeException(Exception):
 
 class PyeeError(PyeeException):
     """An error internal to pyee."""
-
-
-Handler = TypeVar("Handler", bound=Callable)
 
 
 class EventEmitter:
@@ -75,11 +71,13 @@ class EventEmitter:
         self._lock = Lock()
 
     @overload
-    def on(self: Self, event: str) -> Callable[[Handler], Handler]: ...
+    def on[Handler: Callable](
+        self: Self, event: str
+    ) -> Callable[[Handler], Handler]: ...
     @overload
-    def on(self: Self, event: str, f: Handler) -> Handler: ...
+    def on[Handler: Callable](self: Self, event: str, f: Handler) -> Handler: ...
 
-    def on(
+    def on[Handler: Callable](
         self: Self, event: str, f: Optional[Handler] = None
     ) -> Union[Handler, Callable[[Handler], Handler]]:
         """Registers the function `f` to the event name `event`, if provided.
@@ -123,7 +121,9 @@ class EventEmitter:
         else:
             return self.add_listener(event, f)
 
-    def listens_to(self: Self, event: str) -> Callable[[Handler], Handler]:
+    def listens_to[Handler: Callable](
+        self: Self, event: str
+    ) -> Callable[[Handler], Handler]:
         """Returns a decorator which will register the decorated function to
         the event name `event`:
 
@@ -150,7 +150,7 @@ class EventEmitter:
 
         return on
 
-    def add_listener(self: Self, event: str, f: Handler) -> Handler:
+    def add_listener[Handler: Callable](self: Self, event: str, f: Handler) -> Handler:
         """Register the function `f` to the event name `event`:
 
         ```
