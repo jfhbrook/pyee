@@ -14,6 +14,9 @@
 
 - [ ] Has the developer read `DEVELOPMENT.md`?
 - [ ] Have tests been updated accordingly?
+- [ ] Does linting pass locally?
+- [ ] Does type checking pass locally?
+- [ ] Do tests pass locally?
 - [ ] Have AI assisted commits been marked with a 🤖 emoji?
 - [ ] Have AI assisted changes been marked with a 🤖 emoji in `CHANGELOG.md`?
 - [ ] Does the PR notify the use of AI coding assistants?
