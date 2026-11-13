@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
-from typing import Any, Generator
+from collections.abc import Generator
+from typing import Any
 from unittest.mock import Mock
 
 from twisted.internet.defer import Deferred, inlineCallbacks, succeed

@@ -34,3 +34,4 @@ Listed in no particular order:
 - Mayank Dhingra @mayankdhingra02 <mayankdhingra02@gmail.com>
 - Nikita Karamov @kytta <me@kytta.dev>
 - Anish Pentyala @anishpentyala
+- Francesco Pezzella @FrancescoPezzella

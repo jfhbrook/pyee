@@ -1,20 +1,10 @@
-# -*- coding: utf-8 -*-
-
 from collections import OrderedDict
+from collections.abc import Callable, Mapping
 from threading import Lock
 from typing import (
     Any,
-    Callable,
-    Dict,
-    List,
-    Mapping,
-    Optional,
     overload,
     Self,
-    Set,
-    Tuple,
-    TypeVar,
-    Union,
 )
 
 
@@ -24,9 +14,6 @@ class PyeeException(Exception):
 
 class PyeeError(PyeeException):
     """An error internal to pyee."""
-
-
-Handler = TypeVar("Handler", bound=Callable)
 
 
 class EventEmitter:
@@ -59,9 +46,9 @@ class EventEmitter:
     """
 
     def __init__(self: Self) -> None:
-        self._events: Dict[
+        self._events: dict[
             str,
-            "OrderedDict[Callable, Callable]",
+            OrderedDict[Callable, Callable],
         ] = dict()
         self._lock: Lock = Lock()
 
@@ -75,13 +62,15 @@ class EventEmitter:
         self._lock = Lock()
 
     @overload
-    def on(self: Self, event: str) -> Callable[[Handler], Handler]: ...
+    def on[Handler: Callable](
+        self: Self, event: str
+    ) -> Callable[[Handler], Handler]: ...
     @overload
-    def on(self: Self, event: str, f: Handler) -> Handler: ...
+    def on[Handler: Callable](self: Self, event: str, f: Handler) -> Handler: ...
 
-    def on(
-        self: Self, event: str, f: Optional[Handler] = None
-    ) -> Union[Handler, Callable[[Handler], Handler]]:
+    def on[Handler: Callable](
+        self: Self, event: str, f: Handler | None = None
+    ) -> Handler | Callable[[Handler], Handler]:
         """Registers the function `f` to the event name `event`, if provided.
 
         If `f` isn't provided, this method calls `EventEmitter#listens_to`, and
@@ -123,7 +112,9 @@ class EventEmitter:
         else:
             return self.add_listener(event, f)
 
-    def listens_to(self: Self, event: str) -> Callable[[Handler], Handler]:
+    def listens_to[Handler: Callable](
+        self: Self, event: str
+    ) -> Callable[[Handler], Handler]:
         """Returns a decorator which will register the decorated function to
         the event name `event`:
 
@@ -150,7 +141,7 @@ class EventEmitter:
 
         return on
 
-    def add_listener(self: Self, event: str, f: Handler) -> Handler:
+    def add_listener[Handler: Callable](self: Self, event: str, f: Handler) -> Handler:
         """Register the function `f` to the event name `event`:
 
         ```
@@ -189,12 +180,12 @@ class EventEmitter:
     def _emit_run(
         self: Self,
         f: Callable,
-        args: Tuple[Any, ...],
-        kwargs: Dict[str, Any],
+        args: tuple[Any, ...],
+        kwargs: dict[str, Any],
     ) -> None:
         f(*args, **kwargs)
 
-    def event_names(self: Self) -> Set[str]:
+    def event_names(self: Self) -> set[str]:
         """Get a set of events that this emitter is listening to.
 
         Returns:
@@ -212,8 +203,8 @@ class EventEmitter:
     def _call_handlers(
         self: Self,
         event: str,
-        args: Tuple[Any, ...],
-        kwargs: Dict[str, Any],
+        args: tuple[Any, ...],
+        kwargs: dict[str, Any],
     ) -> bool:
         handled = False
 
@@ -271,7 +262,7 @@ class EventEmitter:
     def once(
         self: Self,
         event: str,
-        f: Optional[Callable] = None,
+        f: Callable | None = None,
     ) -> Callable:
         """The same as `ee.on`, except that the listener is automatically
         removed after being called.
@@ -330,7 +321,7 @@ class EventEmitter:
         with self._lock:
             self._remove_listener(event, f)
 
-    def remove_all_listeners(self: Self, event: Optional[str] = None) -> None:
+    def remove_all_listeners(self: Self, event: str | None = None) -> None:
         """Remove all listeners attached to `event`.
         If `event` is `None`, remove all listeners on all events.
 
@@ -345,7 +336,7 @@ class EventEmitter:
             else:
                 self._events = dict()
 
-    def listeners(self: Self, event: str) -> List[Callable]:
+    def listeners(self: Self, event: str) -> list[Callable]:
         """Returns a list of all listeners registered to the `event`.
 
         Args:

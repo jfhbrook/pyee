@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 pyee supplies a `EventEmitter` class that is similar to the
 `EventEmitter` class from Node.js. In addition, it supplies the subclasses
@@ -27,6 +25,6 @@ In [5]:
 
 """
 
-from pyee.base import EventEmitter, Handler, PyeeError, PyeeException
+from pyee.base import EventEmitter, PyeeError, PyeeException
 
-__all__ = ["EventEmitter", "Handler", "PyeeError", "PyeeException"]
+__all__ = ["EventEmitter", "PyeeError", "PyeeException"]
