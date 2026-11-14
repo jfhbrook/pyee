@@ -108,11 +108,11 @@ def test_exception_handling(error_handling):
 
     # Hold my beer
     base_error_handler = Mock()
-    base_ee._emit_handle_potential_error = base_error_handler
+    cast(Any, base_ee)._emit_handle_potential_error = base_error_handler
 
     # Hold my other beer
     uplifted_error_handler = Mock()
-    uplifted_ee._emit_handle_potential_error = uplifted_error_handler
+    cast(Any, uplifted_ee)._emit_handle_potential_error = uplifted_error_handler
 
     base_ee.emit("error", base_error)
     uplifted_ee.emit("error", uplifted_error)

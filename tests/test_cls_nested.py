@@ -181,7 +181,7 @@ def test_evented_does_not_invoke_unrelated_descriptors():
 @pytest.mark.parametrize("on_outermost", [False, True])
 @pytest.mark.parametrize("depth", [1, 3])
 def test_evented_preserves_wrapped_handler_binding(on_outermost, depth):
-    calls = []
+    calls: list[Any] = []
 
     def decorate(method):
         for _ in range(depth):

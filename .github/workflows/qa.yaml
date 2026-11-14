@@ -45,7 +45,7 @@ jobs:
       - name: Run pyright
         run: uv run npx pyright@latest
       - name: Run mypy
-        run: uv run mypy .
+        run: uv run mypy --check-untyped-defs .
       - name: Run tests
         run: uv run pytest ./tests
   actionlint:

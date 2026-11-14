@@ -48,7 +48,7 @@ pyright:
 
 # Check type annotations with mypy
 mypy:
-  uv run mypy .
+  uv run mypy --check-untyped-defs .
 
 # Run tests with pytest
 test:
