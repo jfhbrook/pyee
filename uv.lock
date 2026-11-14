@@ -1264,7 +1264,7 @@ wheels = [
 
 [[package]]
 name = "pyee"
-version = "16.0.2"
+version = "16.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "typing-extensions" },
