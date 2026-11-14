@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "pyee"
@@ -64,5 +64,5 @@ asyncio_default_fixture_loop_scope = "function"
 addopts = "--verbose -s"
 testpaths = [ "tests" ]
 
-[tool.setuptools]
+[tool.hatch.build.targets.wheel]
 packages = ["pyee"]
