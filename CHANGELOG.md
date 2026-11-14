@@ -1,17 +1,21 @@
 # Changelog
 
+## 2026/11/14 Version 16.1.0
+
+- Use modernized Python type annotations
+  - **NOTE:** Removes `Handler` from exported types. This was a `TypeVar` that was likely never useful, and is being treated as a minor change.
+- Switch build from setuptools to hatchling
+- Development tooling changes
+  - Switch formatting/linting from black/flake8/isort to ruff
+  - Check untyped definitions with `mypy`
+
+
 ## 2026/11/1 Version 16.0.2
 
 - Add support for Python 3.15
 - Trio bugfixes
   - 🤖 Clear owned nursery and context references after context exits
   - 🤖 Clear preserve borrowed nurseries in `context()`.
-- Use modernized Python type annotations
-  - **NOTE:** Removes `Handler` type from exports, which is no longer required
-- Switch build from setuptools to hatchling
-- Development tooling changes
-  - Switch formatting/linting from black/flake8/isort to ruff
-  - Check untyped definitions with `mypy`
 
 ## 2026/10/31 🎃 Version 16.0.1
 
