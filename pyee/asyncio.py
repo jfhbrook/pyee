@@ -1,6 +1,6 @@
-from asyncio import AbstractEventLoop, ensure_future, Future, iscoroutine, wait
+from asyncio import AbstractEventLoop, Future, ensure_future, iscoroutine, wait
 from collections.abc import Callable
-from typing import Any, cast, Self
+from typing import Any, Self, cast
 
 from pyee.base import EventEmitter
 
@@ -95,7 +95,7 @@ class AsyncIOEventEmitter(EventEmitter):
     ) -> None:
         try:
             coro: Any = f(*args, **kwargs)
-        except Exception as exc:
+        except Exception as exc:  # noqa
             self.emit("error", exc)
         else:
             if iscoroutine(coro):

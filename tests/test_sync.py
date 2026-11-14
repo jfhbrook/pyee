@@ -151,7 +151,7 @@ def test_remove_all_listeners_clears_every_event():
 
     ee.remove_all_listeners()
 
-    assert ee._events == dict()
+    assert ee._events == {}
     assert ee.event_names() == set()
     assert ee.emit("a") is False
     assert ee.emit("b") is False

@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
@@ -235,7 +235,7 @@ def test_evented_cyclic_wrapper_metadata_terminates():
         def handler(self):
             self.called = True
 
-        setattr(handler, "__wrapped__", handler)
+        cast(Any, handler).__wrapped__ = handler
 
     instance = Evented()
     assert instance.event_emitter.emit("event")

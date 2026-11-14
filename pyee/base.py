@@ -3,8 +3,8 @@ from collections.abc import Callable, Mapping
 from threading import Lock
 from typing import (
     Any,
-    overload,
     Self,
+    overload,
 )
 
 
@@ -49,7 +49,7 @@ class EventEmitter:
         self._events: dict[
             str,
             OrderedDict[Callable, Callable],
-        ] = dict()
+        ] = {}
         self._lock: Lock = Lock()
 
     def __getstate__(self: Self) -> Mapping[str, Any]:
@@ -334,7 +334,7 @@ class EventEmitter:
                 if event in self._events:
                     del self._events[event]
             else:
-                self._events = dict()
+                self._events = {}
 
     def listeners(self: Self, event: str) -> list[Callable]:
         """Returns a list of all listeners registered to the `event`.

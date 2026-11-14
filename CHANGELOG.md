@@ -8,6 +8,7 @@
   - 🤖 Clear preserve borrowed nurseries in `context()`.
 - Use modernized Python features for types
   - **NOTE:** Removes `Handler` type from exports, which is no longer required
+- Switch formatting/linting from black/flake8/isort to ruff
 
 ## 2026/10/31 🎃 Version 16.0.1
 

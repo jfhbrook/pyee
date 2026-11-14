@@ -75,7 +75,7 @@ class TrioEventEmitter(EventEmitter):
         if nursery:
             if manager:
                 raise PyeeError(
-                    "You may either pass a nursery or a nursery manager " "but not both"
+                    "You may either pass a nursery or a nursery manager but not both"
                 )
             self._nursery = nursery
         elif manager:
@@ -94,7 +94,7 @@ class TrioEventEmitter(EventEmitter):
                 result = f(*args, **kwargs)
                 if isawaitable(result):
                     await result
-            except Exception as exc:
+            except Exception as exc:  # noqa
                 self.emit("error", exc)
 
         return runner
@@ -140,7 +140,7 @@ class TrioEventEmitter(EventEmitter):
         else:
             raise PyeeError("Uninitialized nursery or nursery manager")
 
-    async def __aenter__(self: Self) -> "TrioEventEmitter":
+    async def __aenter__(self: Self) -> "TrioEventEmitter":  # noqa
         self._context: AbstractAsyncContextManager[TrioEventEmitter] | None = (
             self.context()
         )

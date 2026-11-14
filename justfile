@@ -30,14 +30,13 @@ update:
 
 # Format the project
 format:
-  uv run black ./docs './pyee' ./tests
-  uv run isort --settings-file . ./docs ./pyee ./tests
+  uv run ruff format
+  uv run ruff check --fix-only
 
 # Lint the project
 lint:
-  uv run black --check ./docs './pyee' ./tests
-  uv run isort --settings-file . --check ./docs ./pyee ./tests
-  uv run flake8 ./docs './pyee' ./tests
+  uv run ruff format --check
+  uv run ruff check
   uv run validate-pyproject ./pyproject.toml
 
 # Check type annotations

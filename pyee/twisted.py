@@ -58,7 +58,7 @@ class TwistedEventEmitter(EventEmitter):
         d: Deferred[Any] | None = None
         try:
             result = f(*args, **kwargs)
-        except Exception:
+        except Exception:  # noqa
             self.emit("failure", Failure())
         else:
             if iscoroutine(result):
@@ -79,7 +79,7 @@ class TwistedEventEmitter(EventEmitter):
             if isinstance(error, Failure):
                 try:
                     error.raiseException()
-                except Exception as exc:
+                except Exception as exc:  # noqa
                     self.emit("error", exc)
             elif isinstance(error, Exception):
                 self.emit("error", error)

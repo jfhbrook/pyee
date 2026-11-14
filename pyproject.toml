@@ -30,28 +30,24 @@ classifiers = [
 requires-python = ">=3.12"
 
 dependencies = [
-    "typing-extensions"
+    "typing-extensions",
 ]
 
 [dependency-groups]
 dev = [
   "build",
-  "flake8",
-  "flake8-black",
   "pytest",
-  "pytest-asyncio; python_version >= '3.4'",
-  "pytest-trio; python_version >= '3.7'",
-  "black",
-  "isort",
+  "pytest-asyncio",
+  "pytest-trio",
   "jupyter-console",
   "mkdocs",
   "mkdocs-include-markdown-plugin",
   "mkdocstrings[python]",
   "mypy",
+  "ruff",
   "sphinx",
-  "tox",
-  "trio; python_version > '3.6'",
-  "trio-typing; python_version > '3.6'",
+  "trio",
+  "trio-typing",
   "twisted",
   "validate-pyproject[all]",
 ]
@@ -64,6 +60,7 @@ known_application = "pyee"
 include = ["pyee", "tests"]
 
 [tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
 addopts = "--verbose -s"
 testpaths = [ "tests" ]
 

@@ -1,4 +1,5 @@
-from unittest.mock import call, Mock
+from typing import Any, cast
+from unittest.mock import Mock, call
 
 import pytest
 
@@ -71,10 +72,10 @@ def test_uplift_emit():
     unwrap(uplifted_ee)
 
     with pytest.raises(AttributeError):
-        getattr(uplifted_ee, "unwrap")
+        cast(Any, uplifted_ee).unwrap  # noqa
 
     with pytest.raises(AttributeError):
-        getattr(base_ee, "unwrap")
+        cast(Any, base_ee).unwrap  # noqa
 
     assert not uplifted_ee.emit("base_event")
     assert uplifted_ee.emit("shared_event")
@@ -130,7 +131,7 @@ def test_exception_handling(error_handling):
         base_error_handler.assert_called_once_with("error", base_error)
         uplifted_error_handler.assert_called_once_with("error", uplifted_error)
     else:
-        raise Exception("unrecognized setting")
+        raise Exception("unrecognized setting")  # noqa
 
 
 @pytest.mark.parametrize(
@@ -197,4 +198,4 @@ def test_proxy_new_listener(proxy_new_listener):
             ]
         )
     else:
-        raise Exception("unrecognized proxy_new_listener")
+        raise Exception("unrecognized proxy_new_listener")  # noqa

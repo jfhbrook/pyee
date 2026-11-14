@@ -39,7 +39,8 @@ jobs:
           uv sync
       - name: Run linting
         run: |
-          uv run flake8 ./pyee ./tests
+          uv run ruff format --check
+          uv run ruff check
           uv run validate-pyproject ./pyproject.toml
       - name: Run pyright
         run: uv run npx pyright@latest

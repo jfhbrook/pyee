@@ -1,11 +1,11 @@
+import warnings
 from collections.abc import Callable
 from functools import wraps
-from typing import Any, cast, Literal, Union
-import warnings
+from typing import Any, Literal, cast
 
 from pyee.base import EventEmitter
 
-EMIT_WRAPPERS: dict[EventEmitter, Callable[[], None]] = dict()
+EMIT_WRAPPERS: dict[EventEmitter, Callable[[], None]] = {}
 
 
 def unwrap(event_emitter: EventEmitter) -> None:
@@ -73,18 +73,16 @@ def _wrap(
     left.unwrap = _unwrap  # type: ignore
 
 
-_PROXY_NEW_LISTENER_SETTINGS: dict[str, tuple[bool, bool]] = dict(
-    forward=(False, True),
-    backward=(True, False),
-    both=(True, True),
-    neither=(False, False),
-)
+_PROXY_NEW_LISTENER_SETTINGS: dict[str, tuple[bool, bool]] = {
+    "forward": (False, True),
+    "backward": (True, False),
+    "both": (True, True),
+    "neither": (False, False),
+}
 
 
-ErrorStrategy = Union[Literal["new"], Literal["underlying"], Literal["neither"]]
-ProxyStrategy = Union[
-    Literal["forward"], Literal["backward"], Literal["both"], Literal["neither"]
-]
+ErrorStrategy = Literal["new", "underlying", "neither"]
+ProxyStrategy = Literal["forward", "backward", "both", "neither"]
 
 
 def uplift[UpliftingEventEmitter: EventEmitter](
@@ -185,9 +183,11 @@ def uplift[UpliftingEventEmitter: EventEmitter](
 
     new: UpliftingEventEmitter = cls(*args, **kwargs)
 
-    uplift_error_handlers: dict[str, tuple[EventEmitter, EventEmitter]] = dict(
-        new=(new, new), underlying=(underlying, underlying), neither=(new, underlying)
-    )
+    uplift_error_handlers: dict[str, tuple[EventEmitter, EventEmitter]] = {
+        "new": (new, new),
+        "underlying": (underlying, underlying),
+        "neither": (new, underlying),
+    }
 
     new_error_handler, underlying_error_handler = uplift_error_handlers[error_handling]
 

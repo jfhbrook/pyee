@@ -14,7 +14,7 @@ with open("../pyproject.toml", "rb") as f:
 project = "pyee"
 copyright = "2023, Josh Holbrook"
 author = "Josh Holbrook"
-release = f'v{pyproject_toml["project"]["version"]}'
+release = f"v{pyproject_toml['project']['version']}"
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "index.md"]

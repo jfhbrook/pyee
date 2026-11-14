@@ -82,11 +82,14 @@ class ExecutorEventEmitter(EventEmitter):
 
         self._executor.shutdown(wait=wait)
 
-    def __enter__(self: Self) -> "ExecutorEventEmitter":
+    def __enter__(self: Self) -> Self:
         return self
 
     def __exit__(
-        self: Self, type: type[Exception], value: Exception, traceback: TracebackType
+        self: Self,
+        type: type[BaseException] | None,
+        value: BaseException | None,
+        traceback: TracebackType | None,
     ) -> bool | None:
         self.shutdown()
         return None
