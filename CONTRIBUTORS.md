@@ -35,3 +35,4 @@ Listed in no particular order:
 - Nikita Karamov @kytta <me@kytta.dev>
 - Anish Pentyala @anishpentyala
 - Francesco Pezzella @FrancescoPezzella
+- Nithish Reddy @nithishreddy5771
