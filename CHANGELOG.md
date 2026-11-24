@@ -1,5 +1,9 @@
 # Changelog
 
+## xxxx.yy.zz Version x.y.z
+
+- 🤖 Honor supplied executors regardless of their truth value.
+
 ## 2026/11/14 Version 16.1.0
 
 - Use modernized Python type annotations
