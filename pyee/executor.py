@@ -49,7 +49,7 @@ class ExecutorEventEmitter(EventEmitter):
 
     def __init__(self: Self, executor: Executor | None = None) -> None:
         super().__init__()
-        if executor:
+        if executor is not None:
             self._executor: Executor = executor
         else:
             self._executor = ThreadPoolExecutor()
