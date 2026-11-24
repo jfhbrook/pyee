@@ -3,7 +3,7 @@ from threading import Event
 from time import sleep
 from unittest.mock import Mock
 
-from pytest import LogCaptureFixture
+from pytest import LogCaptureFixture, mark, raises
 
 from pyee.executor import ExecutorEventEmitter
 
@@ -91,3 +91,36 @@ def test_executor_canceled_future(caplog: LogCaptureFixture) -> None:
     should_not_call.assert_not_called()
     should_not_error.assert_not_called()
     assert not caplog.records
+
+
+class FalseValuedExecutor(ThreadPoolExecutor):
+    def __bool__(self) -> bool:
+        return False
+
+
+class EmptyExecutor(ThreadPoolExecutor):
+    def __len__(self) -> int:
+        return 0
+
+
+class UntestableExecutor(ThreadPoolExecutor):
+    def __bool__(self) -> bool:
+        raise AssertionError("Executor truth value should not be tested")
+
+
+@mark.parametrize(
+    "executor_type", [FalseValuedExecutor, EmptyExecutor, UntestableExecutor]
+)
+def test_executor_preserves_supplied_executor(executor_type) -> None:
+    executor = executor_type(max_workers=1)
+    called = Event()
+    try:
+        with ExecutorEventEmitter(executor) as ee:
+            assert ee._executor is executor
+            ee.on("event", called.set)
+            assert ee.emit("event")
+            assert called.wait(timeout=5)
+        with raises(RuntimeError):
+            executor.submit(called.set)
+    finally:
+        executor.shutdown(wait=True)
